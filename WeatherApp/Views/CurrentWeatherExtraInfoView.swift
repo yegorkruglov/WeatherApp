@@ -48,4 +48,34 @@ private extension CurrentWeatherExtraInfoView {
         
         stackUpComponents(components: &components)
     }
+    
+    func stackUpComponents(components: inout [some UIView]) {
+        
+        let verticalStack = UIStackView()
+        verticalStack.axis = .vertical
+        verticalStack.distribution = .fillEqually
+        verticalStack.spacing = Constants.insetM
+        
+        let numberOfTwoItemsStacks = components.count / 2
+        
+        for _ in 1...numberOfTwoItemsStacks {
+            let horizontalStack = UIStackView()
+            horizontalStack.axis = .horizontal
+            horizontalStack.distribution = .fillEqually
+            horizontalStack.spacing = Constants.insetM
+            
+            for _ in 1...2 {
+                horizontalStack.addArrangedSubview(components.removeFirst())
+            }
+            
+            verticalStack.addArrangedSubview(horizontalStack)
+        }
+        
+        verticalStack.addArrangedSubview(components.removeFirst())
+        
+        addSubview(verticalStack)
+        verticalStack.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
 }

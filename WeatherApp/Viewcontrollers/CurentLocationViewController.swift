@@ -31,8 +31,8 @@ final class CurentLocationViewController: UIViewController {
         scroll.showsHorizontalScrollIndicator = false
         scroll.showsVerticalScrollIndicator = false
         scroll.layer.cornerRadius = Constants.cornerRadiusM
-        scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Constants.insetM, right: 0)
-        
+//        scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Constants.insetM * 3, right: 0)
+    
         return scroll
     }()
     private var weatherView = WeatherView(frame: .zero)
@@ -42,6 +42,7 @@ final class CurentLocationViewController: UIViewController {
         
         return indicator
     }()
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -63,12 +64,13 @@ private extension CurentLocationViewController {
         view.backgroundColor = .white
         
         view.addSubview(scrollView)
-        scrollView.addSubview(weatherView)
         scrollView.snp.makeConstraints { make in
-            make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(Constants.insetS)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(Constants.insetS)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(Constants.insetS)
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
         }
         
+        scrollView.addSubview(weatherView)
         weatherView.snp.makeConstraints { make in
             make.height.equalToSuperview()
             make.width.equalToSuperview()

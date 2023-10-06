@@ -36,25 +36,25 @@ private extension WeatherView {
             make.height.equalToSuperview().dividedBy(6)
         }
         
-        addSubview(extra)
-        extra.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(summary)
-            make.top.equalTo(summary.snp.bottom).offset(Constants.insetM)
-            make.bottom.equalToSuperview()
-        }
-        
         addSubview(hourly)
         hourly.snp.makeConstraints { make in
-            make.size.equalTo(summary)
-            make.horizontalEdges.equalTo(summary)
-            make.top.equalTo(extra.snp.bottom).offset(Constants.insetM)
+            make.top.equalTo(summary.snp.bottom).offset(Constants.insetM)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalToSuperview().dividedBy(6)
+        }
+
+        addSubview(extra)
+        extra.snp.makeConstraints { make in
+            make.top.equalTo(hourly.snp.bottom).offset(Constants.insetM)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(summary).multipliedBy(5)
         }
         
         addSubview(daily)
         daily.snp.makeConstraints { make in
-            make.height.equalTo(extra)
-            make.width.equalTo(extra)
-            make.top.equalTo(hourly.snp.bottom).offset(Constants.insetM)
+            make.top.equalTo(extra.snp.bottom).offset(Constants.insetM)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(summary).multipliedBy(5)
         }
     }
 }
