@@ -26,16 +26,7 @@ final class CurentLocationViewController: UIViewController {
         }
     }
     
-    private lazy var scrollView = {
-        let scroll = UIScrollView()
-        scroll.showsHorizontalScrollIndicator = false
-        scroll.showsVerticalScrollIndicator = false
-        scroll.layer.cornerRadius = Constants.cornerRadiusM
-//        scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Constants.insetM * 3, right: 0)
-    
-        return scroll
-    }()
-    private var weatherView = WeatherView(frame: .zero)
+    private var weatherView = WeatherView()
     private lazy var activityIndicator = {
         let indicator = UIActivityIndicatorView(style: .large)
         indicator.hidesWhenStopped = true
@@ -50,11 +41,11 @@ final class CurentLocationViewController: UIViewController {
         
         setupUI()
         locationManager.delegate = self
-//        activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //        requestCurrentLocation()
+        requestCurrentLocation()
     }
 }
 
@@ -63,24 +54,17 @@ private extension CurentLocationViewController {
     func setupUI() {
         view.backgroundColor = .white
         
-        view.addSubview(scrollView)
-        scrollView.snp.makeConstraints { make in
+        view.addSubview(weatherView)
+        weatherView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(Constants.insetS)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(Constants.insetS)
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
         }
         
-        scrollView.addSubview(weatherView)
-        weatherView.snp.makeConstraints { make in
-            make.height.equalToSuperview()
-            make.width.equalToSuperview()
-            make.verticalEdges.equalToSuperview().dividedBy(2)
-        }
-    
-        scrollView.alpha = 1
-//
-//        view.addSubview(activityIndicator)
-//        activityIndicator.center = view.center
+        weatherView.alpha = 1
+        
+        view.addSubview(activityIndicator)
+        activityIndicator.center = view.center
     }
     
     func requestCurrentLocation() {
@@ -94,19 +78,10 @@ private extension CurentLocationViewController {
             return
         }
         
-        //        networkManager.requestWeatherFor(
-        //            latitude: currentCoordinates?.latitude,
-        //            longitude: currentCoordinates?.longitude
-        //        ) { result in
-        //            switch result {
-        //            case .success(let weatherResponse):
-        //                self.weatherData = weatherData
-        //            case .failure(let error):
-        //                print(error.rawValue)
-        //            }
-        //        }
-        
-        networkManager.requestWeatherFor(city: "New York") { result in
+        networkManager.requestWeatherFor(
+            latitude: currentCoordinates?.latitude,
+            longitude: currentCoordinates?.longitude
+        ) { result in
             switch result {
             case .success(let weatherData):
                 self.weatherData = weatherData

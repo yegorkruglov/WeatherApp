@@ -9,10 +9,20 @@ import UIKit
 
 final class WeatherView: UIView {
     
-    private var summary = CurrentWeatherSummaryView(frame: .zero)
-    private var extra = CurrentWeatherExtraInfoView(frame: .zero)
-    private var hourly = HourlyForecastView(frame: .zero)
-    private var daily = DailyForecastView(frame: .zero)
+    private var summary = CurrentWeatherSummaryView()
+    private var extra = CurrentWeatherExtraInfoView()
+    private var hourly = HourlyForecastView()
+    private var daily = DailyForecastView()
+    
+    private lazy var scrollView = {
+        let scroll = UIScrollView()
+        scroll.showsHorizontalScrollIndicator = false
+        scroll.showsVerticalScrollIndicator = false
+        scroll.layer.cornerRadius = Constants.cornerRadiusM
+        scroll.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Constants.insetM * 3, right: 0)
+    
+        return scroll
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,28 +39,44 @@ private extension WeatherView {
     func setupUI() {
         layer.cornerRadius = Constants.cornerRadiusM
         
-        addSubview(summary)
+        addSubview(scrollView)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        let contentView = UIView()
+        contentView.backgroundColor = .gray
+        contentView.layer.cornerRadius = Constants.cornerRadiusM
+        
+        scrollView.addSubview(contentView)
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(2)
+        }
+        
+        contentView.addSubview(summary)
         summary.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
-            make.height.equalToSuperview().dividedBy(6)
+            make.height.equalToSuperview().dividedBy(12)
         }
         
-        addSubview(hourly)
+        contentView.addSubview(hourly)
         hourly.snp.makeConstraints { make in
             make.top.equalTo(summary.snp.bottom).offset(Constants.insetM)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalToSuperview().dividedBy(6)
+            make.height.equalTo(summary)
         }
 
-        addSubview(extra)
+        contentView.addSubview(extra)
         extra.snp.makeConstraints { make in
             make.top.equalTo(hourly.snp.bottom).offset(Constants.insetM)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(summary).multipliedBy(5)
         }
         
-        addSubview(daily)
+        contentView.addSubview(daily)
         daily.snp.makeConstraints { make in
             make.top.equalTo(extra.snp.bottom).offset(Constants.insetM)
             make.horizontalEdges.equalToSuperview()
