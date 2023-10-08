@@ -8,7 +8,7 @@
 import UIKit
 
 final class HourlyForecastView: UIView {
-
+    
     private let hourData = (1...12).map { _ in
         HourForecastComponentView(frame: .zero, hour: "hour", condition: "cond", temp: "temp")
     }
@@ -22,7 +22,7 @@ final class HourlyForecastView: UIView {
         return stack
     }()
     
-     lazy var scrollView = {
+    lazy var scrollView = {
         let scroll = UIScrollView()
         scroll.showsHorizontalScrollIndicator = false
         scroll.showsVerticalScrollIndicator = false

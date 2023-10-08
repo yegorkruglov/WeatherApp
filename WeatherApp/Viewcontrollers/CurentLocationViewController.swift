@@ -61,14 +61,14 @@ private extension CurentLocationViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
         }
         
-        weatherView.alpha = 1
+        weatherView.isHidden = true
         
         view.addSubview(activityIndicator)
         activityIndicator.center = view.center
+        activityIndicator.startAnimating()
     }
     
     func requestCurrentLocation() {
-        locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
     }
     
@@ -91,9 +91,23 @@ private extension CurentLocationViewController {
         }
     }
     
+    func checkLocationManagerAutharizationStatus() {
+        switch locationManager.authorizationStatus {
+            
+        case .notDetermined, .restricted, .denied:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedAlways, .authorizedWhenInUse: break
+        @unknown default:
+            locationManager.requestWhenInUseAuthorization()
+        }
+        
+        requestCurrentLocation()
+    }
+    
     func updateUIWithWeatherData() {
         activityIndicator.stopAnimating()
-        
+        weatherView.isHidden = false
+        print(weatherData ?? "no weather received")
     }
 }
 
@@ -108,5 +122,6 @@ extension CurentLocationViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
+        checkLocationManagerAutharizationStatus()
     }
 }

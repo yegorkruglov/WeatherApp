@@ -8,7 +8,7 @@
 import UIKit
 
 final class HourForecastComponentView: UIView {
-
+    
     private let hour: String
     private let condition: String
     private let temp: String
@@ -22,14 +22,14 @@ final class HourForecastComponentView: UIView {
         self.condition = condition
         self.temp = temp
         super.init(frame: frame)
-
+        
         setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }
 
 private extension HourForecastComponentView {
