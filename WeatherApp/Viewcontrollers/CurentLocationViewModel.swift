@@ -10,83 +10,70 @@ import CoreLocation
 
 protocol CurentLocationViewModelProtocol {
     func fetchWeatherForLocation(completion: @escaping() -> Void)
+    
     func numberOfSections() -> Int
     func numberOfRowsInSection() -> Int
 }
 
-final class CurentLocationViewModel: NSObject, CurentLocationViewModelProtocol {
+final class CurentLocationViewModel: CurentLocationViewModelProtocol {
     private let networkManager = NetworkManager.shared
-
-    private let locationManager = CLLocationManager()
+    private let locationManager = LocationManager()
     
-    private var currentCoordinates: CLLocationCoordinate2D? {
+    private var weatherData: Weather? {
         didSet {
-            requestWeatherForCurrentlocation()
+            print(weatherData?.current.condition.text)
         }
     }
     
-    private var weatherData: Weather?
-
     func fetchWeatherForLocation(completion: @escaping() -> Void) {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(checkLocation),
+            name: Notification.Name(rawValue: "isLocationChanged"),
+            object: nil
+        )
         
+        checkLocation()
         
         completion()
     }
     
-    func numberOfSections() -> Int { 4 }
-    
-    func numberOfRowsInSection() -> Int { 1 }
-    
-    
-    
-    
-    
-    func requestCurrentLocation() {
-        locationManager.requestLocation()
+    @objc func checkLocation() {
+        guard let isAuthorizedLocation = locationManager.isAuthorizedLocation else { return }
+        
+        if isAuthorizedLocation {
+            let coordinates = getLocationCoordinates()
+            requestWeatherForLocation(
+                lat: coordinates.coordinate.latitude,
+                long: coordinates.coordinate.longitude
+            )
+        }
     }
     
-    func requestWeatherForCurrentlocation() {
-        guard (currentCoordinates != nil) else {
-            print("No location -> no weather")
-            return
+    func getLocationCoordinates() -> CLLocation {
+        guard let exposedLocation = self.locationManager.exposedLocation else {
+            return CLLocation(latitude: 0.0, longitude: 0.0)
         }
         
+        return exposedLocation
+    }
+    
+    func requestWeatherForLocation(lat: CLLocationDegrees, long: CLLocationDegrees) {
         networkManager.requestWeatherFor(
-            latitude: currentCoordinates?.latitude,
-            longitude: currentCoordinates?.longitude
+            latitude: lat,
+            longitude: long
         ) { result in
             switch result {
             case .success(let weatherData):
                 self.weatherData = weatherData
+                print(weatherData.current.condition.text)
             case .failure(let error):
                 print(error.rawValue)
             }
         }
     }
     
-    func checkLocationManagerAutharizationStatus() {
-        switch locationManager.authorizationStatus {
-            
-        case .notDetermined, .restricted, .denied:
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedAlways, .authorizedWhenInUse: break
-        @unknown default:
-            locationManager.requestWhenInUseAuthorization()
-        }
-        
-        requestCurrentLocation()
-    }
-}
-
-extension CurentLocationViewModel: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            currentCoordinates = location.coordinate
-        }
-    }
+    func numberOfSections() -> Int { 4 }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
-        checkLocationManagerAutharizationStatus()
-    }
+    func numberOfRowsInSection() -> Int { 1 }
 }

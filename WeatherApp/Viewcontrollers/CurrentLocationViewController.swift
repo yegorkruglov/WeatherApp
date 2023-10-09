@@ -36,9 +36,11 @@ final class CurrentLocationViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
         viewModel.fetchWeatherForLocation { [weak self] in
             self?.tableView.reloadData()
             self?.activityIndicator.stopAnimating()
+            self?.tableView.isHidden.toggle()
         }
     }
 }
@@ -53,7 +55,8 @@ private extension CurrentLocationViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
-    
+        tableView.isHidden.toggle()
+        
         view.addSubview(activityIndicator)
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
@@ -66,15 +69,14 @@ extension CurrentLocationViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         viewModel.numberOfSections()
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.numberOfRowsInSection()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       UITableViewCell()
+        UITableViewCell()
     }
-    
-    
 }
 
 // MARK: - UITableViewDelegate
