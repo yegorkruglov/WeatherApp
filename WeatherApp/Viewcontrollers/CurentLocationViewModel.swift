@@ -1,72 +1,45 @@
 //
-//  CurentLocationViewController.swift
+//  CurentLocationViewModel.swift
 //  WeatherApp
 //
-//  Created by Egor Kruglov on 28.09.2023.
+//  Created by Egor Kruglov on 09.10.2023.
 //
 
-import UIKit
+import Foundation
 import CoreLocation
-import SnapKit
 
-final class CurentLocationViewController: UIViewController {
-    
-    // MARK: - Private Properties
-    
+protocol CurentLocationViewModelProtocol {
+    func fetchWeatherForLocation(completion: @escaping() -> Void)
+    func numberOfSections() -> Int
+    func numberOfRowsInSection() -> Int
+}
+
+final class CurentLocationViewModel: NSObject, CurentLocationViewModelProtocol {
     private let networkManager = NetworkManager.shared
+
     private let locationManager = CLLocationManager()
+    
     private var currentCoordinates: CLLocationCoordinate2D? {
         didSet {
             requestWeatherForCurrentlocation()
         }
     }
-    private var weatherData: Weather? {
-        didSet {
-            updateUIWithWeatherData()
-        }
-    }
     
-    private var weatherView = WeatherView()
-    private lazy var activityIndicator = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.hidesWhenStopped = true
-        
-        return indicator
-    }()
-    
-    // MARK: - Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupUI()
-        locationManager.delegate = self
-        activityIndicator.startAnimating()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        requestCurrentLocation()
-    }
-}
+    private var weatherData: Weather?
 
-private extension CurentLocationViewController {
-    
-    func setupUI() {
-        view.backgroundColor = .white
+    func fetchWeatherForLocation(completion: @escaping() -> Void) {
         
-        view.addSubview(weatherView)
-        weatherView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(Constants.insetS)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(Constants.insetS)
-            make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
-        }
         
-        weatherView.isHidden = true
-        
-        view.addSubview(activityIndicator)
-        activityIndicator.center = view.center
-        activityIndicator.startAnimating()
+        completion()
     }
+    
+    func numberOfSections() -> Int { 4 }
+    
+    func numberOfRowsInSection() -> Int { 1 }
+    
+    
+    
+    
     
     func requestCurrentLocation() {
         locationManager.requestLocation()
@@ -103,17 +76,9 @@ private extension CurentLocationViewController {
         
         requestCurrentLocation()
     }
-    
-    func updateUIWithWeatherData() {
-        activityIndicator.stopAnimating()
-        weatherView.isHidden = false
-        print(weatherData ?? "no weather received")
-    }
 }
 
-// MARK: - CLLocationManagerDelegate
-
-extension CurentLocationViewController: CLLocationManagerDelegate {
+extension CurentLocationViewModel: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
             currentCoordinates = location.coordinate
