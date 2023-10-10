@@ -1,5 +1,5 @@
 //
-//  HourlyForecastView.swift
+//  HourlyCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 04.10.2023.
@@ -7,7 +7,14 @@
 
 import UIKit
 
-final class HourlyForecastView: UIView {
+class HourlyCell: UITableViewCell {
+    static var identifier: String { String(describing: self) }
+    
+    var viewModel: HourlyCellViewModelProtocol! {
+        didSet {
+            
+        }
+    }
     
     private let hourData = (1...12).map { _ in
         HourForecastComponentView(frame: .zero, hour: "hour", condition: "cond", temp: "temp")
@@ -31,17 +38,15 @@ final class HourlyForecastView: UIView {
         return scroll
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-private extension HourlyForecastView {
+    
     func setupUI() {
         backgroundColor = .systemYellow
         layer.cornerRadius = Constants.cornerRadiusM
@@ -59,3 +64,4 @@ private extension HourlyForecastView {
         }
     }
 }
+

@@ -24,25 +24,13 @@ final class CurrentLocationViewController: UIViewController {
     }()
     
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
-        tableView.dataSource = self
-        tableView.delegate = self
+        configureTableView()
         
         setupUI()
-        activityIndicator.startAnimating()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel.fetchWeatherForLocation { [weak self] in
-            self?.tableView.reloadData()
-            self?.activityIndicator.stopAnimating()
-            self?.tableView.isHidden.toggle()
-        }
+        configureViewModelObserver()
     }
 }
 
@@ -56,17 +44,39 @@ private extension CurrentLocationViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
-        tableView.isHidden.toggle()
+        tableView.isHidden = true
         
         view.addSubview(activityIndicator)
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
+    }
+    
+    func configureTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
+        tableView.register(HourlyCell.self, forCellReuseIdentifier: HourlyCell.identifier)
+        
+        tableView.separatorStyle = .none
+        tableView.allowsSelection = false
+    }
+    
+    func configureViewModelObserver() {
+        viewModel.weatherData.bind { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                self?.activityIndicator.isHidden = true
+                self?.tableView.isHidden = false
+            }
+        }
     }
 }
 
 // MARK: - UITableViewDataSource
 
 extension CurrentLocationViewController: UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         viewModel.numberOfSections()
     }
@@ -77,16 +87,29 @@ extension CurrentLocationViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        guard let weatherData = viewModel.weatherData else { return cell }
+        guard let weatherData = viewModel.weatherData.value else { return cell }
         
-        switch indexPath.row {
+        switch indexPath.section {
         case Table.Summary.rawValue:
-            guard let summaryCell = tableView.dequeueReusableCell(withIdentifier: SummaryCell.identifier) as? SummaryCell else { return cell }
-            summaryCell.viewModel = viewModel.getSummaryCellViewModel(withWeather: weatherData)
+            guard let summaryCell = tableView.dequeueReusableCell(
+                withIdentifier: SummaryCell.identifier
+            ) as? SummaryCell else { return cell }
+            summaryCell.viewModel = viewModel.getSummaryCellViewModel(
+                withWeather: weatherData
+            )
             return summaryCell
-//        case Table.Hourly.rawValue:
-//        case Table.Extra.rawValue:
-//        case Table.Daily.rawValue:
+            
+        case Table.Hourly.rawValue:
+            guard let hourlyCell = tableView.dequeueReusableCell(
+                withIdentifier: HourlyCell.identifier
+            ) as? HourlyCell else { return cell }
+            hourlyCell.viewModel = viewModel.getHourlyCellViewModel(
+                withWeather: weatherData
+            )
+            return hourlyCell
+            
+            //        case Table.Extra.rawValue:
+            //        case Table.Daily.rawValue:
         default:
             return cell
         }
@@ -96,11 +119,8 @@ extension CurrentLocationViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension CurrentLocationViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section < 2 {
-            return heightS
-        } else {
-            return heightM
-        }
+        indexPath.section < 2 ? heightS : heightM
     }
 }
