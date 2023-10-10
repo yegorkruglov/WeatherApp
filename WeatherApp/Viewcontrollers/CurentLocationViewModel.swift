@@ -14,6 +14,7 @@ protocol CurentLocationViewModelProtocol {
     func numberOfSections() -> Int
     func numberOfRowsInSection() -> Int
     
+    func getHeaderTitle(forSection number: Int) -> String
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
     func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCellViewModelProtocol
 }
@@ -67,7 +68,7 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
             switch result {
             case .success(let weatherData):
                 self.weatherData.value = weatherData
-                print(self.weatherData.value?.current.condition.text)
+//                print(self.weatherData.value?.current.condition.text)
             case .failure(let error):
                 print(error.rawValue)
             }
@@ -77,6 +78,10 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
     func numberOfSections() -> Int { Table.allCases.count }
     
     func numberOfRowsInSection() -> Int { 1 }
+    
+    func getHeaderTitle(forSection number: Int) -> String {
+        Table.allCases[number].value
+    }
     
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol {
         SummaryCellViewModel(weatherData: weatherData)
@@ -95,4 +100,17 @@ enum Table: Int, CaseIterable {
     case Hourly
     case Extra
     case Daily
+    
+    var value: String {
+        switch self {
+        case .Summary:
+            "Summary"
+        case .Hourly:
+            "Hourly forecast"
+        case .Extra:
+            "Extra details"
+        case .Daily:
+            "Daily forecast"
+        }
+    }
 }

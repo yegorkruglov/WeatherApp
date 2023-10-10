@@ -114,6 +114,10 @@ extension CurrentLocationViewController: UITableViewDataSource {
             return cell
         }
     }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        viewModel.getHeaderTitle(forSection: section)
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -123,4 +127,6 @@ extension CurrentLocationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         indexPath.section < 2 ? heightS : heightM
     }
+    
+    
 }
