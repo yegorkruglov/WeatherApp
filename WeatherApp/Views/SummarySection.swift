@@ -1,5 +1,5 @@
 //
-//  SummaryCell.swift
+//  SummarySection.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 10.10.2023.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-class SummaryCell: UITableViewCell {
+class SummarySection: UITableViewCell {
     static var identifier: String { String(describing: self) }
     
-    var viewModel: SummaryCellViewModelProtocol! {
+    var viewModel: SummarySectionViewModelProtocol! {
         didSet {
             locationNameLbael.text = viewModel.locationName
             conditionLabel.text = viewModel.conditionText

@@ -1,5 +1,5 @@
 //
-//  HourlyCellViewModel.swift
+//  HourlySectionViewModel.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 10.10.2023.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol HourlyCellViewModelProtocol {
+protocol HourlySectionViewModelProtocol {
     init(weatherData: Weather)
 }
 
-class HourlyCellViewModel: HourlyCellViewModelProtocol {
+class HourlySectionViewModel: HourlySectionViewModelProtocol {
     private let weatherData: Weather
 
     required init(weatherData: Weather) {

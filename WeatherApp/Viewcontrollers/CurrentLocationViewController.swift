@@ -45,6 +45,7 @@ private extension CurrentLocationViewController {
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
         tableView.isHidden = true
+        tableView.showsVerticalScrollIndicator = false
         
         view.addSubview(activityIndicator)
         activityIndicator.center = view.center
@@ -55,11 +56,12 @@ private extension CurrentLocationViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
-        tableView.register(HourlyCell.self, forCellReuseIdentifier: HourlyCell.identifier)
+        tableView.register(SummarySection.self, forCellReuseIdentifier: SummarySection.identifier)
+        tableView.register(HourlySection.self, forCellReuseIdentifier: HourlySection.identifier)
         
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
+        tableView.isDirectionalLockEnabled = true
     }
     
     func configureViewModelObserver() {
@@ -92,8 +94,8 @@ extension CurrentLocationViewController: UITableViewDataSource {
         switch indexPath.section {
         case Table.Summary.rawValue:
             guard let summaryCell = tableView.dequeueReusableCell(
-                withIdentifier: SummaryCell.identifier
-            ) as? SummaryCell else { return cell }
+                withIdentifier: SummarySection.identifier
+            ) as? SummarySection else { return cell }
             summaryCell.viewModel = viewModel.getSummaryCellViewModel(
                 withWeather: weatherData
             )
@@ -101,11 +103,11 @@ extension CurrentLocationViewController: UITableViewDataSource {
             
         case Table.Hourly.rawValue:
             guard let hourlyCell = tableView.dequeueReusableCell(
-                withIdentifier: HourlyCell.identifier
-            ) as? HourlyCell else { return cell }
-            hourlyCell.viewModel = viewModel.getHourlyCellViewModel(
-                withWeather: weatherData
-            )
+                withIdentifier: HourlySection.identifier
+            ) as? HourlySection else { return cell }
+//            hourlyCell.viewModel = viewModel.getHourlyCellViewModel(
+//                withWeather: weatherData
+//            )
             return hourlyCell
             
             //        case Table.Extra.rawValue:
@@ -127,6 +129,4 @@ extension CurrentLocationViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         indexPath.section < 2 ? heightS : heightM
     }
-    
-    
 }

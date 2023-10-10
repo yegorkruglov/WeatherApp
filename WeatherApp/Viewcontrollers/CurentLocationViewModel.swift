@@ -15,8 +15,8 @@ protocol CurentLocationViewModelProtocol {
     func numberOfRowsInSection() -> Int
     
     func getHeaderTitle(forSection number: Int) -> String
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
-    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCellViewModelProtocol
+    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummarySectionViewModelProtocol
+    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol
 }
 
 final class CurentLocationViewModel: CurentLocationViewModelProtocol {
@@ -83,12 +83,12 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
         Table.allCases[number].value
     }
     
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol {
-        SummaryCellViewModel(weatherData: weatherData)
+    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummarySectionViewModelProtocol {
+       SummarySectionViewModel(weatherData: weatherData)
     }
     
-    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCellViewModelProtocol {
-        HourlyCellViewModel(weatherData: weatherData)
+    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol {
+        HourlySectionViewModel(weatherData: weatherData)
     }
     
 }

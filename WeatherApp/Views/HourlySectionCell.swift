@@ -1,5 +1,5 @@
 //
-//  HourForecastComponentView.swift
+//  HourlySectionCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 04.10.2023.
@@ -7,32 +7,28 @@
 
 import UIKit
 
-final class HourForecastComponentView: UIView {
+final class HourlySectionCell: UICollectionViewCell {
+    static var identifier: String { String(describing: self) }
     
-    private let hour: String
-    private let condition: String
-    private let temp: String
+//    private let hour: String
+//    private let condition: String
+//    private let temp: String
     
-    private lazy var hourLabel = getLabel(text: hour, font: Constants.fontS, alignment: .center)
-    private lazy var conditionLabel = getLabel(text: condition, font: Constants.fontS, alignment: .center)
-    private lazy var tempLabel = getLabel(text: temp, font: Constants.fontS, alignment: .center)
+    private lazy var hourLabel = UILabel()
+    private lazy var conditionLabel = UILabel()
+    private lazy var tempLabel = UILabel()
     
-    init(frame: CGRect, hour: String, condition: String, temp: String) {
-        self.hour = hour
-        self.condition = condition
-        self.temp = temp
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
-private extension HourForecastComponentView {
+private extension HourlySectionCell {
     func setupUI() {
         backgroundColor = .cyan
         layer.cornerRadius = Constants.cornerRadiusM

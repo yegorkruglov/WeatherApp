@@ -8,6 +8,9 @@
 import UIKit
 
 extension UIView {  
+    var viewHeight: CGFloat { frame.height }
+    var viewWidth: CGFloat { frame.width }
+    
     func getLabel(text: String, font: UIFont, alignment: NSTextAlignment = .left) -> UILabel {
         let label = UILabel()
         label.text = text
