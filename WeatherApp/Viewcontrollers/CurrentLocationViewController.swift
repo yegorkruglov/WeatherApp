@@ -28,6 +28,7 @@ final class CurrentLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -36,7 +37,7 @@ final class CurrentLocationViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        super.viewDidAppear(animated)
         viewModel.fetchWeatherForLocation { [weak self] in
             self?.tableView.reloadData()
             self?.activityIndicator.stopAnimating()
@@ -75,7 +76,20 @@ extension CurrentLocationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        UITableViewCell()
+        let cell = UITableViewCell()
+        guard let weatherData = viewModel.weatherData else { return cell }
+        
+        switch indexPath.row {
+        case Table.Summary.rawValue:
+            guard let summaryCell = tableView.dequeueReusableCell(withIdentifier: SummaryCell.identifier) as? SummaryCell else { return cell }
+            summaryCell.viewModel = viewModel.getSummaryCellViewModel(withWeather: weatherData)
+            return summaryCell
+//        case Table.Hourly.rawValue:
+//        case Table.Extra.rawValue:
+//        case Table.Daily.rawValue:
+        default:
+            return cell
+        }
     }
 }
 

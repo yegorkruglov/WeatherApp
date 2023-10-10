@@ -9,17 +9,21 @@ import Foundation
 import CoreLocation
 
 protocol CurentLocationViewModelProtocol {
+    var weatherData: Weather? { get }
+    
     func fetchWeatherForLocation(completion: @escaping() -> Void)
     
     func numberOfSections() -> Int
     func numberOfRowsInSection() -> Int
+    
+    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
 }
 
 final class CurentLocationViewModel: CurentLocationViewModelProtocol {
     private let networkManager = NetworkManager.shared
     private let locationManager = LocationManager()
     
-    private var weatherData: Weather? {
+     private(set) var weatherData: Weather? {
         didSet {
             print(weatherData?.current.condition.text)
         }
@@ -73,7 +77,21 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
         }
     }
     
-    func numberOfSections() -> Int { 4 }
+    func numberOfSections() -> Int { Table.allCases.count }
     
     func numberOfRowsInSection() -> Int { 1 }
+    
+    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol {
+        SummaryCellViewModel(weatherData: weatherData)
+    }
+
+}
+
+//MARK: - UITableView Configuration
+
+enum Table: Int, CaseIterable {
+    case Summary
+    case Hourly
+    case Extra
+    case Daily
 }

@@ -1,31 +1,40 @@
 //
-//  CurrentWeatherSummaryView.swift
+//  SummaryCell.swift
 //  WeatherApp
 //
-//  Created by Egor Kruglov on 03.10.2023.
+//  Created by Egor Kruglov on 10.10.2023.
 //
 
 import UIKit
 
-final class CurrentWeatherSummaryView: UIView {
+class SummaryCell: UITableViewCell {
+    static var identifier: String { String(describing: self) }
+    
+    var viewModel: SummaryCellViewModelProtocol! {
+        didSet {
+            locationNameLbael.text = viewModel.locationName
+            conditionLabel.text = viewModel.conditionText
+            currentTempLabel.text = viewModel.currentTempText
+            highTempLabel.text = viewModel.highestTempText
+            lowTempLabel.text = viewModel.lowestTempText
+        }
+    }
     
     private lazy var locationNameLbael = getLabel(text: "Location", font: Constants.fontL)
     private lazy var conditionLabel = getLabel(text: "Condition", font: Constants.fontM)
-    private lazy var currentTempLabel = getLabel(text: "20", font: Constants.fontL, alignment: .center)
-    private lazy var highTempLabel = getLabel(text: "H: 25", font: Constants.fontS, alignment: .center)
-    private lazy var lowTempLabel = getLabel(text: "L: 15", font: Constants.fontS, alignment: .center)
+    private lazy var currentTempLabel = getLabel(text: "Temp", font: Constants.fontL, alignment: .center)
+    private lazy var highTempLabel = getLabel(text: "H:", font: Constants.fontS, alignment: .center)
+    private lazy var lowTempLabel = getLabel(text: "L:", font: Constants.fontS, alignment: .center)
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-private extension CurrentWeatherSummaryView {
+    
     func setupUI() {
         backgroundColor = .purple
         layer.cornerRadius = Constants.cornerRadiusM
@@ -69,4 +78,5 @@ private extension CurrentWeatherSummaryView {
             make.leading.equalTo(highTempLabel.snp.trailing)
         }
     }
+
 }
