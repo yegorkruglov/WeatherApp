@@ -7,22 +7,22 @@
 
 import Foundation
 
-
 protocol HourlySectionCellViewModelProtocol {
     var hourText: String { get }
-    var conditionText: String { get }
     var tempText: String { get }
-    
+    var conditionImageURL: URL? { get }
     init(hourData: Hour)
 }
 
 class HourlySectionCellViewModel: HourlySectionCellViewModelProtocol {
+    
+    
     var hourText: String {  getFormattedHour(from: hourData.time) }
+        
+    var tempText: String { String(hourData.tempC) + "°" }
     
-    var conditionText: String { hourData.condition.text }
-    
-    var tempText: String { String(hourData.tempC) }
-    
+    var conditionImageURL: URL? { getConditionImageURL() }
+        
     private let hourData: Hour
     
     required init(hourData: Hour) {
@@ -39,5 +39,10 @@ class HourlySectionCellViewModel: HourlySectionCellViewModelProtocol {
         let hourString = dateFormatter.string(from: date)
         
         return hourString
+    }
+    
+    private func getConditionImageURL() -> URL? {
+        guard let url = URL(string: "https:" + hourData.condition.icon) else { return nil}
+        return url
     }
 }

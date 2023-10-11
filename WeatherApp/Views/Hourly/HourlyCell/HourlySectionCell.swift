@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class HourlySectionCell: UICollectionViewCell {
     static var identifier: String { String(describing: self) }
@@ -13,13 +14,19 @@ final class HourlySectionCell: UICollectionViewCell {
     var viewModel: HourlySectionCellViewModelProtocol! {
         didSet {
             hourLabel.text = viewModel.hourText
-            conditionLabel.text = viewModel.conditionText
             tempLabel.text = viewModel.tempText
+            conditionImageView.kf.setImage(with: viewModel.conditionImageURL)
         }
     }
     
     private lazy var hourLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
-    private lazy var conditionLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
+    private lazy var conditionImageView: UIImageView =  {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        
+        return imageView
+        
+    }()
     private lazy var tempLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
     
     override init(frame: CGRect) {
@@ -37,7 +44,7 @@ private extension HourlySectionCell {
         backgroundColor = .cyan
         layer.cornerRadius = Constants.cornerRadiusM
         
-        let stackView = UIStackView(arrangedSubviews: [hourLabel, conditionLabel, tempLabel])
+        let stackView = UIStackView(arrangedSubviews: [hourLabel, conditionImageView, tempLabel])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         

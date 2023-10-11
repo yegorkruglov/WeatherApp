@@ -29,7 +29,9 @@ final class NetworkManager {
         
         guard
             let query = query,
-            let url = URL(string: "\(baseURL)forecast.json?key=\(apiKey)&q=\(query)&days=6&aqi=no&alerts=no")
+            let url = URL(
+                string: "\(baseURL)forecast.json?key=\(apiKey)&q=\(query)&days=6&aqi=no&alerts=no"
+            )
         else { return }
         
         print(url)
