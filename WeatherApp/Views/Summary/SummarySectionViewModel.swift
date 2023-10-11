@@ -13,6 +13,7 @@ protocol SummarySectionViewModelProtocol {
     var currentTempText: String { get }
     var highestTempText: String { get }
     var lowestTempText: String { get }
+    var conditionImageURL: URL? { get }
     
     init(weatherData: Weather)
 }
@@ -34,9 +35,16 @@ class SummarySectionViewModel: SummarySectionViewModelProtocol {
         return String(minTemp) + "°"
     }
     
+    var conditionImageURL: URL? { getConditionImageURL() }
+    
     private let weatherData: Weather
     
     required init(weatherData: Weather) {
         self.weatherData = weatherData
+    }
+    
+    private func getConditionImageURL() -> URL? {
+        guard let url = URL(string: "https:" + weatherData.current.condition.icon) else { return nil}
+        return url
     }
 }

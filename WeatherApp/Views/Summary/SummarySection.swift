@@ -17,6 +17,7 @@ class SummarySection: UITableViewCell {
             currentTempLabel.text = viewModel.currentTempText
             highTempLabel.text = viewModel.highestTempText
             lowTempLabel.text = viewModel.lowestTempText
+            conditionImageView.kf.setImage(with: viewModel.conditionImageURL)
         }
     }
     
@@ -25,6 +26,14 @@ class SummarySection: UITableViewCell {
     private lazy var currentTempLabel = getLabel(text: "Temp", font: Constants.fontL, alignment: .center)
     private lazy var highTempLabel = getLabel(text: "H:", font: Constants.fontS, alignment: .center)
     private lazy var lowTempLabel = getLabel(text: "L:", font: Constants.fontS, alignment: .center)
+    private lazy var conditionImageView: UIImageView =  {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        
+        return imageView
+        
+    }()
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -76,6 +85,12 @@ class SummarySection: UITableViewCell {
             make.size.equalTo(highTempLabel)
             make.top.equalTo(highTempLabel)
             make.leading.equalTo(highTempLabel.snp.trailing)
+        }
+        
+        addSubview(conditionImageView)
+        conditionImageView.snp.makeConstraints { make in
+            make.bottom.width.height.equalTo(highTempLabel)
+            make.trailing.equalTo(highTempLabel.snp.leading)
         }
     }
 
