@@ -105,9 +105,9 @@ extension CurrentLocationViewController: UITableViewDataSource {
             guard let hourlyCell = tableView.dequeueReusableCell(
                 withIdentifier: HourlySection.identifier
             ) as? HourlySection else { return cell }
-//            hourlyCell.viewModel = viewModel.getHourlyCellViewModel(
-//                withWeather: weatherData
-//            )
+            hourlyCell.viewModel = viewModel.getHourlyCellViewModel(
+                withWeather: weatherData
+            )
             return hourlyCell
             
             //        case Table.Extra.rawValue:

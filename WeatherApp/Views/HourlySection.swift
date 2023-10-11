@@ -13,6 +13,12 @@ class HourlySection: UITableViewCell {
     
     private var collectionView: UICollectionView?
     
+    var viewModel: HourlySectionViewModelProtocol! {
+        didSet {
+            
+        }
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -50,11 +56,12 @@ class HourlySection: UITableViewCell {
 
 extension HourlySection: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        viewModel.getNumberOfItems()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlySectionCell.identifier, for: indexPath) as? HourlySectionCell else { return UICollectionViewCell() }
+        cell.viewModel = viewModel.getHourlySectionCellViewModel(at: indexPath)
         
         return cell
     }

@@ -10,9 +10,13 @@ import UIKit
 final class HourlySectionCell: UICollectionViewCell {
     static var identifier: String { String(describing: self) }
     
-//    private let hour: String
-//    private let condition: String
-//    private let temp: String
+    var viewModel: HourlySectionCellViewModelProtocol! {
+        didSet {
+            hourLabel.text = viewModel.hourText
+            conditionLabel.text = viewModel.conditionText
+            tempLabel.text = viewModel.tempText
+        }
+    }
     
     private lazy var hourLabel = UILabel()
     private lazy var conditionLabel = UILabel()
