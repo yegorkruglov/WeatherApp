@@ -18,9 +18,9 @@ final class HourlySectionCell: UICollectionViewCell {
         }
     }
     
-    private lazy var hourLabel = UILabel()
-    private lazy var conditionLabel = UILabel()
-    private lazy var tempLabel = UILabel()
+    private lazy var hourLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
+    private lazy var conditionLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
+    private lazy var tempLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

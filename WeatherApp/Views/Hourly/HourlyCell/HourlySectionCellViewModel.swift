@@ -17,7 +17,7 @@ protocol HourlySectionCellViewModelProtocol {
 }
 
 class HourlySectionCellViewModel: HourlySectionCellViewModelProtocol {
-    var hourText: String { hourData.time }
+    var hourText: String {  getFormattedHour(from: hourData.time) }
     
     var conditionText: String { hourData.condition.text }
     
@@ -27,5 +27,17 @@ class HourlySectionCellViewModel: HourlySectionCellViewModelProtocol {
     
     required init(hourData: Hour) {
         self.hourData = hourData
+    }
+    
+    private func getFormattedHour(from dateText: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        
+        guard let date = dateFormatter.date(from: dateText)  else { return "err"}
+        
+        dateFormatter.dateFormat = "HH"
+        let hourString = dateFormatter.string(from: date)
+        
+        return hourString
     }
 }
