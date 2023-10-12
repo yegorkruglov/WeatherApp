@@ -13,10 +13,10 @@ final class DailyForecastComponentView: UIView {
     private let tempHigh: String
     private let tempLow: String
     
-    private lazy var dateLabel = getLabel(text: date, font: Constants.fontS, alignment: .left)
-    private lazy var conditionLabel = getLabel(text: condition, font: Constants.fontS, alignment: .center)
-    private lazy var tempHighLabel = getLabel(text: tempHigh, font: Constants.fontS, alignment: .center)
-    private lazy var tempLowLabel = getLabel(text: tempLow, font: Constants.fontS, alignment: .center)
+    private lazy var dateLabel = getLabel(font: Constants.fontS, alignment: .left)
+    private lazy var conditionLabel = getLabel(font: Constants.fontS, alignment: .center)
+    private lazy var tempHighLabel = getLabel(font: Constants.fontS, alignment: .center)
+    private lazy var tempLowLabel = getLabel(font: Constants.fontS, alignment: .center)
     
     init(frame: CGRect, date: String, condition: String, tempHigh: String, tempLow: String) {
         self.date = date

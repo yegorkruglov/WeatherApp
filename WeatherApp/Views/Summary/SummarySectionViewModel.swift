@@ -23,16 +23,16 @@ class SummarySectionViewModel: SummarySectionViewModelProtocol {
     
     var conditionText: String { weatherData.current.condition.text }
     
-    var currentTempText: String { String(weatherData.current.tempC) + "°" }
+    var currentTempText: String { String(Int(weatherData.current.tempC)) + "°" }
     
     var highestTempText: String {
         guard let maxTemp = weatherData.forecast.forecastday.first?.day.maxtempC else { return "err"}
-        return String(maxTemp) + "°"
+        return "H: " + String(Int(maxTemp)) + "°"
     }
     
     var lowestTempText: String {
         guard let minTemp = weatherData.forecast.forecastday.first?.day.mintempC else { return "err"}
-        return String(minTemp) + "°"
+        return "L: " + String(Int(minTemp)) + "°"
     }
     
     var conditionImageURL: URL? { getConditionImageURL() }

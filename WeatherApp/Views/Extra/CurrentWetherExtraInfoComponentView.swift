@@ -11,8 +11,8 @@ final class CurrentWetherExtraInfoComponentView: UIView {
     private let componentName: String
     private let value: String
     
-    private lazy var componentNameLabel = getLabel(text: componentName, font: Constants.fontM, alignment: .center)
-    private lazy var valueLabel = getLabel(text: value, font: Constants.fontL, alignment: .center)
+    private lazy var componentNameLabel = getLabel(font: Constants.fontM, alignment: .center)
+    private lazy var valueLabel = getLabel(font: Constants.fontL, alignment: .center)
 
     init(frame: CGRect, componentName: String, value: String) {
         self.value = value

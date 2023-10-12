@@ -19,7 +19,7 @@ final class HourlySectionCell: UICollectionViewCell {
         }
     }
     
-    private lazy var hourLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
+    private lazy var hourLabel = getLabel(font: Constants.fontM, alignment: .center)
     private lazy var conditionImageView: UIImageView =  {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -27,7 +27,7 @@ final class HourlySectionCell: UICollectionViewCell {
         return imageView
         
     }()
-    private lazy var tempLabel = getLabel(text: "", font: Constants.fontM, alignment: .center)
+    private lazy var tempLabel = getLabel(font: Constants.fontM, alignment: .center)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

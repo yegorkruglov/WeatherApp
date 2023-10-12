@@ -19,7 +19,7 @@ class HourlySectionCellViewModel: HourlySectionCellViewModelProtocol {
     
     var hourText: String {  getFormattedHour(from: hourData.time) }
         
-    var tempText: String { String(hourData.tempC) + "°" }
+    var tempText: String { String(Int(hourData.tempC)) + "°" }
     
     var conditionImageURL: URL? { getConditionImageURL() }
         
