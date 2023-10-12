@@ -1,5 +1,5 @@
 //
-//  ExtraSectionCellViewModel.swift
+//  ExtraCollectionViewCellViewModel.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 12.10.2023.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol ExtraSectionCellViewModelProtocol {
+protocol ExtraCollectionViewCellViewModelProtocol {
     var cellName: String { get }
     var cellValue: String { get }
     
     init(cellName: String, cellValue: String)
 }
 
-class ExtraSectionCellViewModel: ExtraSectionCellViewModelProtocol {
+final class ExtraCollectionViewCellViewModel: ExtraCollectionViewCellViewModelProtocol {
     
     var cellName: String
     
@@ -24,5 +24,4 @@ class ExtraSectionCellViewModel: ExtraSectionCellViewModelProtocol {
         self.cellName = cellName
         self.cellValue = cellValue
     }
-    
 }

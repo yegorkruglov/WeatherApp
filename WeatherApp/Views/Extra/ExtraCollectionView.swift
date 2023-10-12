@@ -1,5 +1,5 @@
 //
-//  ExtraSection.swift
+//  ExtraCollectionView.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 03.10.2023.
@@ -7,15 +7,15 @@
 
 import UIKit
 
-final class ExtraSection: UITableViewCell {
+final class ExtraCollectionView: UITableViewCell {
     
     static var identifier: String { String(describing: self) }
+    
+    var viewModel: ExtraCollectionViewModelProtocol!
     
     private var collectionView: UICollectionView?
     
     private let itemsPerRow: CGFloat = 2
-    
-    var viewModel: ExtraSectionViewModelProtocol!
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,6 +26,9 @@ final class ExtraSection: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+private extension ExtraCollectionView {
     func setupUI() {
         backgroundColor = .clear
         layer.cornerRadius = Constants.cornerRadiusM
@@ -41,8 +44,8 @@ final class ExtraSection: UITableViewCell {
         collectionView?.dataSource = self
         collectionView?.delegate = self
         collectionView?.register(
-            ExtraSectionCell.self,
-            forCellWithReuseIdentifier: ExtraSectionCell.identifier
+            ExtraCollectionViewCell.self,
+            forCellWithReuseIdentifier: ExtraCollectionViewCell.identifier
         )
         
         contentView.addSubview(collectionView ?? UILabel())
@@ -52,20 +55,20 @@ final class ExtraSection: UITableViewCell {
     }
 }
 
-extension ExtraSection: UICollectionViewDataSource {
+extension ExtraCollectionView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.getNumberOfItems()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {        
-        guard let extraCell = collectionView.dequeueReusableCell(withReuseIdentifier: ExtraSectionCell.identifier, for: indexPath) as? ExtraSectionCell else { return UICollectionViewCell() }
+        guard let extraCell = collectionView.dequeueReusableCell(withReuseIdentifier: ExtraCollectionViewCell.identifier, for: indexPath) as? ExtraCollectionViewCell else { return UICollectionViewCell() }
         extraCell.viewModel = viewModel.getExtraSectionCellViewModel(at: indexPath)
         
         return extraCell
     }
 }
 
-extension ExtraSection: UICollectionViewDelegateFlowLayout {
+extension ExtraCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let itemsPerSection = CGFloat(viewModel.getNumberOfItems() / 2)
@@ -78,8 +81,6 @@ extension ExtraSection: UICollectionViewDelegateFlowLayout {
         let heightPerItem = availableHeight / itemsPerSection
         return CGSize(width: widthPerItem, height: heightPerItem)
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         Constants.insetM

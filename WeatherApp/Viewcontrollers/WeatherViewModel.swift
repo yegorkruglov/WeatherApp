@@ -1,5 +1,5 @@
 //
-//  CurentLocationViewModel.swift
+//  WeatherViewModel.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 09.10.2023.
@@ -8,20 +8,20 @@
 import Foundation
 import CoreLocation
 
-protocol CurentLocationViewModelProtocol {
+protocol WeatherViewModelProtocol {
     var weatherData: Bindable<Weather?> { get }
     
     func numberOfSections() -> Int
     func numberOfRowsIn(section: Int) -> Int
     
     func getHeaderTitle(forSection number: Int) -> String
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummarySectionViewModelProtocol
-    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol
-    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraSectionViewModelProtocol
-    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailySectionCellViewModelProtocol
+    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
+    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCollectionViewViewModelProtocol
+    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraCollectionViewModelProtocol
+    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol
 }
 
-final class CurentLocationViewModel: CurentLocationViewModelProtocol {    
+final class WeatherViewModel: WeatherViewModelProtocol {    
     private let networkManager = NetworkManager.shared
     private let locationManager = LocationManager()
     
@@ -88,25 +88,23 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
         Table.allCases[number].value
     }
     
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummarySectionViewModelProtocol {
-       SummarySectionViewModel(weatherData: weatherData)
+    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol {
+       SummaryCellViewModel(weatherData: weatherData)
     }
     
-    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol {
-        HourlySectionViewModel(weatherData: weatherData)
+    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCollectionViewViewModelProtocol {
+        HourlyCollectionViewViewModel(weatherData: weatherData)
     }
     
-    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraSectionViewModelProtocol {
-        ExtraSectionViewmodel(weatherData: weatherdata)
+    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraCollectionViewModelProtocol {
+        ExtraCollectionViewViewmodel(weatherData: weatherdata)
     }
     
-    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailySectionCellViewModelProtocol {
-        DailySectionCellViewModel(forecastDay: forecastDay)
+    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol {
+        DailyCellViewModel(forecastDay: forecastDay)
     }
     
 }
-
-//MARK: - UITableView Configuration
 
 enum Table: Int, CaseIterable {
     case Summary

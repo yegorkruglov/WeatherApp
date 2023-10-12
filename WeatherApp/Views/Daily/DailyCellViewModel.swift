@@ -1,5 +1,5 @@
 //
-//  DailySectionCellViewModel.swift
+//  DailyCellViewModel.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 12.10.2023.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DailySectionCellViewModelProtocol {
+protocol DailyCellViewModelProtocol {
     var dateText: String { get }
     var conditionText: String { get }
     var tempHighText: String { get }
@@ -17,7 +17,7 @@ protocol DailySectionCellViewModelProtocol {
     init(forecastDay: Forecastday)
 }
 
-class DailySectionCellViewModel: DailySectionCellViewModelProtocol {
+final class DailyCellViewModel: DailyCellViewModelProtocol {
     var dateText: String { getFormattedDate() }
     
     var conditionText: String { forecastDay.day.condition.text }
@@ -28,15 +28,16 @@ class DailySectionCellViewModel: DailySectionCellViewModelProtocol {
     
     var conditionImageURL: URL? { getConditionImageURL() }
     
-    
     private let forecastDay: Forecastday
     
     required init(forecastDay: Forecastday) {
         self.forecastDay = forecastDay
     }
-    
-    private func getFormattedDate() -> String {
-           
+}
+
+private extension DailyCellViewModel {
+    func getFormattedDate() -> String {
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
@@ -49,9 +50,8 @@ class DailySectionCellViewModel: DailySectionCellViewModelProtocol {
         return formattedDate
     }
     
-    private func getConditionImageURL() -> URL? {
-        guard let url = URL(string: "https:" + forecastDay.day.condition.icon) else { return nil}
+    func getConditionImageURL() -> URL? {
+        guard let url = URL(string: "https:" + forecastDay.day.condition.icon) else { return nil }
         return url
     }
-    
 }

@@ -1,5 +1,5 @@
 //
-//  HourlySectionViewModel.swift
+//  HourlyCollectionViewViewModel.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 10.10.2023.
@@ -7,18 +7,18 @@
 
 import Foundation
 
-protocol HourlySectionViewModelProtocol {
+protocol HourlyCollectionViewViewModelProtocol {
     init(weatherData: Weather)
     
     var weatherData: Bindable<Weather?> { get }
-    func getHourlySectionCellViewModel(at indexPath: IndexPath) -> HourlySectionCellViewModel
+    func getHourlySectionCellViewModel(at indexPath: IndexPath) -> HourlyCollectionViewCellViewModel
     func getNumberOfItems() -> Int
 }
 
-class HourlySectionViewModel: HourlySectionViewModelProtocol {
-    func getHourlySectionCellViewModel(at indexPath: IndexPath) -> HourlySectionCellViewModel {
+final class HourlyCollectionViewViewModel: HourlyCollectionViewViewModelProtocol {
+    func getHourlySectionCellViewModel(at indexPath: IndexPath) -> HourlyCollectionViewCellViewModel {
         let hourData = hoursData[indexPath.item]
-        return HourlySectionCellViewModel(hourData: hourData)
+        return HourlyCollectionViewCellViewModel(hourData: hourData)
     }
     
     func getNumberOfItems() -> Int {
@@ -32,7 +32,9 @@ class HourlySectionViewModel: HourlySectionViewModelProtocol {
     required init(weatherData: Weather) {
         self.weatherData.value = weatherData
     }
-    
+}
+
+extension HourlyCollectionViewViewModel {
     private func getHoursData() -> [Hour] {
         var hoursData: [Hour] = []
         let currentDate = Date()
@@ -52,7 +54,6 @@ class HourlySectionViewModel: HourlySectionViewModelProtocol {
         for index in 0...11 {
             hoursData.append(allHoursData[index])
         }
-        
         
         return hoursData
     }

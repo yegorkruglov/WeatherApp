@@ -1,5 +1,5 @@
 //
-//  SummarySection.swift
+//  SummaryCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 10.10.2023.
@@ -7,10 +7,13 @@
 
 import UIKit
 
-class SummarySection: UITableViewCell {
+final class SummaryCell: UITableViewCell {
+    
+    // MARK: Public propeties
+    
     static var identifier: String { String(describing: self) }
     
-    var viewModel: SummarySectionViewModelProtocol! {
+    var viewModel: SummaryCellViewModelProtocol! {
         didSet {
             locationNameLbael.text = viewModel.locationName
             conditionLabel.text = viewModel.conditionText
@@ -21,18 +24,13 @@ class SummarySection: UITableViewCell {
         }
     }
     
-    private lazy var locationNameLbael = getLabel(font: Constants.fontL)
+    // MARK: - Private Properties
+    private lazy var locationNameLbael = getLabel(font: Constants.fontL, alignment: .center)
     private lazy var conditionLabel = getLabel(font: Constants.fontM, alignment: .center)
     private lazy var currentTempLabel = getLabel(font: Constants.fontL, alignment: .center)
     private lazy var highTempLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var lowTempLabel = getLabel(font: Constants.fontS, alignment: .center)
-    private lazy var conditionImageView: UIImageView =  {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        
-        return imageView
-    }()
-
+    private lazy var conditionImageView = getImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -42,8 +40,12 @@ class SummarySection: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func setupUI() {
+}
+
+// MARK: - Cell setup
+
+extension SummaryCell {
+    private func setupUI() {
         backgroundColor = .appGray
         layer.cornerRadius = Constants.cornerRadiusM
         
@@ -88,14 +90,5 @@ class SummarySection: UITableViewCell {
             make.leading.equalTo(conditionImageView.snp.trailing)
             make.trailing.equalTo(highTempLabel.snp.leading)
         }
-        
-        
-        
-        
-        
-        
-        
-        
     }
-
 }

@@ -1,5 +1,5 @@
 //
-//  DailySectionCell.swift
+//  DailyCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 04.10.2023.
@@ -8,11 +8,11 @@
 import UIKit
 import Kingfisher
 
-final class DailySectionCell: UITableViewCell {
+final class DailyCell: UITableViewCell {
     
     static var identifier: String { String(describing: self) }
     
-    var viewModel: DailySectionCellViewModelProtocol! {
+    var viewModel: DailyCellViewModelProtocol! {
         didSet {
             dateLabel.text = viewModel.dateText
             conditionImageView.kf.setImage(with: viewModel.conditionImageURL)
@@ -23,16 +23,10 @@ final class DailySectionCell: UITableViewCell {
     }
     
     private lazy var dateLabel = getLabel(font: Constants.fontS, alignment: .center)
-    private lazy var conditionImageView: UIImageView =  {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        
-        return imageView
-        
-    }()
     private lazy var conditionLabel = getLabel(font: Constants.fontS, alignment: .left)
     private lazy var tempHighLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var tempLowLabel = getLabel(font: Constants.fontS, alignment: .center)
+    private lazy var conditionImageView = getImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,7 +38,7 @@ final class DailySectionCell: UITableViewCell {
     }
 }
 
-private extension DailySectionCell {
+private extension DailyCell {
     func setupUI() {
         layer.cornerRadius = Constants.cornerRadiusM
         
@@ -66,7 +60,7 @@ private extension DailySectionCell {
         
         dateLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview().inset(Constants.insetS)
-            make.width.equalTo(dateLabel.snp.height)
+            make.width.equalTo(dateLabel.snp.height).multipliedBy(1.2)
         }
         
         conditionImageView.snp.makeConstraints { make in
@@ -77,7 +71,7 @@ private extension DailySectionCell {
         
         tempLowLabel.snp.makeConstraints { make in
             make.top.bottom.trailing.equalToSuperview().inset(Constants.insetS)
-            make.width.equalTo(dateLabel).multipliedBy(1.2)
+            make.width.equalTo(dateLabel)
         }
         
         tempHighLabel.snp.makeConstraints { make in

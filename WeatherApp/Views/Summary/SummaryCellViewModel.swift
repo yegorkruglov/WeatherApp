@@ -1,5 +1,5 @@
 //
-//  SummarySectionViewModel.swift
+//  SummaryCellViewModel.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 10.10.2023.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol SummarySectionViewModelProtocol {
+protocol SummaryCellViewModelProtocol {
     var locationName: String { get }
     var conditionText: String { get }
     var currentTempText: String { get }
@@ -18,7 +18,7 @@ protocol SummarySectionViewModelProtocol {
     init(weatherData: Weather)
 }
 
-class SummarySectionViewModel: SummarySectionViewModelProtocol {
+final class SummaryCellViewModel: SummaryCellViewModelProtocol {
     var locationName: String { weatherData.location.name }
     
     var conditionText: String { weatherData.current.condition.text }
@@ -42,7 +42,9 @@ class SummarySectionViewModel: SummarySectionViewModelProtocol {
     required init(weatherData: Weather) {
         self.weatherData = weatherData
     }
-    
+}
+
+extension SummaryCellViewModel {
     private func getConditionImageURL() -> URL? {
         guard let url = URL(string: "https:" + weatherData.current.condition.icon) else { return nil}
         return url

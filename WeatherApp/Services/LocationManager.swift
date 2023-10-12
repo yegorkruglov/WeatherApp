@@ -35,6 +35,7 @@ extension LocationManager: CLLocationManagerDelegate {
         didChangeAuthorization status: CLAuthorizationStatus
     ) {
         switch status {
+            
         case .notDetermined:
             self.locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:

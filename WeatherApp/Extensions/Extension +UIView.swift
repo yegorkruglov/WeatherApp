@@ -21,4 +21,11 @@ extension UIView {
         
         return label
     }
+    
+    func getImageView() -> UIImageView {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        
+        return imageView
+    }
 }

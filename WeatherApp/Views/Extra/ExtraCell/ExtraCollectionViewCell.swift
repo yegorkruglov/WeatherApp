@@ -1,5 +1,5 @@
 //
-//  ExtraSectionCell.swift
+//  ExtraCollectionViewCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 03.10.2023.
@@ -7,11 +7,11 @@
 
 import UIKit
 
-final class ExtraSectionCell: UICollectionViewCell {
+final class ExtraCollectionViewCell: UICollectionViewCell {
     
     static var identifier: String { String(describing: self) }
     
-    var viewModel: ExtraSectionCellViewModelProtocol! {
+    var viewModel: ExtraCollectionViewCellViewModelProtocol! {
         didSet {
             cellNameLabel.text = viewModel.cellName
             valueLabel.text = viewModel.cellValue
@@ -31,7 +31,7 @@ final class ExtraSectionCell: UICollectionViewCell {
     }
 }
 
-private extension ExtraSectionCell {
+private extension ExtraCollectionViewCell {
     func setupUI() {
         backgroundColor = .appGray
         layer.cornerRadius = Constants.cornerRadiusM

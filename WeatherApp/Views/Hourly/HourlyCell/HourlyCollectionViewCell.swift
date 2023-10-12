@@ -1,5 +1,5 @@
 //
-//  HourlySectionCell.swift
+//  HourlyCollectionViewCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 04.10.2023.
@@ -8,10 +8,10 @@
 import UIKit
 import Kingfisher
 
-final class HourlySectionCell: UICollectionViewCell {
+final class HourlyCollectionViewCell: UICollectionViewCell {
     static var identifier: String { String(describing: self) }
     
-    var viewModel: HourlySectionCellViewModelProtocol! {
+    var viewModel: HourlyCollectionViewCellViewModelProtocol! {
         didSet {
             hourLabel.text = viewModel.hourText
             tempLabel.text = viewModel.tempText
@@ -20,14 +20,8 @@ final class HourlySectionCell: UICollectionViewCell {
     }
     
     private lazy var hourLabel = getLabel(font: Constants.fontM, alignment: .center)
-    private lazy var conditionImageView: UIImageView =  {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        
-        return imageView
-        
-    }()
     private lazy var tempLabel = getLabel(font: Constants.fontM, alignment: .center)
+    private lazy var conditionImageView = getImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,7 +33,7 @@ final class HourlySectionCell: UICollectionViewCell {
     }
 }
 
-private extension HourlySectionCell {
+private extension HourlyCollectionViewCell {
     func setupUI() {
         backgroundColor = .appGray
         layer.cornerRadius = Constants.cornerRadiusM

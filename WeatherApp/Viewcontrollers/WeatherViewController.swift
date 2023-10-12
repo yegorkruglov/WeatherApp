@@ -1,5 +1,5 @@
 //
-//  CurrentLocationViewController.swift
+//  WeatherViewController.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 28.09.2023.
@@ -8,13 +8,13 @@
 import UIKit
 import SnapKit
 
-final class CurrentLocationViewController: UIViewController {
+final class WeatherViewController: UIViewController {
     
     // MARK: - Private Properties
     
     private let tableView = UITableView()
     
-    private let viewModel: CurentLocationViewModelProtocol = CurentLocationViewModel()
+    private let viewModel: WeatherViewModelProtocol = WeatherViewModel()
     
     private lazy var activityIndicator = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -27,14 +27,15 @@ final class CurrentLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureTableView()
-        
         setupUI()
+        configureTableView()
         configureViewModelObserver()
     }
 }
 
-private extension CurrentLocationViewController {
+// MARK: - WeatherViewController setup
+
+private extension WeatherViewController {
     
     func setupUI() {
         view.backgroundColor = .white
@@ -56,10 +57,10 @@ private extension CurrentLocationViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        tableView.register(SummarySection.self, forCellReuseIdentifier: SummarySection.identifier)
-        tableView.register(HourlySection.self, forCellReuseIdentifier: HourlySection.identifier)
-        tableView.register(ExtraSection.self, forCellReuseIdentifier: ExtraSection.identifier)
-        tableView.register(DailySectionCell.self, forCellReuseIdentifier: DailySectionCell.identifier)
+        tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
+        tableView.register(HourlyCollectionView.self, forCellReuseIdentifier: HourlyCollectionView.identifier)
+        tableView.register(ExtraCollectionView.self, forCellReuseIdentifier: ExtraCollectionView.identifier)
+        tableView.register(DailyCell.self, forCellReuseIdentifier: DailyCell.identifier)
         
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
@@ -79,7 +80,7 @@ private extension CurrentLocationViewController {
 
 // MARK: - UITableViewDataSource
 
-extension CurrentLocationViewController: UITableViewDataSource {
+extension WeatherViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         viewModel.numberOfSections()
@@ -97,26 +98,28 @@ extension CurrentLocationViewController: UITableViewDataSource {
             
         case Table.Summary.rawValue:
             guard let summaryCell = tableView.dequeueReusableCell(
-                withIdentifier: SummarySection.identifier
-            ) as? SummarySection else { return cell }
+                withIdentifier: SummaryCell.identifier
+            ) as? SummaryCell else { return cell }
             summaryCell.viewModel = viewModel.getSummaryCellViewModel(
                 withWeather: weatherData
             )
+            
             return summaryCell
             
         case Table.Hourly.rawValue:
             guard let hourlyCell = tableView.dequeueReusableCell(
-                withIdentifier: HourlySection.identifier
-            ) as? HourlySection else { return cell }
+                withIdentifier: HourlyCollectionView.identifier
+            ) as? HourlyCollectionView else { return cell }
             hourlyCell.viewModel = viewModel.getHourlyCellViewModel(
                 withWeather: weatherData
             )
+            
             return hourlyCell
             
         case Table.Extra.rawValue:
             guard let extraCell = tableView.dequeueReusableCell(
-                withIdentifier: ExtraSection.identifier
-            ) as? ExtraSection else { return cell}
+                withIdentifier: ExtraCollectionView.identifier
+            ) as? ExtraCollectionView else { return cell}
             extraCell.viewModel = viewModel.getExtraCellViewModel(
                 withWeather: weatherData
             )
@@ -125,8 +128,8 @@ extension CurrentLocationViewController: UITableViewDataSource {
             
         case Table.Daily.rawValue:
             guard let dailyCell = tableView.dequeueReusableCell(
-                withIdentifier: DailySectionCell.identifier
-            ) as? DailySectionCell else { return cell }
+                withIdentifier: DailyCell.identifier
+            ) as? DailyCell else { return cell }
             
             let dayData = weatherData.forecast.forecastday[indexPath.row]
             dailyCell.viewModel = viewModel.getDailySectionCellViewModel(withDay: dayData)
@@ -145,7 +148,7 @@ extension CurrentLocationViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension CurrentLocationViewController: UITableViewDelegate {
+extension WeatherViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
