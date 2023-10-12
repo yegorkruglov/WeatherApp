@@ -1,5 +1,5 @@
 //
-//  DailyForecastComponentView.swift
+//  DailySectionCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 04.10.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DailyForecastComponentView: UIView {
+final class DailySectionCell: UIView {
     private let date: String
     private let condition: String
     private let tempHigh: String
@@ -33,7 +33,7 @@ final class DailyForecastComponentView: UIView {
     }
 }
 
-private extension DailyForecastComponentView {
+private extension DailySectionCell {
     func setupUI() {
         backgroundColor = .brown
         layer.cornerRadius = Constants.cornerRadiusM

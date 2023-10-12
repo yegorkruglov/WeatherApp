@@ -1,5 +1,5 @@
 //
-//  CurrentWetherComponentView.swift
+//  ExtraSectionCell.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 03.10.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CurrentWetherExtraInfoComponentView: UIView {
+final class ExtraSectionCell: UIView {
     private let componentName: String
     private let value: String
     
@@ -27,7 +27,7 @@ final class CurrentWetherExtraInfoComponentView: UIView {
     }
 }
 
-private extension CurrentWetherExtraInfoComponentView {
+private extension ExtraSectionCell {
     func setupUI() {
         backgroundColor = .orange
         layer.cornerRadius = Constants.cornerRadiusM

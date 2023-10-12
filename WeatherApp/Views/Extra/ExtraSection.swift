@@ -1,5 +1,5 @@
 //
-//  CurrentWeatherExtraInfoView.swift
+//  ExtraSection.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 03.10.2023.
@@ -7,17 +7,17 @@
 
 import UIKit
 
-final class CurrentWeatherExtraInfoView: UIView {
+final class ExtraSection: UIView {
     
-    private var feelsLikeComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Feels like", value: "20")
-    private var pressureComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Pressure", value: "1013")
-    private var humidityComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Humidity", value: "78%")
-    private var precipitationComponantView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Precipitation", value: "0 mm")
-    private var visibilityComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Visibility", value: "14 km")
-    private var cloudsComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Clouds", value: "Sky clear")
-    private var sunComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Sun", value: "Up at: \n06:55 AM\nDown at: \n06:33 PM")
-    private var moonComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Moon", value: "Up at: \n09:49 PM\nDown at: \n01:02 PM")
-    private var windComponentView = CurrentWetherExtraInfoComponentView(frame: .zero, componentName: "Wind", value: "NW, 2 m/s\nGust up to 5 m/s")
+    private var feelsLikeComponentView = ExtraSectionCell(frame: .zero, componentName: "Feels like", value: "20")
+    private var pressureComponentView = ExtraSectionCell(frame: .zero, componentName: "Pressure", value: "1013")
+    private var humidityComponentView = ExtraSectionCell(frame: .zero, componentName: "Humidity", value: "78%")
+    private var precipitationComponantView = ExtraSectionCell(frame: .zero, componentName: "Precipitation", value: "0 mm")
+    private var visibilityComponentView = ExtraSectionCell(frame: .zero, componentName: "Visibility", value: "14 km")
+    private var cloudsComponentView = ExtraSectionCell(frame: .zero, componentName: "Clouds", value: "Sky clear")
+    private var sunComponentView = ExtraSectionCell(frame: .zero, componentName: "Sun", value: "Up at: \n06:55 AM\nDown at: \n06:33 PM")
+    private var moonComponentView = ExtraSectionCell(frame: .zero, componentName: "Moon", value: "Up at: \n09:49 PM\nDown at: \n01:02 PM")
+    private var windComponentView = ExtraSectionCell(frame: .zero, componentName: "Wind", value: "NW, 2 m/s\nGust up to 5 m/s")
     
     private lazy var components = [
         feelsLikeComponentView,
@@ -41,7 +41,7 @@ final class CurrentWeatherExtraInfoView: UIView {
     }
 }
 
-private extension CurrentWeatherExtraInfoView {
+private extension ExtraSection {
     func setupUI() {
         backgroundColor = .systemPink
         layer.cornerRadius = Constants.cornerRadiusM

@@ -1,5 +1,5 @@
 //
-//  DailyForecastView.swift
+//  DailySection.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 04.10.2023.
@@ -7,10 +7,10 @@
 
 import UIKit
 
-final class DailyForecastView: UIView {
+final class DailySection: UIView {
     
     private let dailyData = (1...7).map { _ in
-        DailyForecastComponentView(frame: .zero, date: "Some day", condition: "Cloudy", tempHigh: "H: 25", tempLow: "L: 15")
+        DailySectionCell(frame: .zero, date: "Some day", condition: "Cloudy", tempHigh: "H: 25", tempLow: "L: 15")
     }
     
     private lazy var stackView = {
@@ -32,7 +32,7 @@ final class DailyForecastView: UIView {
     }
 }
 
-private extension DailyForecastView {
+private extension DailySection {
     func setupUI() {
         backgroundColor = .systemMint
         layer.cornerRadius = Constants.cornerRadiusM
