@@ -22,6 +22,8 @@
 		5D03D9CB2ACDD54500AC32F6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D03D9BB2ACDD54500AC32F6 /* AppDelegate.swift */; };
 		5D03D9CC2ACDD54500AC32F6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D03D9BC2ACDD54500AC32F6 /* SceneDelegate.swift */; };
 		5D03D9CD2ACDD54500AC32F6 /* CurrentLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D03D9BE2ACDD54500AC32F6 /* CurrentLocationViewController.swift */; };
+		5D6BEEB72AD80CEF00A2E398 /* ExtraSectionViewmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6BEEB62AD80CEF00A2E398 /* ExtraSectionViewmodel.swift */; };
+		5D6BEEB92AD80D0200A2E398 /* ExtraSectionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6BEEB82AD80D0200A2E398 /* ExtraSectionCellViewModel.swift */; };
 		5DBC2A9F2AD4177D0095A70C /* CurentLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC2A9E2AD4177D0095A70C /* CurentLocationViewModel.swift */; };
 		5DBC2AA12AD41E200095A70C /* Extension +UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC2AA02AD41E200095A70C /* Extension +UIViewController.swift */; };
 		5DBC2AA32AD42BFE0095A70C /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC2AA22AD42BFE0095A70C /* LocationManager.swift */; };
@@ -51,6 +53,8 @@
 		5D03D9BB2ACDD54500AC32F6 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D03D9BC2ACDD54500AC32F6 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5D03D9BE2ACDD54500AC32F6 /* CurrentLocationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentLocationViewController.swift; sourceTree = "<group>"; };
+		5D6BEEB62AD80CEF00A2E398 /* ExtraSectionViewmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraSectionViewmodel.swift; sourceTree = "<group>"; };
+		5D6BEEB82AD80D0200A2E398 /* ExtraSectionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraSectionCellViewModel.swift; sourceTree = "<group>"; };
 		5DBC2A9E2AD4177D0095A70C /* CurentLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurentLocationViewModel.swift; sourceTree = "<group>"; };
 		5DBC2AA02AD41E200095A70C /* Extension +UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension +UIViewController.swift"; sourceTree = "<group>"; };
 		5DBC2AA22AD42BFE0095A70C /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -192,6 +196,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		5D6BEEBA2AD80D0900A2E398 /* ExtraSectionCell */ = {
+			isa = PBXGroup;
+			children = (
+				5D03D9B62ACDD54500AC32F6 /* ExtraSectionCell.swift */,
+				5D6BEEB82AD80D0200A2E398 /* ExtraSectionCellViewModel.swift */,
+			);
+			path = ExtraSectionCell;
+			sourceTree = "<group>";
+		};
 		5DA7AB2D2AD721400043A46D /* Summary */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,7 +237,8 @@
 			isa = PBXGroup;
 			children = (
 				5D03D9B12ACDD54500AC32F6 /* ExtraSection.swift */,
-				5D03D9B62ACDD54500AC32F6 /* ExtraSectionCell.swift */,
+				5D6BEEB62AD80CEF00A2E398 /* ExtraSectionViewmodel.swift */,
+				5D6BEEBA2AD80D0900A2E398 /* ExtraSectionCell */,
 			);
 			path = Extra;
 			sourceTree = "<group>";
@@ -375,7 +389,9 @@
 				5D03D9CA2ACDD54500AC32F6 /* Constants.swift in Sources */,
 				5D03D9CC2ACDD54500AC32F6 /* SceneDelegate.swift in Sources */,
 				5D03D9C92ACDD54500AC32F6 /* Weather.swift in Sources */,
+				5D6BEEB72AD80CEF00A2E398 /* ExtraSectionViewmodel.swift in Sources */,
 				5D03D9CB2ACDD54500AC32F6 /* AppDelegate.swift in Sources */,
+				5D6BEEB92AD80D0200A2E398 /* ExtraSectionCellViewModel.swift in Sources */,
 				5D03D9C52ACDD54500AC32F6 /* HourlySectionCell.swift in Sources */,
 				5D03D9C72ACDD54500AC32F6 /* HourlySection.swift in Sources */,
 				5DE167852AD58807009117F3 /* HourlySectionCellViewModel.swift in Sources */,

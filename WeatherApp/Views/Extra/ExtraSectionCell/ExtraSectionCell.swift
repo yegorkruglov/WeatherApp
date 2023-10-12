@@ -8,7 +8,7 @@
 import UIKit
 
 final class ExtraSectionCell: UIView {
-    private let componentName: String
+    private let cellName: String
     private let value: String
     
     private lazy var componentNameLabel = getLabel(font: Constants.fontM, alignment: .center)
@@ -16,7 +16,7 @@ final class ExtraSectionCell: UIView {
 
     init(frame: CGRect, componentName: String, value: String) {
         self.value = value
-        self.componentName = componentName
+        self.cellName = componentName
         super.init(frame: frame)
 
         setupUI()
