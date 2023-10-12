@@ -58,6 +58,7 @@ private extension CurrentLocationViewController {
         
         tableView.register(SummarySection.self, forCellReuseIdentifier: SummarySection.identifier)
         tableView.register(HourlySection.self, forCellReuseIdentifier: HourlySection.identifier)
+        tableView.register(ExtraSection.self, forCellReuseIdentifier: ExtraSection.identifier)
         
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
@@ -110,7 +111,15 @@ extension CurrentLocationViewController: UITableViewDataSource {
             )
             return hourlyCell
             
-            //        case Table.Extra.rawValue:
+        case Table.Extra.rawValue:
+            guard let extraCell = tableView.dequeueReusableCell(
+                withIdentifier: ExtraSection.identifier
+            ) as? ExtraSection else { return cell}
+            extraCell.viewModel = viewModel.getExtraCellViewModel(
+                withWeather: weatherData
+            )
+            
+            return extraCell
             //        case Table.Daily.rawValue:
         default:
             return cell

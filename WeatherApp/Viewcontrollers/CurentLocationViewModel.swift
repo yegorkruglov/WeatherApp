@@ -17,9 +17,12 @@ protocol CurentLocationViewModelProtocol {
     func getHeaderTitle(forSection number: Int) -> String
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummarySectionViewModelProtocol
     func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol
+    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraSectionViewModelProtocol
 }
 
 final class CurentLocationViewModel: CurentLocationViewModelProtocol {
+    
+    
     
     private let networkManager = NetworkManager.shared
     private let locationManager = LocationManager()
@@ -89,6 +92,9 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
     
     func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol {
         HourlySectionViewModel(weatherData: weatherData)
+    }
+    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraSectionViewModelProtocol {
+        ExtraSectionViewmodel(weatherData: weatherdata)
     }
     
 }

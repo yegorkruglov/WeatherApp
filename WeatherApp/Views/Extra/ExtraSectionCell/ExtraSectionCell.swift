@@ -7,18 +7,22 @@
 
 import UIKit
 
-final class ExtraSectionCell: UIView {
-    private let cellName: String
-    private let value: String
+final class ExtraSectionCell: UICollectionViewCell {
     
-    private lazy var componentNameLabel = getLabel(font: Constants.fontM, alignment: .center)
+    static var identifier: String { String(describing: self) }
+    
+    var viewModel: ExtraSectionCellViewModelProtocol! {
+        didSet {
+            cellNameLabel.text = viewModel.cellName
+            valueLabel.text = viewModel.cellValue
+        }
+    }
+    
+    private lazy var cellNameLabel = getLabel(font: Constants.fontM, alignment: .center)
     private lazy var valueLabel = getLabel(font: Constants.fontL, alignment: .center)
 
-    init(frame: CGRect, componentName: String, value: String) {
-        self.value = value
-        self.cellName = componentName
+    override init(frame: CGRect) {
         super.init(frame: frame)
-
         setupUI()
     }
     
@@ -32,16 +36,16 @@ private extension ExtraSectionCell {
         backgroundColor = .orange
         layer.cornerRadius = Constants.cornerRadiusM
         
-        addSubview(componentNameLabel)
-        componentNameLabel.snp.makeConstraints { make in
+        addSubview(cellNameLabel)
+        cellNameLabel.snp.makeConstraints { make in
             make.top.horizontalEdges.equalToSuperview().inset(Constants.insetM)
-            make.height.equalToSuperview().dividedBy(4)
+            make.height.equalToSuperview().dividedBy(5)
         }
         
         addSubview(valueLabel)
         valueLabel.snp.makeConstraints { make in
             make.bottom.horizontalEdges.equalToSuperview().inset(Constants.insetM)
-            make.top.equalTo(componentNameLabel.snp.bottom)
+            make.top.equalTo(cellNameLabel.snp.bottom)
         }
     }
 }

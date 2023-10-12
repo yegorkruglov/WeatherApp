@@ -13,11 +13,7 @@ class HourlySection: UITableViewCell {
     
     private var collectionView: UICollectionView?
     
-    var viewModel: HourlySectionViewModelProtocol! {
-        didSet {
-            
-        }
-    }
+    var viewModel: HourlySectionViewModelProtocol!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -65,10 +61,6 @@ extension HourlySection: UICollectionViewDataSource {
         
         return cell
     }
-}
-
-extension HourlySection: UICollectionViewDelegate {
-    
 }
 
 extension HourlySection: UICollectionViewDelegateFlowLayout {

@@ -7,111 +7,72 @@
 
 import UIKit
 
-final class ExtraSection: UIView {
+final class ExtraSection: UITableViewCell {
     
-    private var feelsLikeCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Feels like",
-        value: "20"
-    )
-    private var pressureCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Pressure",
-        value: "1013"
-    )
-    private var humidityCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Humidity",
-        value: "78%"
-    )
-    private var precipitationCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Precipitation",
-        value: "0 mm"
-    )
-    private var visibilityCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Visibility",
-        value: "14 km"
-    )
-    private var cloudsCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Clouds",
-        value: "Sky clear"
-    )
-    private var sunCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Sun",
-        value: "Up at: \n06:55 AM\nDown at: \n06:33 PM"
-    )
-    private var moonCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Moon",
-        value: "Up at: \n09:49 PM\nDown at: \n01:02 PM"
-    )
-    private var windCell = ExtraSectionCell(
-        frame: .zero,
-        componentName: "Wind",
-        value: "NW, 2 m/s\nGust up to 5 m/s"
-    )
+    static var identifier: String { String(describing: self) }
     
-    private lazy var cells = [
-        feelsLikeCell,
-        pressureCell,
-        humidityCell,
-        precipitationCell,
-        visibilityCell,
-        cloudsCell,
-        sunCell,
-        moonCell,
-        windCell
-    ]
+    private var collectionView: UICollectionView?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    var viewModel: ExtraSectionViewModelProtocol!
+        
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-private extension ExtraSection {
+    
     func setupUI() {
         backgroundColor = .systemPink
         layer.cornerRadius = Constants.cornerRadiusM
+        contentView.layer.cornerRadius = Constants.cornerRadiusM
         
-        stackUpCells(cells: &cells)
-    }
-    
-    func stackUpCells(cells: inout [some UIView]) {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
         
-        let verticalStack = UIStackView()
-        verticalStack.axis = .vertical
-        verticalStack.distribution = .fillEqually
-        verticalStack.spacing = Constants.insetM
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView?.layer.cornerRadius = Constants.cornerRadiusM
+        collectionView?.showsVerticalScrollIndicator = false
+        collectionView?.backgroundColor = .clear
+        collectionView?.dataSource = self
+        collectionView?.delegate = self
+        collectionView?.register(
+            ExtraSectionCell.self,
+            forCellWithReuseIdentifier: ExtraSectionCell.identifier
+        )
         
-        let numberOfTwoItemsStacks = cells.count / 2
-        
-        for _ in 1...numberOfTwoItemsStacks {
-            let horizontalStack = UIStackView()
-            horizontalStack.axis = .horizontal
-            horizontalStack.distribution = .fillEqually
-            horizontalStack.spacing = Constants.insetM
-            
-            for _ in 1...2 {
-                horizontalStack.addArrangedSubview(cells.removeFirst())
-            }
-            
-            verticalStack.addArrangedSubview(horizontalStack)
-        }
-        
-        verticalStack.addArrangedSubview(cells.removeFirst())
-        
-        addSubview(verticalStack)
-        verticalStack.snp.makeConstraints { make in
+        contentView.addSubview(collectionView ?? UILabel())
+        collectionView?.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+}
+
+extension ExtraSection: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        viewModel.getNumberOfItems()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ExtraSectionCell.identifier, for: indexPath) as? ExtraSectionCell else { return UICollectionViewCell() }
+        cell.viewModel = viewModel.getExtraSectionCellViewModel(at: indexPath)
+        
+        return cell
+    }
+}
+
+extension ExtraSection: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: viewWidth / 2, height: viewHeight / 8)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        Constants.insetS
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        Constants.insetS
     }
 }
