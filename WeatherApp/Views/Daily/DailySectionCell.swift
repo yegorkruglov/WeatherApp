@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class DailySectionCell: UITableViewCell {
     
@@ -14,6 +15,7 @@ final class DailySectionCell: UITableViewCell {
     var viewModel: DailySectionCellViewModelProtocol! {
         didSet {
             dateLabel.text = viewModel.dateText
+            conditionImageView.kf.setImage(with: viewModel.conditionImageURL)
             conditionLabel.text = viewModel.conditionText
             tempHighLabel.text = viewModel.tempHighText
             tempLowLabel.text = viewModel.tempLowText
@@ -21,7 +23,14 @@ final class DailySectionCell: UITableViewCell {
     }
     
     private lazy var dateLabel = getLabel(font: Constants.fontS, alignment: .center)
-    private lazy var conditionLabel = getLabel(font: Constants.fontS, alignment: .center)
+    private lazy var conditionImageView: UIImageView =  {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        
+        return imageView
+        
+    }()
+    private lazy var conditionLabel = getLabel(font: Constants.fontS, alignment: .left)
     private lazy var tempHighLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var tempLowLabel = getLabel(font: Constants.fontS, alignment: .center)
     
@@ -37,16 +46,40 @@ final class DailySectionCell: UITableViewCell {
 
 private extension DailySectionCell {
     func setupUI() {
-        backgroundColor = .brown
+//        backgroundColor = .brown
         layer.cornerRadius = Constants.cornerRadiusM
         
-        let stackView = UIStackView(arrangedSubviews: [dateLabel, conditionLabel, tempHighLabel, tempLowLabel])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually        
+        addSubview(dateLabel)
+        addSubview(conditionImageView)
+        addSubview(conditionLabel)
+        addSubview(tempHighLabel)
+        addSubview(tempLowLabel)
         
-        addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(Constants.insetM)
+        dateLabel.snp.makeConstraints { make in
+            make.top.bottom.leading.equalToSuperview().inset(Constants.insetS)
+            make.width.equalTo(dateLabel.snp.height)
+        }
+        
+        conditionImageView.snp.makeConstraints { make in
+            make.width.top.bottom.equalTo(dateLabel)
+            make.leading.equalTo(dateLabel.snp.trailing)
+        }
+        
+        tempLowLabel.snp.makeConstraints { make in
+            make.top.bottom.trailing.equalToSuperview().inset(Constants.insetS)
+            make.width.equalTo(dateLabel)
+        }
+        
+        tempHighLabel.snp.makeConstraints { make in
+            make.top.bottom.equalTo(tempLowLabel)
+            make.trailing.equalTo(tempLowLabel.snp.leading)
+            make.width.equalTo(tempLowLabel)
+        }
+        
+        conditionLabel.snp.makeConstraints { make in
+            make.verticalEdges.equalTo(dateLabel)
+            make.leading.equalTo(conditionImageView.snp.trailing).offset(Constants.insetS)
+            make.trailing.equalTo(tempHighLabel.snp.leading)
         }
     }
 }

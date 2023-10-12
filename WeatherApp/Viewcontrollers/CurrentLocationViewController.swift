@@ -149,11 +149,12 @@ extension CurrentLocationViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
+            
         case Table.Summary.rawValue, Table.Hourly.rawValue: heightS
         case Table.Extra.rawValue: heightL
         case Table.Daily.rawValue: heightXS
-        default: heightS
             
+        default: heightS
         }
     }
 }

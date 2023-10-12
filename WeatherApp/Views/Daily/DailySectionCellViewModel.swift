@@ -12,6 +12,7 @@ protocol DailySectionCellViewModelProtocol {
     var conditionText: String { get }
     var tempHighText: String { get }
     var tempLowText: String { get }
+    var conditionImageURL: URL? { get }
     
     init(forecastDay: Forecastday)
 }
@@ -21,9 +22,11 @@ class DailySectionCellViewModel: DailySectionCellViewModelProtocol {
     
     var conditionText: String { forecastDay.day.condition.text }
     
-    var tempHighText: String { "H: " + String(forecastDay.day.maxtempC) }
+    var tempHighText: String { "H: " + String(Int(forecastDay.day.maxtempC.rounded())) + "°" }
     
-    var tempLowText: String { "L: " + String(forecastDay.day.mintempC) }
+    var tempLowText: String { "L: " + String(Int(forecastDay.day.mintempC.rounded())) + "°" }
+    
+    var conditionImageURL: URL? { getConditionImageURL() }
     
     
     private let forecastDay: Forecastday
@@ -44,6 +47,11 @@ class DailySectionCellViewModel: DailySectionCellViewModelProtocol {
         let formattedDate = dateFormatter.string(from: date)
         
         return formattedDate
+    }
+    
+    private func getConditionImageURL() -> URL? {
+        guard let url = URL(string: "https:" + forecastDay.day.condition.icon) else { return nil}
+        return url
     }
     
 }
