@@ -7,24 +7,26 @@
 
 import UIKit
 
-final class DailySectionCell: UIView {
-    private let date: String
-    private let condition: String
-    private let tempHigh: String
-    private let tempLow: String
+final class DailySectionCell: UITableViewCell {
     
-    private lazy var dateLabel = getLabel(font: Constants.fontS, alignment: .left)
+    static var identifier: String { String(describing: self) }
+    
+    var viewModel: DailySectionCellViewModelProtocol! {
+        didSet {
+            dateLabel.text = viewModel.dateText
+            conditionLabel.text = viewModel.conditionText
+            tempHighLabel.text = viewModel.tempHighText
+            tempLowLabel.text = viewModel.tempLowText
+        }
+    }
+    
+    private lazy var dateLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var conditionLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var tempHighLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var tempLowLabel = getLabel(font: Constants.fontS, alignment: .center)
     
-    init(frame: CGRect, date: String, condition: String, tempHigh: String, tempLow: String) {
-        self.date = date
-        self.condition = condition
-        self.tempHigh = tempHigh
-        self.tempLow = tempLow
-        super.init(frame: frame)
-        
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     

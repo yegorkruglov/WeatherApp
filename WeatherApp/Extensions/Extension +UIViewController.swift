@@ -11,6 +11,7 @@ extension UIViewController {
     var screenHeight: CGFloat { view.frame.height }
     var screenWidth: CGFloat { view.frame.width }
     
+    var heightXS: CGFloat { screenHeight / 12 }
     var heightS: CGFloat { screenHeight / 6 }
     var heightM: CGFloat { screenHeight / 3 }
     var heightL: CGFloat { screenHeight / 1.5 }

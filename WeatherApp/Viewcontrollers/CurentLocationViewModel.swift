@@ -12,18 +12,16 @@ protocol CurentLocationViewModelProtocol {
     var weatherData: Bindable<Weather?> { get }
     
     func numberOfSections() -> Int
-    func numberOfRowsInSection() -> Int
+    func numberOfRowsIn(section: Int) -> Int
     
     func getHeaderTitle(forSection number: Int) -> String
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummarySectionViewModelProtocol
     func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol
     func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraSectionViewModelProtocol
+    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailySectionCellViewModelProtocol
 }
 
-final class CurentLocationViewModel: CurentLocationViewModelProtocol {
-    
-    
-    
+final class CurentLocationViewModel: CurentLocationViewModelProtocol {    
     private let networkManager = NetworkManager.shared
     private let locationManager = LocationManager()
     
@@ -71,7 +69,6 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
             switch result {
             case .success(let weatherData):
                 self.weatherData.value = weatherData
-//                print(self.weatherData.value?.current.condition.text)
             case .failure(let error):
                 print(error.rawValue)
             }
@@ -80,7 +77,12 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
     
     func numberOfSections() -> Int { Table.allCases.count }
     
-    func numberOfRowsInSection() -> Int { 1 }
+    func numberOfRowsIn(section: Int) -> Int {
+        switch section {
+        case Table.Daily.rawValue: weatherData.value?.forecast.forecastday.count ?? 0
+        default: 1
+        }
+    }
     
     func getHeaderTitle(forSection number: Int) -> String {
         Table.allCases[number].value
@@ -93,8 +95,13 @@ final class CurentLocationViewModel: CurentLocationViewModelProtocol {
     func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlySectionViewModelProtocol {
         HourlySectionViewModel(weatherData: weatherData)
     }
+    
     func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraSectionViewModelProtocol {
         ExtraSectionViewmodel(weatherData: weatherdata)
+    }
+    
+    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailySectionCellViewModelProtocol {
+        DailySectionCellViewModel(forecastDay: forecastDay)
     }
     
 }

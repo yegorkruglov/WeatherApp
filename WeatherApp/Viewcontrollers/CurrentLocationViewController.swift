@@ -59,6 +59,7 @@ private extension CurrentLocationViewController {
         tableView.register(SummarySection.self, forCellReuseIdentifier: SummarySection.identifier)
         tableView.register(HourlySection.self, forCellReuseIdentifier: HourlySection.identifier)
         tableView.register(ExtraSection.self, forCellReuseIdentifier: ExtraSection.identifier)
+        tableView.register(DailySectionCell.self, forCellReuseIdentifier: DailySectionCell.identifier)
         
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
@@ -85,7 +86,7 @@ extension CurrentLocationViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numberOfRowsInSection()
+        viewModel.numberOfRowsIn(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -121,7 +122,17 @@ extension CurrentLocationViewController: UITableViewDataSource {
             )
             
             return extraCell
-            //        case Table.Daily.rawValue:
+            
+        case Table.Daily.rawValue:
+            guard let dailyCell = tableView.dequeueReusableCell(
+                withIdentifier: DailySectionCell.identifier
+            ) as? DailySectionCell else { return cell }
+            
+            let dayData = weatherData.forecast.forecastday[indexPath.row]
+            dailyCell.viewModel = viewModel.getDailySectionCellViewModel(withDay: dayData)
+            
+            return dailyCell
+            
         default:
             return cell
         }
@@ -138,8 +149,9 @@ extension CurrentLocationViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 2: heightL
-        case 3: heightM
+        case Table.Summary.rawValue, Table.Hourly.rawValue: heightS
+        case Table.Extra.rawValue: heightL
+        case Table.Daily.rawValue: heightXS
         default: heightS
             
         }

@@ -31,7 +31,6 @@ class SummarySection: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         
         return imageView
-        
     }()
 
     
