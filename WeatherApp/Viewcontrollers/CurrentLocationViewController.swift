@@ -137,6 +137,11 @@ extension CurrentLocationViewController: UITableViewDataSource {
 extension CurrentLocationViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.section < 2 ? heightS : heightM
+        switch indexPath.section {
+        case 2: heightL
+        case 3: heightM
+        default: heightS
+            
+        }
     }
 }
