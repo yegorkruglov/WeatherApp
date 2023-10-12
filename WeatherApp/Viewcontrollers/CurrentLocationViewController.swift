@@ -93,6 +93,7 @@ extension CurrentLocationViewController: UITableViewDataSource {
         guard let weatherData = viewModel.weatherData.value else { return cell }
         
         switch indexPath.section {
+            
         case Table.Summary.rawValue:
             guard let summaryCell = tableView.dequeueReusableCell(
                 withIdentifier: SummarySection.identifier
