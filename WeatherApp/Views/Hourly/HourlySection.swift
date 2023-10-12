@@ -25,7 +25,7 @@ class HourlySection: UITableViewCell {
     }
     
     func setupUI() {
-        backgroundColor = .systemYellow
+        backgroundColor = .clear
         layer.cornerRadius = Constants.cornerRadiusM
         contentView.layer.cornerRadius = Constants.cornerRadiusM
         

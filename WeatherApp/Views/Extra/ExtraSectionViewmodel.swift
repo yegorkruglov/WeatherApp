@@ -39,7 +39,7 @@ class ExtraSectionViewmodel: ExtraSectionViewModelProtocol {
         case Extra.Humidity.rawValue:
             ExtraSectionCellViewModel(
                 cellName: Extra.Humidity.text,
-                cellValue: String(Int(weatherData.value?.current.humidity.rounded() ?? 0)) + "%"
+                cellValue: String(Int(weatherData.value?.current.humidity.rounded() ?? 0)) + " %"
             )
         case Extra.Precipitation.rawValue:
             ExtraSectionCellViewModel(
@@ -54,7 +54,7 @@ class ExtraSectionViewmodel: ExtraSectionViewModelProtocol {
         case Extra.CloudsCoverage.rawValue:
             ExtraSectionCellViewModel(
                 cellName: Extra.CloudsCoverage.text,
-                cellValue: String(Int(weatherData.value?.current.cloud.rounded() ?? 00)) + "%"
+                cellValue: String(Int(weatherData.value?.current.cloud.rounded() ?? 00)) + " %"
             )
         case Extra.Sunrise.rawValue:
             ExtraSectionCellViewModel(

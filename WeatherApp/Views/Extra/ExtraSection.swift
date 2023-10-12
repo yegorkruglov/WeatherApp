@@ -27,7 +27,7 @@ final class ExtraSection: UITableViewCell {
     }
     
     func setupUI() {
-        backgroundColor = .systemPink
+        backgroundColor = .clear
         layer.cornerRadius = Constants.cornerRadiusM
         contentView.layer.cornerRadius = Constants.cornerRadiusM
         

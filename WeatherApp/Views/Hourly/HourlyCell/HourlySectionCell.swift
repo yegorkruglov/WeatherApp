@@ -41,7 +41,7 @@ final class HourlySectionCell: UICollectionViewCell {
 
 private extension HourlySectionCell {
     func setupUI() {
-        backgroundColor = .cyan
+        backgroundColor = .appGray
         layer.cornerRadius = Constants.cornerRadiusM
         
         let stackView = UIStackView(arrangedSubviews: [hourLabel, conditionImageView, tempLabel])

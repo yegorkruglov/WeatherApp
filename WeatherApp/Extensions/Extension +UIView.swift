@@ -11,10 +11,10 @@ extension UIView {
     var viewHeight: CGFloat { frame.height }
     var viewWidth: CGFloat { frame.width }
     
-    func getLabel(text: String = "", font: UIFont, alignment: NSTextAlignment = .left) -> UILabel {
+    func getLabel(font: UIFont, alignment: NSTextAlignment = .left, textColor: UIColor = .black) -> UILabel {
         let label = UILabel()
-        label.text = text
         label.font = font
+        label.textColor = textColor
         label.numberOfLines = 0
         label.textAlignment = alignment
         label.adjustsFontSizeToFitWidth = true

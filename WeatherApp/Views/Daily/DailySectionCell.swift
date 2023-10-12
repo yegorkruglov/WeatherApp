@@ -46,14 +46,23 @@ final class DailySectionCell: UITableViewCell {
 
 private extension DailySectionCell {
     func setupUI() {
-//        backgroundColor = .brown
         layer.cornerRadius = Constants.cornerRadiusM
         
-        addSubview(dateLabel)
-        addSubview(conditionImageView)
-        addSubview(conditionLabel)
-        addSubview(tempHighLabel)
-        addSubview(tempLowLabel)
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .appGray
+        backgroundView.layer.cornerRadius = Constants.cornerRadiusM
+        
+        addSubview(backgroundView)
+        backgroundView.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview()
+            make.verticalEdges.equalToSuperview().inset(Constants.insetS)
+        }
+        
+        backgroundView.addSubview(dateLabel)
+        backgroundView.addSubview(conditionImageView)
+        backgroundView.addSubview(conditionLabel)
+        backgroundView.addSubview(tempHighLabel)
+        backgroundView.addSubview(tempLowLabel)
         
         dateLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview().inset(Constants.insetS)
@@ -61,13 +70,14 @@ private extension DailySectionCell {
         }
         
         conditionImageView.snp.makeConstraints { make in
-            make.width.top.bottom.equalTo(dateLabel)
+            make.top.bottom.equalTo(dateLabel)
+            make.width.equalTo(conditionImageView.snp.height)
             make.leading.equalTo(dateLabel.snp.trailing)
         }
         
         tempLowLabel.snp.makeConstraints { make in
             make.top.bottom.trailing.equalToSuperview().inset(Constants.insetS)
-            make.width.equalTo(dateLabel)
+            make.width.equalTo(dateLabel).multipliedBy(1.2)
         }
         
         tempHighLabel.snp.makeConstraints { make in

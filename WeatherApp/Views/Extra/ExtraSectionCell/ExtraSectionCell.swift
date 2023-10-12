@@ -18,7 +18,7 @@ final class ExtraSectionCell: UICollectionViewCell {
         }
     }
     
-    private lazy var cellNameLabel = getLabel(font: Constants.fontM, alignment: .center)
+    private lazy var cellNameLabel = getLabel(font: Constants.fontM, alignment: .center, textColor: .appBlue)
     private lazy var valueLabel = getLabel(font: Constants.fontL, alignment: .center)
 
     override init(frame: CGRect) {
@@ -33,7 +33,7 @@ final class ExtraSectionCell: UICollectionViewCell {
 
 private extension ExtraSectionCell {
     func setupUI() {
-        backgroundColor = .orange
+        backgroundColor = .appGray
         layer.cornerRadius = Constants.cornerRadiusM
         
         addSubview(cellNameLabel)

@@ -23,7 +23,7 @@ class SummarySectionViewModel: SummarySectionViewModelProtocol {
     
     var conditionText: String { weatherData.current.condition.text }
     
-    var currentTempText: String { "t: " + String(Int(weatherData.current.tempC)) + "°" }
+    var currentTempText: String { String(Int(weatherData.current.tempC)) + "°" }
     
     var highestTempText: String {
         guard let maxTemp = weatherData.forecast.forecastday.first?.day.maxtempC else { return "err"}

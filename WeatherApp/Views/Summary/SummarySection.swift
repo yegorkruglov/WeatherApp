@@ -22,7 +22,7 @@ class SummarySection: UITableViewCell {
     }
     
     private lazy var locationNameLbael = getLabel(font: Constants.fontL)
-    private lazy var conditionLabel = getLabel(font: Constants.fontM)
+    private lazy var conditionLabel = getLabel(font: Constants.fontM, alignment: .center)
     private lazy var currentTempLabel = getLabel(font: Constants.fontL, alignment: .center)
     private lazy var highTempLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var lowTempLabel = getLabel(font: Constants.fontS, alignment: .center)
@@ -44,14 +44,14 @@ class SummarySection: UITableViewCell {
     }
     
     func setupUI() {
-        backgroundColor = .purple
+        backgroundColor = .appGray
         layer.cornerRadius = Constants.cornerRadiusM
         
         addSubview(locationNameLbael)
         locationNameLbael.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().inset(Constants.insetM)
             make.width.equalToSuperview().dividedBy(1.5)
-            make.height.equalToSuperview().dividedBy(1.5)
+            make.height.equalToSuperview().dividedBy(2)
         }
         
         addSubview(currentTempLabel)
