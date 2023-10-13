@@ -60,6 +60,36 @@ final class NetworkManager {
         task.resume()
     }
     
+    func search(query: String, completion: @escaping (Result<SearchResponse, NetworkError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)search.json?key=\(apiKey)&q=\(query)") else { return }
+        
+        print(url)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            guard let data = data else {
+                print(error?.localizedDescription ?? "no data")
+                completion(.failure(.noData))
+                
+                return
+            }
+            
+            do {
+                let searchResponse = try JSONDecoder().decode(SearchResponse.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(searchResponse))
+                }
+            } catch {
+                completion(.failure(.decodingError))
+            }
+        }
+        
+        task.resume()
+        
+    }
+    
     private init(){}
 }
 

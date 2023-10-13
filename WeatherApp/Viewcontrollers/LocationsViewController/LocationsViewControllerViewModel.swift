@@ -96,10 +96,10 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     }
     
     func fetchWeatherForLocation(lat: CLLocationDegrees, long: CLLocationDegrees) {
-        networkManager.requestWeatherFor(latitude: lat, longitude: long) { result in
+        networkManager.requestWeatherFor(latitude: lat, longitude: long) { [weak self] result in
             switch result {
             case .success(let weatherData):
-                self.CurrentLocationWeatherData.value = weatherData
+                self?.CurrentLocationWeatherData.value = weatherData
             case .failure(let error):
                 print(error.rawValue)
             }

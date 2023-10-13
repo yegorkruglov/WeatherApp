@@ -8,10 +8,19 @@
 import UIKit
 
 final class SearchViewController: UIViewController {
-
+    
     private let viewModel: SearchViewControllerViewModelProtocol
     
     private let tableView = UITableView()
+    
+    private let searchController = {
+        let searchController = UISearchController()
+        searchController.searchBar.placeholder = "City name, airport code"
+        
+        return searchController
+    }()
+    
+    private var timer: Timer?
     
     init(viewModel: SearchViewControllerViewModelProtocol) {
         self.viewModel = viewModel
@@ -30,6 +39,7 @@ final class SearchViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        setupSearchController()
         configureTableView()
         configureViewModelObserver()
     }
@@ -50,28 +60,36 @@ private extension SearchViewController {
         }
     }
     
+    func setupSearchController() {
+        searchController.delegate = self
+        searchController.searchResultsUpdater = self
+        
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
     func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         
         tableView.register(SearchCell.self, forCellReuseIdentifier: SearchCell.identifier)
-        
         tableView.separatorStyle = .none
+        tableView.keyboardDismissMode = .onDrag
     }
     
     func configureViewModelObserver() {
-//        viewModel.CurrentLocationWeatherData.bind { [weak self] _ in
-//            DispatchQueue.main.async {
-//                self?.tableView.reloadData()
-//                self?.tableView.isHidden = false
-//            }
-//        }
+        
+        viewModel.searchResults.bind { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
     }
 }
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        viewModel.getNumberOfRows()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -92,7 +110,29 @@ extension SearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+    }
+}
+
+extension SearchViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        timer?.invalidate()
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            guard let searchQuery = searchController.searchBar.text, !searchQuery.isEmpty else { return }
+            self?.viewModel.searchFor(query: searchQuery)
+        }
+    }
+}
+
+extension SearchViewController: UISearchControllerDelegate {
+    func willDismissSearchController(_ searchController: UISearchController) {
+        searchController.resignFirstResponder()
+        viewModel.searchBarCancelButtonClicked()
+    }
     
+    func didDismissSearchController(_ searchController: UISearchController) {
+        guard let searchQuery = searchController.searchBar.text, !searchQuery.isEmpty else { return }
+        viewModel.searchFor(query: searchQuery)
     }
 }
 
