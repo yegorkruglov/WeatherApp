@@ -44,6 +44,17 @@ private extension LocationsViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .search,
+            target: self,
+            action: #selector(goToSearchViewController)
+        )
+    }
+    
+    @objc func goToSearchViewController() {
+        let searchVC = SearchViewController(viewModel: SearchViewControllerViewModel())
+        navigationController?.pushViewController(searchVC, animated: true)
     }
     
     func configureTableView() {
