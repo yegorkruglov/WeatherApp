@@ -23,6 +23,7 @@ protocol LocationsViewControllerViewModelProtocol {
 
 final class LocationsViewControllerViewModel: LocationsViewControllerViewModelProtocol {
     private let networkManager = NetworkManager.shared
+    
     private let locationManager = LocationManager()
     
     private(set) var CurrentLocationWeatherData = Bindable<Weather?> (value: nil)
@@ -66,14 +67,6 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
 //    func fetchWeatherForLocation(at indexPath: IndexPath) -> Weather {
 //        <#code#>
 //    }
-    
-    
-    
-    
-    
-    
-    
-    
     
     @objc  func checkLocation() {
         guard let isAuthorizedLocation = locationManager.isAuthorizedLocation else { return }

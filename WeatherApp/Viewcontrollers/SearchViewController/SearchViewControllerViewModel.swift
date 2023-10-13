@@ -15,11 +15,11 @@ protocol SearchViewControllerViewModelProtocol {
     func getNumberOfRows() -> Int
     func searchBarCancelButtonClicked()
     func getWeatherForLocation(at indexPath: IndexPath)
-    
+    func getSearchCellViewModel(withLocation locationData: SearchResponseElement) -> SearchCellViewModelProtocol
+    func getLocationData(at indexPath: IndexPath) -> SearchResponseElement
 }
 
 final class SearchViewControllerViewModel: SearchViewControllerViewModelProtocol {
-    
     private let networkManager = NetworkManager.shared
     
     private(set) var searchResults = Bindable<SearchResponse> (value: [])
@@ -57,5 +57,13 @@ final class SearchViewControllerViewModel: SearchViewControllerViewModelProtocol
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func getSearchCellViewModel(withLocation locationData: SearchResponseElement) -> SearchCellViewModelProtocol {
+        SearchCellViewModel(locationData: locationData)
+    }
+    
+    func getLocationData(at indexPath: IndexPath) -> SearchResponseElement {
+        searchResults.value[indexPath.row]
     }
 }

@@ -118,6 +118,10 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchCell.identifier, for: indexPath) as? SearchCell else { return UITableViewCell() }
         
+        let locationData = viewModel.getLocationData(at: indexPath)
+        
+        cell.viewModel = viewModel.getSearchCellViewModel(withLocation: locationData)
+        
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
