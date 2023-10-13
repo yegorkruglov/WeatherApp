@@ -14,7 +14,7 @@ final class WeatherViewController: UIViewController {
     
     private let tableView = UITableView()
     
-    private let viewModel: WeatherViewModelProtocol = WeatherViewModel()
+    private let viewModel: WeatherViewControllerViewModelProtocol = WeatherViewControllerViewModel()
     
     private lazy var activityIndicator = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -97,7 +97,7 @@ extension WeatherViewController: UITableViewDataSource {
         
         switch indexPath.section {
             
-        case Table.Summary.rawValue:
+        case WeatherTable.Summary.rawValue:
             guard let summaryCell = tableView.dequeueReusableCell(
                 withIdentifier: SummaryCell.identifier
             ) as? SummaryCell else { return cell }
@@ -107,7 +107,7 @@ extension WeatherViewController: UITableViewDataSource {
             
             return summaryCell
             
-        case Table.Hourly.rawValue:
+        case WeatherTable.Hourly.rawValue:
             guard let hourlyCell = tableView.dequeueReusableCell(
                 withIdentifier: HourlyCollectionView.identifier
             ) as? HourlyCollectionView else { return cell }
@@ -117,7 +117,7 @@ extension WeatherViewController: UITableViewDataSource {
             
             return hourlyCell
             
-        case Table.Extra.rawValue:
+        case WeatherTable.Extra.rawValue:
             guard let extraCell = tableView.dequeueReusableCell(
                 withIdentifier: ExtraCollectionView.identifier
             ) as? ExtraCollectionView else { return cell}
@@ -127,7 +127,7 @@ extension WeatherViewController: UITableViewDataSource {
             
             return extraCell
             
-        case Table.Daily.rawValue:
+        case WeatherTable.Daily.rawValue:
             guard let dailyCell = tableView.dequeueReusableCell(
                 withIdentifier: DailyCell.identifier
             ) as? DailyCell else { return cell }
@@ -154,9 +154,9 @@ extension WeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
             
-        case Table.Summary.rawValue, Table.Hourly.rawValue: heightS
-        case Table.Extra.rawValue: heightL
-        case Table.Daily.rawValue: heightXS
+        case WeatherTable.Summary.rawValue, WeatherTable.Hourly.rawValue: heightS
+        case WeatherTable.Extra.rawValue: heightL
+        case WeatherTable.Daily.rawValue: heightXS
             
         default: heightS
         }

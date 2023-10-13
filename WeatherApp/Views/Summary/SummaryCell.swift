@@ -46,17 +46,26 @@ final class SummaryCell: UITableViewCell {
 
 extension SummaryCell {
     private func setupUI() {
-        backgroundColor = .appGray
         layer.cornerRadius = Constants.cornerRadiusM
         
-        addSubview(locationNameLbael)
+        let backGroundView = UIView()
+        backGroundView.backgroundColor = .appGray
+        backGroundView.layer.cornerRadius = Constants.cornerRadiusM
+        
+        addSubview(backGroundView)
+        backGroundView.snp.makeConstraints { make in
+            make.horizontalEdges.equalToSuperview()
+            make.verticalEdges.equalToSuperview().inset(Constants.insetS)
+        }
+        
+        backGroundView.addSubview(locationNameLbael)
         locationNameLbael.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().inset(Constants.insetM)
             make.width.equalToSuperview().dividedBy(1.5)
             make.height.equalToSuperview().dividedBy(2)
         }
         
-        addSubview(currentTempLabel)
+        backGroundView.addSubview(currentTempLabel)
         currentTempLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(Constants.insetM)
             make.leading.equalTo(locationNameLbael.snp.trailing)
@@ -64,7 +73,7 @@ extension SummaryCell {
             make.height.equalTo(locationNameLbael)
         }
         
-        addSubview(lowTempLabel)
+        backGroundView.addSubview(lowTempLabel)
         lowTempLabel.snp.makeConstraints { make in
             make.trailing.equalTo(currentTempLabel)
             make.top.equalTo(currentTempLabel.snp.bottom)
@@ -72,19 +81,19 @@ extension SummaryCell {
             make.width.equalTo(currentTempLabel).dividedBy(2)
         }
         
-        addSubview(highTempLabel)
+        backGroundView.addSubview(highTempLabel)
         highTempLabel.snp.makeConstraints { make in
             make.top.bottom.width.equalTo(lowTempLabel)
             make.trailing.equalTo(lowTempLabel.snp.leading)
         }
         
-        addSubview(conditionImageView)
+        backGroundView.addSubview(conditionImageView)
         conditionImageView.snp.makeConstraints { make in
             make.top.bottom.width.equalTo(lowTempLabel)
             make.leading.equalTo(locationNameLbael)
         }
         
-        addSubview(conditionLabel)
+        backGroundView.addSubview(conditionLabel)
         conditionLabel.snp.makeConstraints { make in
             make.top.bottom.equalTo(lowTempLabel)
             make.leading.equalTo(conditionImageView.snp.trailing).offset(Constants.insetM)
