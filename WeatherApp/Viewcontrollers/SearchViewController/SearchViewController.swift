@@ -20,6 +20,14 @@ final class SearchViewController: UIViewController {
         return searchController
     }()
     
+    private lazy var activityIndicator = {
+        let indicator = UIActivityIndicatorView()
+        indicator.style = .large
+        indicator.hidesWhenStopped = true
+        
+        return indicator
+    }()
+    
     private var timer: Timer?
     
     init(viewModel: SearchViewControllerViewModelProtocol) {
@@ -58,6 +66,9 @@ private extension SearchViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
+        
+        view.addSubview(activityIndicator)
+        activityIndicator.center = view.center
     }
     
     func setupSearchController() {
@@ -83,6 +94,18 @@ private extension SearchViewController {
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
             }
+        }
+        
+        viewModel.weatherData.bind { [weak self] weatherData in
+            guard let weatherData = weatherData else { return }
+            let viewModel = WeatherViewControllerViewModel(weatherData: weatherData)
+            let weatherVC = WeatherViewController(viewModel: viewModel)
+            
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+            }
+            
+            self?.navigationController?.pushViewController(weatherVC, animated: true)
         }
     }
 }
@@ -110,6 +133,9 @@ extension SearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+        
+        viewModel.getWeatherForLocation(at: indexPath)
+        activityIndicator.startAnimating()
     }
 }
 

@@ -9,16 +9,21 @@ import Foundation
 
 protocol SearchViewControllerViewModelProtocol {
     var searchResults: Bindable<SearchResponse> { get }
+    var weatherData: Bindable<Weather?> { get }
     
     func searchFor(query: String)
     func getNumberOfRows() -> Int
     func searchBarCancelButtonClicked()
+    func getWeatherForLocation(at indexPath: IndexPath)
+    
 }
 
 final class SearchViewControllerViewModel: SearchViewControllerViewModelProtocol {
+    
     private let networkManager = NetworkManager.shared
     
     private(set) var searchResults = Bindable<SearchResponse> (value: [])
+    private(set) var weatherData =  Bindable<Weather?> (value: nil)
     
     func searchFor(query: String) {
         networkManager.search(query: query) { [weak self] result in
@@ -38,5 +43,19 @@ final class SearchViewControllerViewModel: SearchViewControllerViewModelProtocol
     
     func searchBarCancelButtonClicked() {
         searchResults.value = []
+    }
+    
+    func getWeatherForLocation(at indexPath: IndexPath) {
+        networkManager.requestWeatherFor(
+            latitude: searchResults.value[indexPath.row].lat,
+            longitude: searchResults.value[indexPath.row].lon
+        ) { [weak self] result in
+            switch result {
+            case .success(let weatherResponse):
+                self?.weatherData.value = weatherResponse
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
