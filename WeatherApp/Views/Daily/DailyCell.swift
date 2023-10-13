@@ -59,25 +59,25 @@ private extension DailyCell {
         backgroundView.addSubview(tempLowLabel)
         
         dateLabel.snp.makeConstraints { make in
-            make.top.bottom.leading.equalToSuperview().inset(Constants.insetS)
-            make.width.equalTo(dateLabel.snp.height).multipliedBy(1.2)
+            make.top.bottom.leading.equalToSuperview().inset(Constants.insetM)
+            make.width.equalToSuperview().dividedBy(7)
         }
         
         conditionImageView.snp.makeConstraints { make in
             make.top.bottom.equalTo(dateLabel)
-            make.width.equalTo(conditionImageView.snp.height)
+            make.width.equalTo(dateLabel)
             make.leading.equalTo(dateLabel.snp.trailing)
         }
         
         tempLowLabel.snp.makeConstraints { make in
-            make.top.bottom.trailing.equalToSuperview().inset(Constants.insetS)
+            make.top.bottom.trailing.equalToSuperview().inset(Constants.insetM)
             make.width.equalTo(dateLabel)
         }
         
         tempHighLabel.snp.makeConstraints { make in
             make.top.bottom.equalTo(tempLowLabel)
             make.trailing.equalTo(tempLowLabel.snp.leading)
-            make.width.equalTo(tempLowLabel)
+            make.width.equalTo(dateLabel)
         }
         
         conditionLabel.snp.makeConstraints { make in

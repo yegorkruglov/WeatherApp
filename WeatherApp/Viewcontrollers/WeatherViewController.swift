@@ -39,6 +39,7 @@ private extension WeatherViewController {
     
     func setupUI() {
         view.backgroundColor = .white
+        tableView.layer.cornerRadius = Constants.cornerRadiusM
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
