@@ -25,8 +25,8 @@ final class SummaryCell: UITableViewCell {
     }
     
     // MARK: - Private Properties
-    private lazy var locationNameLbael = getLabel(font: Constants.fontL, alignment: .center)
-    private lazy var conditionLabel = getLabel(font: Constants.fontM, alignment: .center)
+    private lazy var locationNameLbael = getLabel(font: Constants.fontL)
+    private lazy var conditionLabel = getLabel(font: Constants.fontM)
     private lazy var currentTempLabel = getLabel(font: Constants.fontL, alignment: .center)
     private lazy var highTempLabel = getLabel(font: Constants.fontS, alignment: .center)
     private lazy var lowTempLabel = getLabel(font: Constants.fontS, alignment: .center)
@@ -87,7 +87,7 @@ extension SummaryCell {
         addSubview(conditionLabel)
         conditionLabel.snp.makeConstraints { make in
             make.top.bottom.equalTo(lowTempLabel)
-            make.leading.equalTo(conditionImageView.snp.trailing)
+            make.leading.equalTo(conditionImageView.snp.trailing).offset(Constants.insetM)
             make.trailing.equalTo(highTempLabel.snp.leading)
         }
     }
