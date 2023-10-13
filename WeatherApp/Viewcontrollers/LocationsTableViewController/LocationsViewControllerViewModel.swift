@@ -16,7 +16,7 @@ protocol LocationsViewControllerViewModelProtocol {
     
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
     
-    func getHeaderTitleFor(section: Int) -> String
+    func getHeaderTitleForSection(number: Int) -> String
 //    func fetchWeatherForLocationCurrentLocation() -> Weather
 //    func fetchWeatherForLocation(at indexPath: IndexPath) -> Weather
 }
@@ -55,8 +55,8 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         SummaryCellViewModel(weatherData: weatherData)
     }
     
-    func getHeaderTitleFor(section: Int) -> String {
-        LocationsTable.allCases[section].value
+    func getHeaderTitleForSection(number: Int) -> String {
+        LocationsTable.allCases[number].value
     }
     
 //    func fetchWeatherForLocationCurrentLocation() -> Weather {

@@ -10,6 +10,8 @@ import Foundation
 protocol WeatherViewControllerViewModelProtocol {
     var weatherData: Bindable<Weather?> { get }
     
+    init(weatherData: Weather)
+    
     func numberOfSections() -> Int
     func numberOfRowsIn(section: Int) -> Int
     
@@ -20,10 +22,14 @@ protocol WeatherViewControllerViewModelProtocol {
     func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol
 }
 
-final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtocol {    
+final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtocol {
     private let networkManager = NetworkManager.shared
     
     private(set) var weatherData = Bindable<Weather?> (value: nil)
+    
+    init(weatherData: Weather) {
+        self.weatherData.value = weatherData
+    }
     
     func numberOfSections() -> Int { WeatherTable.allCases.count }
     
@@ -53,7 +59,6 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol {
         DailyCellViewModel(forecastDay: forecastDay)
     }
-    
 }
 
 enum WeatherTable: Int, CaseIterable {

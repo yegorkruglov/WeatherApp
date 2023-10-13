@@ -14,7 +14,7 @@ final class WeatherViewController: UIViewController {
     
     private let tableView = UITableView()
     
-    private let viewModel: WeatherViewControllerViewModelProtocol = WeatherViewControllerViewModel()
+    private let viewModel: WeatherViewControllerViewModelProtocol
     
     private lazy var activityIndicator = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -22,6 +22,19 @@ final class WeatherViewController: UIViewController {
         
         return indicator
     }()
+    
+    init(viewModel: WeatherViewControllerViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("WeatherVC was released")
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -38,6 +51,8 @@ final class WeatherViewController: UIViewController {
 private extension WeatherViewController {
     
     func setupUI() {
+        title = viewModel.weatherData.value?.location.name
+        
         view.backgroundColor = .white
         tableView.layer.cornerRadius = Constants.cornerRadiusM
         

@@ -33,6 +33,7 @@ class LocationsViewController: UIViewController {
 
 private extension LocationsViewController {
     func setupUI() {
+        title = "Locations"
         view.backgroundColor = .white
         
         view.addSubview(tableView)
@@ -52,8 +53,6 @@ private extension LocationsViewController {
         tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
         
         tableView.separatorStyle = .none
-        tableView.allowsSelection = false
-        tableView.isDirectionalLockEnabled = true
     }
     
     func configureViewModelObserver() {
@@ -88,16 +87,27 @@ extension LocationsViewController: UITableViewDataSource {
             withWeather: weatherData
         )
         
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .clear
+        summaryCell.selectedBackgroundView = backgroundView
+        
         return summaryCell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        viewModel.getHeaderTitleFor(section: section)
+        viewModel.getHeaderTitleForSection(number: section)
     }
 }
 
 extension LocationsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         heightS
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        
+        guard let weatherData = viewModel.CurrentLocationWeatherData.value else { return }
+        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData)), animated: true)
     }
 }
