@@ -33,6 +33,7 @@
 		5DE167832AD5587B009117F3 /* HourlyCollectionViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE167822AD5587B009117F3 /* HourlyCollectionViewViewModel.swift */; };
 		5DE167852AD58807009117F3 /* HourlyCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE167842AD58807009117F3 /* HourlyCollectionViewCellViewModel.swift */; };
 		5DE4F7CB2AD964D7002428A1 /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE4F7CA2AD964D7002428A1 /* LocationsTableViewController.swift */; };
+		5DE4F7CF2AD9655E002428A1 /* LocationsTableViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE4F7CE2AD9655E002428A1 /* LocationsTableViewControllerViewModel.swift */; };
 		8C26E52699E20C5D6677BF1E /* Pods_WeatherApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE2598691EF1435849A3C426 /* Pods_WeatherApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		5DE167822AD5587B009117F3 /* HourlyCollectionViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyCollectionViewViewModel.swift; sourceTree = "<group>"; };
 		5DE167842AD58807009117F3 /* HourlyCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		5DE4F7CA2AD964D7002428A1 /* LocationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
+		5DE4F7CE2AD9655E002428A1 /* LocationsTableViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewControllerViewModel.swift; sourceTree = "<group>"; };
 		91E8771D363920FA96614784 /* Pods-WeatherApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.debug.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.debug.xcconfig"; sourceTree = "<group>"; };
 		D0BAEF37B5FA22CC383C8A91 /* Pods-WeatherApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherApp.release.xcconfig"; path = "Target Support Files/Pods-WeatherApp/Pods-WeatherApp.release.xcconfig"; sourceTree = "<group>"; };
 		DE2598691EF1435849A3C426 /* Pods_WeatherApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,9 +169,8 @@
 		5D03D9BD2ACDD54500AC32F6 /* Viewcontrollers */ = {
 			isa = PBXGroup;
 			children = (
-				5D03D9BE2ACDD54500AC32F6 /* WeatherViewController.swift */,
-				5DE4F7CA2AD964D7002428A1 /* LocationsTableViewController.swift */,
-				5DBC2A9E2AD4177D0095A70C /* WeatherViewModel.swift */,
+				5DE4F7CC2AD96529002428A1 /* WeatherViewController */,
+				5DE4F7CD2AD96539002428A1 /* LocationsTableViewController */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -253,6 +254,24 @@
 				5D5E45C62AD84D1D0083B33A /* DailyCellViewModel.swift */,
 			);
 			path = Daily;
+			sourceTree = "<group>";
+		};
+		5DE4F7CC2AD96529002428A1 /* WeatherViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5D03D9BE2ACDD54500AC32F6 /* WeatherViewController.swift */,
+				5DBC2A9E2AD4177D0095A70C /* WeatherViewModel.swift */,
+			);
+			path = WeatherViewController;
+			sourceTree = "<group>";
+		};
+		5DE4F7CD2AD96539002428A1 /* LocationsTableViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5DE4F7CA2AD964D7002428A1 /* LocationsTableViewController.swift */,
+				5DE4F7CE2AD9655E002428A1 /* LocationsTableViewControllerViewModel.swift */,
+			);
+			path = LocationsTableViewController;
 			sourceTree = "<group>";
 		};
 		8FD2BF62717DA01A0C8EE374 /* Frameworks */ = {
@@ -389,6 +408,7 @@
 				5DBC2AA12AD41E200095A70C /* Extension +UIViewController.swift in Sources */,
 				5D03D9BF2ACDD54500AC32F6 /* NetworkManager.swift in Sources */,
 				5D03D9CD2ACDD54500AC32F6 /* WeatherViewController.swift in Sources */,
+				5DE4F7CF2AD9655E002428A1 /* LocationsTableViewControllerViewModel.swift in Sources */,
 				5D03D9C02ACDD54500AC32F6 /* Extension +UIView.swift in Sources */,
 				5D03D9CA2ACDD54500AC32F6 /* Constants.swift in Sources */,
 				5D03D9CC2ACDD54500AC32F6 /* SceneDelegate.swift in Sources */,
