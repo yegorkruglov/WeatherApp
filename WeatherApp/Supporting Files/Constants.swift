@@ -11,6 +11,7 @@ enum Constants {
     static var insetS: CGFloat { 4 }
     static var insetM: CGFloat { 8 }
     static var insetL: CGFloat { 16 }
+    static var insetXL: CGFloat { 20 }
     
     static var fontS: UIFont { UIFont.systemFont(ofSize: 14, weight: .semibold) }
     static var fontM: UIFont { UIFont.systemFont(ofSize: 20, weight: .semibold) }

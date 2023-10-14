@@ -82,7 +82,7 @@ private extension DailyCell {
         
         conditionLabel.snp.makeConstraints { make in
             make.verticalEdges.equalTo(dateLabel)
-            make.leading.equalTo(conditionImageView.snp.trailing).offset(Constants.insetS)
+            make.leading.equalTo(conditionImageView.snp.trailing).offset(Constants.insetM)
             make.trailing.equalTo(tempHighLabel.snp.leading)
         }
     }

@@ -74,6 +74,7 @@ private extension SearchViewController {
     func setupSearchController() {
         searchController.delegate = self
         searchController.searchResultsUpdater = self
+        searchController.hidesNavigationBarDuringPresentation = false
         
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false

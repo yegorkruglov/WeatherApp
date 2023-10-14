@@ -47,13 +47,13 @@ private extension SearchCell {
         
         backgroundView.addSubview(cityLabel)
         cityLabel.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview().inset(Constants.insetM)
+            make.leading.top.trailing.equalToSuperview().inset(Constants.insetXL)
             make.bottom.equalToSuperview().dividedBy(2)
         }
         
         backgroundView.addSubview(areaLabel)
         areaLabel.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalToSuperview().inset(Constants.insetM)
+            make.leading.bottom.trailing.equalToSuperview().inset(Constants.insetXL)
             make.top.equalTo(cityLabel.snp.bottom).offset(Constants.insetM)
         }
     }
