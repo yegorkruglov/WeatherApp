@@ -78,7 +78,7 @@ private extension WeatherViewController {
     }
     
     @objc func addToFavourites() {
-        
+        viewModel.saveLocation()
     }
     
     func configureTableView() {

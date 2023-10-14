@@ -30,7 +30,6 @@ final class SearchViewControllerViewModel: SearchViewControllerViewModelProtocol
             switch result {
             case .success(let searchResponse):
                 self?.searchResults.value = searchResponse
-                print(searchResponse)
             case .failure(let error):
                 print(error.localizedDescription)
             }

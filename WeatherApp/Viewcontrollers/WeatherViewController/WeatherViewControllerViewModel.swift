@@ -21,10 +21,14 @@ protocol WeatherViewControllerViewModelProtocol {
     func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCollectionViewViewModelProtocol
     func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraCollectionViewModelProtocol
     func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol
+    
+    func saveLocation()
 }
 
 final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtocol {
     private let networkManager = NetworkManager.shared
+    
+    private let storageManager = StorageManager.shared
     
     private(set) var weatherData = Bindable<Weather?> (value: nil)
     
@@ -62,6 +66,14 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     
     func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol {
         DailyCellViewModel(forecastDay: forecastDay)
+    }
+    
+    func saveLocation() {
+        
+        guard let location = weatherData.value?.location else { return }
+        storageManager.save(location) { _ in
+            print("saved")
+        }
     }
 }
 

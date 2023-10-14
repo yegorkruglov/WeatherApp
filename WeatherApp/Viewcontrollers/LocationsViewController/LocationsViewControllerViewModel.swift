@@ -20,6 +20,8 @@ protocol LocationsViewControllerViewModelProtocol {
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
     
     func getHeaderTitleForSection(number: Int) -> String
+    
+    func updateTableView()
 }
 
 final class LocationsViewControllerViewModel: LocationsViewControllerViewModelProtocol {
@@ -34,7 +36,7 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     
     private(set) var savedLocations: RealmSwift.Results<LocationRealm>!
     
-    private(set) var savedLocationsWeatherData = Bindable<[Weather]?> (value: nil)
+    private(set) var savedLocationsWeatherData = Bindable<[Weather]?> (value: [])
     
     init() {
         getSavedLocations()
@@ -47,6 +49,10 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         )
         
         checkLocation()
+    }
+    
+    func updateTableView() {
+        getSavedLocations()
     }
     
     func getNumberOfSections() -> Int {
@@ -72,7 +78,7 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     
     func getSavedLocations() {
        savedLocations = storageManager.realm.objects(LocationRealm.self)
-       
+               
         guard !savedLocations.isEmpty else { return }
         savedLocations.forEach { location in
             networkManager.requestWeatherFor(
