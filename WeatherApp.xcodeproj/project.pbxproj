@@ -29,6 +29,8 @@
 		5D642FCC2AD995FC005F7278 /* SearchCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D642FCB2AD995FC005F7278 /* SearchCellViewModel.swift */; };
 		5D6BEEB72AD80CEF00A2E398 /* ExtraCollectionViewViewmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6BEEB62AD80CEF00A2E398 /* ExtraCollectionViewViewmodel.swift */; };
 		5D6BEEB92AD80D0200A2E398 /* ExtraCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6BEEB82AD80D0200A2E398 /* ExtraCollectionViewCellViewModel.swift */; };
+		5D9E645C2ADACAD50080A2FB /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E645B2ADACAD50080A2FB /* StorageManager.swift */; };
+		5D9E645E2ADAD4150080A2FB /* LocationRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9E645D2ADAD4150080A2FB /* LocationRealm.swift */; };
 		5DBC2A9F2AD4177D0095A70C /* WeatherViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC2A9E2AD4177D0095A70C /* WeatherViewControllerViewModel.swift */; };
 		5DBC2AA12AD41E200095A70C /* Extension +UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC2AA02AD41E200095A70C /* Extension +UIViewController.swift */; };
 		5DBC2AA32AD42BFE0095A70C /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC2AA22AD42BFE0095A70C /* LocationManager.swift */; };
@@ -67,6 +69,8 @@
 		5D642FCB2AD995FC005F7278 /* SearchCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCellViewModel.swift; sourceTree = "<group>"; };
 		5D6BEEB62AD80CEF00A2E398 /* ExtraCollectionViewViewmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraCollectionViewViewmodel.swift; sourceTree = "<group>"; };
 		5D6BEEB82AD80D0200A2E398 /* ExtraCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
+		5D9E645B2ADACAD50080A2FB /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		5D9E645D2ADAD4150080A2FB /* LocationRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRealm.swift; sourceTree = "<group>"; };
 		5DBC2A9E2AD4177D0095A70C /* WeatherViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewControllerViewModel.swift; sourceTree = "<group>"; };
 		5DBC2AA02AD41E200095A70C /* Extension +UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension +UIViewController.swift"; sourceTree = "<group>"; };
 		5DBC2AA22AD42BFE0095A70C /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -133,6 +137,7 @@
 			children = (
 				5D03D9AB2ACDD54400AC32F6 /* NetworkManager.swift */,
 				5DBC2AA22AD42BFE0095A70C /* LocationManager.swift */,
+				5D9E645B2ADACAD50080A2FB /* StorageManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -163,6 +168,7 @@
 			children = (
 				5D03D9B82ACDD54500AC32F6 /* Weather.swift */,
 				5D642FC62AD9955E005F7278 /* SearchResponse.swift */,
+				5D9E645D2ADAD4150080A2FB /* LocationRealm.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -444,12 +450,14 @@
 				5D03D9BF2ACDD54500AC32F6 /* NetworkManager.swift in Sources */,
 				5D03D9CD2ACDD54500AC32F6 /* WeatherViewController.swift in Sources */,
 				5DE4F7CF2AD9655E002428A1 /* LocationsViewControllerViewModel.swift in Sources */,
+				5D9E645C2ADACAD50080A2FB /* StorageManager.swift in Sources */,
 				5D03D9C02ACDD54500AC32F6 /* Extension +UIView.swift in Sources */,
 				5D03D9CA2ACDD54500AC32F6 /* Constants.swift in Sources */,
 				5D03D9CC2ACDD54500AC32F6 /* SceneDelegate.swift in Sources */,
 				5D03D9C92ACDD54500AC32F6 /* Weather.swift in Sources */,
 				5D6BEEB72AD80CEF00A2E398 /* ExtraCollectionViewViewmodel.swift in Sources */,
 				5D03D9CB2ACDD54500AC32F6 /* AppDelegate.swift in Sources */,
+				5D9E645E2ADAD4150080A2FB /* LocationRealm.swift in Sources */,
 				5D642FC42AD9920F005F7278 /* SearchViewControllerViewModel.swift in Sources */,
 				5D6BEEB92AD80D0200A2E398 /* ExtraCollectionViewCellViewModel.swift in Sources */,
 				5D03D9C52ACDD54500AC32F6 /* HourlyCollectionViewCell.swift in Sources */,

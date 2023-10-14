@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import RealmSwift
 
 protocol LocationsViewControllerViewModelProtocol {
     var CurrentLocationWeatherData: Bindable<Weather?> { get }
@@ -26,9 +27,15 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     
     private let locationManager = LocationManager()
     
+    private let storageManager = StorageManager.shared
+    
     private(set) var CurrentLocationWeatherData = Bindable<Weather?> (value: nil)
     
+    private var savedLocations: Results<LocationRealm>!
+    
     init() {
+        getSavedLocations()
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(checkLocation),
@@ -46,7 +53,7 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     func getNumberOfRowsInSection(section: Int) -> Int {
         switch section {
         case LocationsTable.CurrentLocation.rawValue: 1
-        case LocationsTable.Other.rawValue: 0
+        case LocationsTable.Other.rawValue: savedLocations.count
         default:
             0
         }
@@ -60,6 +67,9 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         LocationsTable.allCases[number].value
     }
     
+    func getSavedLocations() {
+       savedLocations = storageManager.realm.objects(LocationRealm.self)
+    }
 //    func fetchWeatherForLocationCurrentLocation() -> Weather {
 //        <#code#>
 //    }
