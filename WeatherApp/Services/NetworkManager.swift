@@ -34,8 +34,6 @@ final class NetworkManager {
             )
         else { return }
         
-        print(url)
-        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
@@ -62,8 +60,6 @@ final class NetworkManager {
     
     func search(query: String, completion: @escaping (Result<SearchResponse, NetworkError>) -> Void) {
         guard let url = URL(string: "\(baseURL)search.json?key=\(apiKey)&q=\(query)") else { return }
-        
-        print(url)
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

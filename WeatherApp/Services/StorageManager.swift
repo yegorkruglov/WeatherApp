@@ -23,9 +23,18 @@ final class StorageManager {
     
     func save(_ location: Location, completion: (LocationRealm) -> Void) {
         write {
-            let location = LocationRealm(latitude: location.lat, longitude: location.lon)
+            let newLocation = LocationRealm(latitude: location.lat, longitude: location.lon)
             
-            completion(location)
+            let savedLocations = realm.objects(LocationRealm.self)
+
+            guard !savedLocations.contains(where: { savedLocation in
+                savedLocation.latitude == newLocation.latitude
+                && savedLocation.longitude == newLocation.longitude
+            }) else { return }
+            
+            realm.add(newLocation)
+            
+            completion(newLocation)
         }
     }
     

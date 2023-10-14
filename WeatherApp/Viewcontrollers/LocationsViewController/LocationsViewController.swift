@@ -64,13 +64,14 @@ private extension LocationsViewController {
         tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
         
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
     }
     
     func configureViewModelObserver() {
         viewModel.currentLocationWeatherData.bind { [weak self] _ in
             DispatchQueue.main.async {
                 self?.tableView.isHidden = false
-                self?.tableView.reloadData()
+                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             }
         }
         
@@ -100,6 +101,7 @@ extension LocationsViewController: UITableViewDataSource {
         if indexPath.section == LocationsTable.CurrentLocation.rawValue {
             weatherData = viewModel.currentLocationWeatherData.value
         } else if indexPath.section == LocationsTable.Other.rawValue {
+            guard viewModel.savedLocations.count == viewModel.savedLocationsWeatherData.value?.count else { return UITableViewCell()}
             guard let savedLocationWeatherData = viewModel.savedLocationsWeatherData.value?[indexPath.row] else { return UITableViewCell() }
             weatherData = savedLocationWeatherData
         }
@@ -133,8 +135,17 @@ extension LocationsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         
-        guard let weatherData = viewModel.currentLocationWeatherData.value else { return }
+        var weatherData: Weather!
         
-        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: true)), animated: true)
+        if indexPath.section == LocationsTable.CurrentLocation.rawValue {
+            weatherData = viewModel.currentLocationWeatherData.value
+        } else if indexPath.section == LocationsTable.Other.rawValue {
+            guard let savedLocationWeatherData = viewModel.savedLocationsWeatherData.value?[indexPath.row] else { return }
+            weatherData = savedLocationWeatherData
+        }
+        
+        guard let weatherData = weatherData else { return  }
+        
+        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: indexPath.section == LocationsTable.Other.rawValue ? false : true)), animated: true)
     }
 }
