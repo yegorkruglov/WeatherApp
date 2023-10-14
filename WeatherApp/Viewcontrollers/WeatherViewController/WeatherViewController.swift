@@ -16,13 +16,6 @@ final class WeatherViewController: UIViewController {
     
     private let viewModel: WeatherViewControllerViewModelProtocol
     
-    private lazy var activityIndicator = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.hidesWhenStopped = true
-        
-        return indicator
-    }()
-    
     init(viewModel: WeatherViewControllerViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -69,10 +62,6 @@ private extension WeatherViewController {
         tableView.isHidden = true
         tableView.showsVerticalScrollIndicator = false
         
-        view.addSubview(activityIndicator)
-        activityIndicator.center = view.center
-        activityIndicator.startAnimating()
-        
         guard !viewModel.isCurrentLocationViewController else { return }
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -105,7 +94,6 @@ private extension WeatherViewController {
         viewModel.weatherData.bind { [weak self] _ in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
-                self?.activityIndicator.isHidden = true
                 self?.tableView.isHidden = false
             }
         }

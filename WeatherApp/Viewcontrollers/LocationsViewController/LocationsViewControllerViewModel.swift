@@ -51,10 +51,6 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         checkLocation()
     }
     
-    func updateTableView() {
-        getSavedLocations()
-    }
-    
     func getNumberOfSections() -> Int {
         LocationsTable.allCases.count
     }
@@ -75,6 +71,10 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     func getHeaderTitleForSection(number: Int) -> String {
         LocationsTable.allCases[number].value
     }
+
+    func updateTableView() {
+        getSavedLocations()
+    }
     
     func getSavedLocations() {
         savedLocations = storageManager.realm.objects(LocationRealm.self)
@@ -83,6 +83,8 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     }
     
     func getSavedLocationsWeatherData() {
+        savedLocationsWeatherData.value = []
+        
         guard !savedLocations.isEmpty else { return }
         savedLocations.forEach { location in
             networkManager.requestWeatherFor(

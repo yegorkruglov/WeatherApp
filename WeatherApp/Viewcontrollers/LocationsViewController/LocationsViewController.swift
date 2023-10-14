@@ -29,6 +29,11 @@ class LocationsViewController: UIViewController {
         configureTableView()
         configureViewModelObserver()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.updateTableView()
+    }
 }
 
 private extension LocationsViewController {
@@ -75,7 +80,7 @@ private extension LocationsViewController {
             }
         }
         
-        viewModel.savedLocationsWeatherData.bind { [weak self] _ in
+        viewModel.savedLocationsWeatherData.bind { [weak self] savedLocationsWeatherData in
             guard self?.viewModel.savedLocations.count == self?.viewModel.savedLocationsWeatherData.value?.count else { return }
             
             DispatchQueue.main.async {
