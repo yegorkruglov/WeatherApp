@@ -67,10 +67,19 @@ private extension LocationsViewController {
     }
     
     func configureViewModelObserver() {
-        viewModel.CurrentLocationWeatherData.bind { [weak self] _ in
+        viewModel.currentLocationWeatherData.bind { [weak self] _ in
             DispatchQueue.main.async {
-                self?.tableView.reloadData()
                 self?.tableView.isHidden = false
+                self?.tableView.reloadData()
+            }
+        }
+        
+        viewModel.savedLocationsWeatherData.bind { [weak self] _ in
+            guard self?.viewModel.savedLocations.count == self?.viewModel.savedLocationsWeatherData.value?.count else { return }
+            
+            DispatchQueue.main.async {
+                self?.tableView.isHidden = false
+                self?.tableView.reloadData()
             }
         }
     }
@@ -86,10 +95,16 @@ extension LocationsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let weatherData = viewModel.CurrentLocationWeatherData.value else { return UITableViewCell() }
-        //        indexPath.section == LocationsTable.CurrentLocation.rawValue
-        //        ? viewModel.fetchWeatherForLocationCurrentLocation()
-        //        : viewModel.fetchWeatherForLocation(at: indexPath)
+        var weatherData: Weather!
+        
+        if indexPath.section == LocationsTable.CurrentLocation.rawValue {
+            weatherData = viewModel.currentLocationWeatherData.value
+        } else if indexPath.section == LocationsTable.Other.rawValue {
+            guard let savedLocationWeatherData = viewModel.savedLocationsWeatherData.value?[indexPath.row] else { return UITableViewCell() }
+            weatherData = savedLocationWeatherData
+        }
+        
+        guard let weatherData = weatherData else { return UITableViewCell() }
         
         guard let summaryCell = tableView.dequeueReusableCell(
             withIdentifier: SummaryCell.identifier
@@ -118,7 +133,7 @@ extension LocationsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         
-        guard let weatherData = viewModel.CurrentLocationWeatherData.value else { return }
+        guard let weatherData = viewModel.currentLocationWeatherData.value else { return }
         
         navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: true)), animated: true)
     }

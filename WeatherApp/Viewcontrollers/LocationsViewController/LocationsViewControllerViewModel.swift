@@ -10,7 +10,9 @@ import CoreLocation
 import RealmSwift
 
 protocol LocationsViewControllerViewModelProtocol {
-    var CurrentLocationWeatherData: Bindable<Weather?> { get }
+    var currentLocationWeatherData: Bindable<Weather?> { get }
+    var savedLocations: Results<LocationRealm>! { get }
+    var savedLocationsWeatherData: Bindable<[Weather]?> { get }
     
     func getNumberOfSections() -> Int
     func getNumberOfRowsInSection(section: Int) -> Int
@@ -18,20 +20,21 @@ protocol LocationsViewControllerViewModelProtocol {
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
     
     func getHeaderTitleForSection(number: Int) -> String
-//    func fetchWeatherForLocationCurrentLocation() -> Weather
-//    func fetchWeatherForLocation(at indexPath: IndexPath) -> Weather
 }
 
 final class LocationsViewControllerViewModel: LocationsViewControllerViewModelProtocol {
+    
     private let networkManager = NetworkManager.shared
     
     private let locationManager = LocationManager()
     
     private let storageManager = StorageManager.shared
     
-    private(set) var CurrentLocationWeatherData = Bindable<Weather?> (value: nil)
+    private(set) var currentLocationWeatherData = Bindable<Weather?> (value: nil)
     
-    private var savedLocations: Results<LocationRealm>!
+    private(set) var savedLocations: RealmSwift.Results<LocationRealm>!
+    
+    private(set) var savedLocationsWeatherData = Bindable<[Weather]?> (value: nil)
     
     init() {
         getSavedLocations()
@@ -69,14 +72,22 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     
     func getSavedLocations() {
        savedLocations = storageManager.realm.objects(LocationRealm.self)
+       
+        guard !savedLocations.isEmpty else { return }
+        savedLocations.forEach { location in
+            networkManager.requestWeatherFor(
+                latitude: location.latitude,
+                longitude: location.longitude
+            ) { [weak self] result in
+                switch result {
+                case .success(let weatherResponse):
+                    self?.savedLocationsWeatherData.value?.append(weatherResponse)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
-//    func fetchWeatherForLocationCurrentLocation() -> Weather {
-//        <#code#>
-//    }
-//    
-//    func fetchWeatherForLocation(at indexPath: IndexPath) -> Weather {
-//        <#code#>
-//    }
     
     @objc  func checkLocation() {
         guard let isAuthorizedLocation = locationManager.isAuthorizedLocation else { return }
@@ -102,7 +113,7 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         networkManager.requestWeatherFor(latitude: lat, longitude: long) { [weak self] result in
             switch result {
             case .success(let weatherData):
-                self?.CurrentLocationWeatherData.value = weatherData
+                self?.currentLocationWeatherData.value = weatherData
             case .failure(let error):
                 print(error.rawValue)
             }
