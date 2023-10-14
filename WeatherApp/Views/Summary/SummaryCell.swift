@@ -60,7 +60,8 @@ extension SummaryCell {
         
         backGroundView.addSubview(locationNameLbael)
         locationNameLbael.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(Constants.insetM)
+            make.top.equalToSuperview().inset(Constants.insetM)
+            make.leading.equalToSuperview().inset(Constants.insetXL)
             make.width.equalToSuperview().dividedBy(1.5)
             make.height.equalToSuperview().dividedBy(2)
         }
@@ -90,7 +91,7 @@ extension SummaryCell {
         backGroundView.addSubview(conditionImageView)
         conditionImageView.snp.makeConstraints { make in
             make.top.bottom.width.equalTo(lowTempLabel)
-            make.leading.equalTo(locationNameLbael)
+            make.leading.equalToSuperview().inset(Constants.insetM)
         }
         
         backGroundView.addSubview(conditionLabel)
