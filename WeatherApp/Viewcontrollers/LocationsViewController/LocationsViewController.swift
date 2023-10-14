@@ -119,6 +119,7 @@ extension LocationsViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: false)
         
         guard let weatherData = viewModel.CurrentLocationWeatherData.value else { return }
-        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData)), animated: true)
+        
+        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: true)), animated: true)
     }
 }

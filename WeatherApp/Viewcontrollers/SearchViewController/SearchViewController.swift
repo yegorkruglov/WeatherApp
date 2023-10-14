@@ -98,7 +98,7 @@ private extension SearchViewController {
         
         viewModel.weatherData.bind { [weak self] weatherData in
             guard let weatherData = weatherData else { return }
-            let viewModel = WeatherViewControllerViewModel(weatherData: weatherData)
+            let viewModel = WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: false)
             let weatherVC = WeatherViewController(viewModel: viewModel)
             
             DispatchQueue.main.async {

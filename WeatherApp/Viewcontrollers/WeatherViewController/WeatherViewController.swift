@@ -67,6 +67,18 @@ private extension WeatherViewController {
         view.addSubview(activityIndicator)
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
+        
+        guard !viewModel.isCurrentLocationViewController else { return }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "star"),
+            style: .plain,
+            target: self,
+            action: #selector(addToFavourites)
+        )
+    }
+    
+    @objc func addToFavourites() {
+        
     }
     
     func configureTableView() {

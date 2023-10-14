@@ -9,8 +9,9 @@ import Foundation
 
 protocol WeatherViewControllerViewModelProtocol {
     var weatherData: Bindable<Weather?> { get }
+    var isCurrentLocationViewController: Bool { get }
     
-    init(weatherData: Weather)
+    init(weatherData: Weather, isCurrentLocationViewController: Bool)
     
     func numberOfSections() -> Int
     func numberOfRowsIn(section: Int) -> Int
@@ -27,8 +28,11 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     
     private(set) var weatherData = Bindable<Weather?> (value: nil)
     
-    init(weatherData: Weather) {
+    private(set) var isCurrentLocationViewController: Bool
+    
+    init(weatherData: Weather, isCurrentLocationViewController: Bool) {
         self.weatherData.value = weatherData
+        self.isCurrentLocationViewController = isCurrentLocationViewController
     }
     
     func numberOfSections() -> Int { WeatherTable.allCases.count }
