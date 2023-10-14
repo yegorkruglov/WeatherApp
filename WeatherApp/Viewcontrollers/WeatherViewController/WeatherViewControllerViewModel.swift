@@ -10,6 +10,7 @@ import Foundation
 protocol WeatherViewControllerViewModelProtocol {
     var weatherData: Bindable<Weather?> { get }
     var isCurrentLocationViewController: Bool { get }
+    var isFavourite: Bindable<Bool> { get }
     
     init(weatherData: Weather, isCurrentLocationViewController: Bool)
     
@@ -22,7 +23,7 @@ protocol WeatherViewControllerViewModelProtocol {
     func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraCollectionViewModelProtocol
     func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol
     
-    func saveLocation()
+    func manageLocation()
 }
 
 final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtocol {
@@ -34,9 +35,12 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     
     private(set) var isCurrentLocationViewController: Bool
     
+    private(set) var isFavourite = Bindable<Bool> (value: false)
+    
     init(weatherData: Weather, isCurrentLocationViewController: Bool) {
         self.weatherData.value = weatherData
         self.isCurrentLocationViewController = isCurrentLocationViewController
+        isFavourite.value = setFavouriteStatus()
     }
     
     func numberOfSections() -> Int { WeatherTable.allCases.count }
@@ -53,7 +57,7 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     }
     
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol {
-       SummaryCellViewModel(weatherData: weatherData)
+        SummaryCellViewModel(weatherData: weatherData)
     }
     
     func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCollectionViewViewModelProtocol {
@@ -68,11 +72,25 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
         DailyCellViewModel(forecastDay: forecastDay)
     }
     
-    func saveLocation() {
-        
+    func manageLocation() {
         guard let location = weatherData.value?.location else { return }
-        storageManager.save(location) { _ in
-            print("saved")
+        
+        if isFavourite.value {
+            storageManager.delete(location)
+            print("deleted")
+            isFavourite.value.toggle()
+        } else {
+            storageManager.save(location) { _ in
+                print("saved")
+                isFavourite.value.toggle()
+            }
+        }
+    }
+    
+    func setFavouriteStatus() -> Bool {
+        storageManager.realm.objects(LocationRealm.self).contains { savedLocation in
+            weatherData.value?.location.lat == savedLocation.latitude
+            && weatherData.value?.location.lon == savedLocation.longitude
         }
     }
 }

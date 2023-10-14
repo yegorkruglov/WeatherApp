@@ -26,15 +26,34 @@ final class StorageManager {
             let newLocation = LocationRealm(latitude: location.lat, longitude: location.lon)
             
             let savedLocations = realm.objects(LocationRealm.self)
-
-            guard !savedLocations.contains(where: { savedLocation in
-                savedLocation.latitude == newLocation.latitude
-                && savedLocation.longitude == newLocation.longitude
-            }) else { return }
+            
+            guard !savedLocations.contains(
+                where: { savedLocation in
+                    savedLocation.latitude == newLocation.latitude
+                    && savedLocation.longitude == newLocation.longitude
+                }
+            ) else { return }
             
             realm.add(newLocation)
             
             completion(newLocation)
+        }
+    }
+    
+    func delete(_ location: Location) {
+        write {
+            guard 
+                let locationToDelete = realm.objects(LocationRealm.self).first(where: { savedLocation in
+                    location.lat == savedLocation.latitude
+                    && location.lon == savedLocation.longitude
+                })
+            else { return }
+            
+            print(locationToDelete)
+            print("before delete", realm.objects(LocationRealm.self))
+            realm.delete(locationToDelete)
+            print(realm.objects(LocationRealm.self))
+            print("after delete", realm.objects(LocationRealm.self))
         }
     }
     

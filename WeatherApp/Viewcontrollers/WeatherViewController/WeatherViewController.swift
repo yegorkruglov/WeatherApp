@@ -44,6 +44,11 @@ final class WeatherViewController: UIViewController {
         configureTableView()
         configureViewModelObserver()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.reloadData()
+    }
 }
 
 // MARK: - WeatherViewController setup
@@ -69,16 +74,17 @@ private extension WeatherViewController {
         activityIndicator.startAnimating()
         
         guard !viewModel.isCurrentLocationViewController else { return }
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "star"),
             style: .plain,
             target: self,
-            action: #selector(addToFavourites)
+            action: #selector(handleFavourites)
         )
     }
     
-    @objc func addToFavourites() {
-        viewModel.saveLocation()
+    @objc func handleFavourites() {
+        viewModel.manageLocation()
     }
     
     func configureTableView() {
@@ -101,6 +107,14 @@ private extension WeatherViewController {
                 self?.tableView.reloadData()
                 self?.activityIndicator.isHidden = true
                 self?.tableView.isHidden = false
+            }
+        }
+        
+        viewModel.isFavourite.bind { [weak self] isFavourite in
+            if isFavourite {
+                self?.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")
+            } else {
+                self?.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star")
             }
         }
     }

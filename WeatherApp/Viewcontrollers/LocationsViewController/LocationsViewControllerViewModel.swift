@@ -77,8 +77,12 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     }
     
     func getSavedLocations() {
-       savedLocations = storageManager.realm.objects(LocationRealm.self)
-               
+        savedLocations = storageManager.realm.objects(LocationRealm.self)
+        
+        getSavedLocationsWeatherData()
+    }
+    
+    func getSavedLocationsWeatherData() {
         guard !savedLocations.isEmpty else { return }
         savedLocations.forEach { location in
             networkManager.requestWeatherFor(
