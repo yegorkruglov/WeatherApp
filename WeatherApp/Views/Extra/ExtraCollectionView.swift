@@ -13,12 +13,23 @@ final class ExtraCollectionView: UITableViewCell {
     
     var viewModel: ExtraCollectionViewModelProtocol!
     
-    private var collectionView: UICollectionView?
+    private var collectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .vertical
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.layer.cornerRadius = Constants.cornerRadiusM
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        
+        return collectionView
+    }()
     
     private let itemsPerRow: CGFloat = 2
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureCollectionView()
         setupUI()
     }
     
@@ -29,27 +40,22 @@ final class ExtraCollectionView: UITableViewCell {
 }
 
 private extension ExtraCollectionView {
+    func configureCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(
+            ExtraCollectionViewCell.self,
+            forCellWithReuseIdentifier: ExtraCollectionViewCell.identifier
+        )
+    }
+    
     func setupUI() {
         backgroundColor = .clear
         layer.cornerRadius = Constants.cornerRadiusM
         contentView.layer.cornerRadius = Constants.cornerRadiusM
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView?.layer.cornerRadius = Constants.cornerRadiusM
-        collectionView?.showsVerticalScrollIndicator = false
-        collectionView?.backgroundColor = .clear
-        collectionView?.dataSource = self
-        collectionView?.delegate = self
-        collectionView?.register(
-            ExtraCollectionViewCell.self,
-            forCellWithReuseIdentifier: ExtraCollectionViewCell.identifier
-        )
-        
-        contentView.addSubview(collectionView ?? UILabel())
-        collectionView?.snp.makeConstraints { make in
+        contentView.addSubview(collectionView )
+        collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -62,6 +68,7 @@ extension ExtraCollectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {        
         guard let extraCell = collectionView.dequeueReusableCell(withReuseIdentifier: ExtraCollectionViewCell.identifier, for: indexPath) as? ExtraCollectionViewCell else { return UICollectionViewCell() }
+        
         extraCell.viewModel = viewModel.getExtraSectionCellViewModel(at: indexPath)
         
         return extraCell
@@ -90,4 +97,3 @@ extension ExtraCollectionView: UICollectionViewDelegateFlowLayout {
         Constants.insetM
     }
 }
-

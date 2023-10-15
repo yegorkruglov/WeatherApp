@@ -10,7 +10,7 @@ import Foundation
 protocol ExtraCollectionViewModelProtocol {
     init(weatherData: Weather)
     
-    var weatherData: Bindable<Weather?> { get }
+    var weatherData: Weather { get }
     
     func getNumberOfItems() -> Int
     
@@ -19,10 +19,10 @@ protocol ExtraCollectionViewModelProtocol {
 
 final class ExtraCollectionViewViewmodel: ExtraCollectionViewModelProtocol {
     
-    private(set) var weatherData = Bindable<Weather?> (value: nil)
+    private(set) var weatherData: Weather
     
     required init(weatherData: Weather) {
-        self.weatherData.value = weatherData
+        self.weatherData = weatherData
     }
     
     func getNumberOfItems() -> Int {
@@ -31,73 +31,90 @@ final class ExtraCollectionViewViewmodel: ExtraCollectionViewModelProtocol {
     
     func getExtraSectionCellViewModel(at indexPath: IndexPath) -> ExtraCollectionViewCellViewModel {
         switch indexPath.row {
+            
         case Extra.FeelsLike.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.FeelsLike.text,
-                cellValue: String(Int((weatherData.value?.current.feelslikeC.rounded()) ?? 0)) + "°")
+                cellValue: String(Int((weatherData.current.feelslikeC.rounded()))) + "°")
+        
         case Extra.Pressure.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Pressure.text,
-                cellValue: String(Int(weatherData.value?.current.pressureMB.rounded() ?? 0)) + " hPa"
+                cellValue: String(Int(weatherData.current.pressureMB.rounded())) + " hPa"
             )
+        
         case Extra.Humidity.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Humidity.text,
-                cellValue: String(Int(weatherData.value?.current.humidity.rounded() ?? 0)) + " %"
+                cellValue: String(Int(weatherData.current.humidity.rounded())) + " %"
             )
+        
         case Extra.Precipitation.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Precipitation.text,
-                cellValue: String(weatherData.value?.current.precipMm ?? 0) + " mm"
+                cellValue: String(weatherData.current.precipMm) + " mm"
             )
+        
         case Extra.Visibility.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Visibility.text,
-                cellValue: String(Int(weatherData.value?.current.visKM.rounded() ?? 0)) + " km"
+                cellValue: String(Int(weatherData.current.visKM.rounded())) + " km"
             )
+        
         case Extra.CloudsCoverage.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.CloudsCoverage.text,
-                cellValue: String(Int(weatherData.value?.current.cloud.rounded() ?? 00)) + " %"
+                cellValue: String(Int(weatherData.current.cloud.rounded())) + " %"
             )
+        
         case Extra.Sunrise.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Sunrise.text,
                 cellValue: {
-                    guard let time = weatherData.value?.forecast.forecastday.first?.astro.sunrise else { return "err"}
+                    guard 
+                        let time = weatherData.forecast.forecastday.first?.astro.sunrise else { return "err"}
                     return time }()
             )
+        
         case Extra.Sunset.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Sunset.text,
                 cellValue: {
-                    guard let time = weatherData.value?.forecast.forecastday.first?.astro.sunset else { return "err"}
+                    guard 
+                        let time = weatherData.forecast.forecastday.first?.astro.sunset else { return "err"}
                     return time }()
             )
+        
         case Extra.Moonrise.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Moonrise.text,
                 cellValue: {
-                    guard let time = weatherData.value?.forecast.forecastday.first?.astro.moonrise else { return "err"}
+                    guard 
+                        let time = weatherData.forecast.forecastday.first?.astro.moonrise else { return "err"}
                     return time }()
             )
+        
         case Extra.Moonset.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.Moonset.text,
                 cellValue: {
-                    guard let time = weatherData.value?.forecast.forecastday.first?.astro.moonset else { return "err"}
+                    guard 
+                        let time = weatherData.forecast.forecastday.first?.astro.moonset else { return "err"}
                     return time }()
             )
+        
         case Extra.WindSpeed.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.WindSpeed.text,
-                cellValue: String(weatherData.value?.current.windKph ?? 0) + " Km/h"
+                cellValue: String(weatherData.current.windKph) + " Km/h"
             )
+        
         case Extra.WindDirection.rawValue:
             ExtraCollectionViewCellViewModel(
                 cellName: Extra.WindDirection.text,
-                cellValue: weatherData.value?.current.windDir ?? "err"
+                cellValue: weatherData.current.windDir
             )
+        
         default:
             ExtraCollectionViewCellViewModel(
                 cellName: "err",

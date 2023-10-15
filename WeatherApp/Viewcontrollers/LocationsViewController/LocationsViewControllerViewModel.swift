@@ -15,7 +15,7 @@ protocol LocationsViewControllerViewModelProtocol {
     var savedLocationsWeatherData: Bindable<[Weather]?> { get }
     
     func getNumberOfSections() -> Int
-    func getNumberOfRowsInSection(section: Int) -> Int
+    func getNumberOfRowsInSection(number: Int) -> Int
     
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
     
@@ -55,8 +55,8 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         LocationsTable.allCases.count
     }
     
-    func getNumberOfRowsInSection(section: Int) -> Int {
-        switch section {
+    func getNumberOfRowsInSection(number: Int) -> Int {
+        switch number {
         case LocationsTable.CurrentLocation.rawValue: 1
         case LocationsTable.Other.rawValue: savedLocations.count
         default:

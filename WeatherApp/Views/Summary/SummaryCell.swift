@@ -25,6 +25,7 @@ final class SummaryCell: UITableViewCell {
     }
     
     // MARK: - Private Properties
+    
     private lazy var locationNameLbael = getLabel(font: Constants.fontL)
     private lazy var conditionLabel = getLabel(font: Constants.fontM)
     private lazy var currentTempLabel = getLabel(font: Constants.fontL, alignment: .center)

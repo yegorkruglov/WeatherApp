@@ -11,6 +11,7 @@ protocol HourlyCollectionViewCellViewModelProtocol {
     var hourText: String { get }
     var tempText: String { get }
     var conditionImageURL: URL? { get }
+    
     init(hourData: Hour)
 }
 
