@@ -117,7 +117,10 @@ extension LocationsViewController: UITableViewDataSource {
             withIdentifier: SummaryCell.identifier
         ) as? SummaryCell else { return UITableViewCell() }
         
-        summaryCell.viewModel = viewModel.getSummaryCellViewModel(at: indexPath)
+        
+        guard let viewModel = viewModel.getSummaryCellViewModel(at: indexPath) else { return cell }
+        
+        summaryCell.viewModel = viewModel
         
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
@@ -139,21 +142,9 @@ extension LocationsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         
-        let viewModel = viewModel.getWeatherViewControllerViewModel(at: indexPath)
+        guard let viewModel = viewModel.getWeatherViewControllerViewModel(at: indexPath) else { return }
         let vc = WeatherViewController(viewModel: viewModel)
         
         navigationController?.pushViewController(vc, animated: true)
-//        var weatherData: Weather!
-//        
-//        if indexPath.section == LocationsTable.CurrentLocation.rawValue {
-//            weatherData = viewModel.currentLocationWeatherData.value
-//        } else if indexPath.section == LocationsTable.Other.rawValue {
-//            guard let savedLocationWeatherData = viewModel.savedLocationsWeatherData.value?[indexPath.row] else { return }
-//            weatherData = savedLocationWeatherData
-//        }
-//        
-//        guard let weatherData = weatherData else { return  }
-//        
-//        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: indexPath.section == LocationsTable.Other.rawValue ? false : true)), animated: true)
     }
 }

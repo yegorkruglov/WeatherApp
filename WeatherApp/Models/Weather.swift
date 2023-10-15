@@ -12,8 +12,6 @@ struct Weather: Codable {
     let location: Location
     let current: Current
     let forecast: Forecast
-    
-    static let zeroWeather = Weather.init(location: Location.init(name: "", region: "", country: "", lat: 0, lon: 0, tzID: "", localtimeEpoch: 0, localtime: ""), current: Current(lastUpdatedEpoch: 0, lastUpdated: "", tempC: 0, tempF: 0, isDay: 0, condition: Condition(text: "", icon: "", code: 0), windMph: 0, windKph: 0, windDegree: 0, windDir: "", pressureMB: 0, pressureIn: 0, precipMm: 0, precipIn: 0, humidity: 0, cloud: 0, feelslikeC: 0, feelslikeF: 0, visKM: 0, visMiles: 0, uv: 0, gustMph: 0, gustKph: 0), forecast: Forecast(forecastday: [Forecastday.init(date: "", dateEpoch: 0, day: Day.init(maxtempC: 0, maxtempF: 0, mintempC: 0, mintempF: 0, avgtempC: 0, avgtempF: 0, maxwindMph: 0, maxwindKph: 0, totalprecipMm: 0, totalprecipIn: 0, totalsnowCM: 0, avgvisKM: 0, avgvisMiles: 0, avghumidity: 0, dailyWillItRain: 0, dailyChanceOfRain: 0, dailyWillItSnow: 0, dailyChanceOfSnow: 0, condition: Condition(text: "", icon: "", code: 0), uv: 0), astro: Astro(sunrise: "", sunset: "", moonrise: "", moonset: "", moonPhase: "", moonIllumination: "", isMoonUp: 0, isSunUp: 0), hour: [Hour.init(timeEpoch: 0, time: "", tempC: 0, tempF: 0, isDay: 0, condition: Condition(text: "", icon: "", code: 0), windMph: 0, windKph: 0, windDegree: 0, windDir: "", pressureMB: 0, pressureIn: 0, precipMm: 0, precipIn: 0, humidity: 0, cloud: 0, feelslikeC: 0, feelslikeF: 0, windchillC: 0, windchillF: 0, heatindexC: 0, heatindexF: 0, dewpointC: 0, dewpointF: 0, willItRain: 0, chanceOfRain: 0, willItSnow: 0, chanceOfSnow: 0, visKM: 0, visMiles: 0, gustMph: 0, gustKph: 0, uv: 0)])]))
 }
 
 // MARK: - Current

@@ -37,11 +37,6 @@ final class WeatherViewController: UIViewController {
         configureTableView()
         configureViewModelObserver()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        tableView.reloadData()
-    }
 }
 
 // MARK: - WeatherViewController setup
@@ -49,7 +44,7 @@ final class WeatherViewController: UIViewController {
 private extension WeatherViewController {
     
     func setupUI() {
-        title = viewModel.weatherData.value.location.name
+        title = viewModel.weatherData.location.name
         
         view.backgroundColor = .white
         tableView.layer.cornerRadius = Constants.cornerRadiusM
@@ -89,13 +84,7 @@ private extension WeatherViewController {
         tableView.isDirectionalLockEnabled = true
     }
     
-    func configureViewModelObserver() {
-        viewModel.weatherData.bind { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
-        }
-        
+    func configureViewModelObserver() {        
         viewModel.isFavourite.bind { [weak self] isFavourite in
             if isFavourite {
                 self?.navigationItem.rightBarButtonItem?.image = UIImage(systemName: "star.fill")

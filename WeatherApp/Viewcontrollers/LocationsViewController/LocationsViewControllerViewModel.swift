@@ -17,9 +17,8 @@ protocol LocationsViewControllerViewModelProtocol {
     func getNumberOfSections() -> Int
     func getNumberOfRowsInSection(number: Int) -> Int
     
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
-    func getSummaryCellViewModel(at indexPath: IndexPath) -> SummaryCellViewModelProtocol
-    func getWeatherViewControllerViewModel(at indexPath: IndexPath) -> WeatherViewControllerViewModelProtocol
+    func getSummaryCellViewModel(at indexPath: IndexPath) -> SummaryCellViewModelProtocol?
+    func getWeatherViewControllerViewModel(at indexPath: IndexPath) -> WeatherViewControllerViewModelProtocol?
     func getHeaderTitleForSection(number: Int) -> String
     func updateTableView()
 }
@@ -64,18 +63,12 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
             0
         }
     }
-    
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol {
-        SummaryCellViewModel(weatherData: weatherData)
-    }
-    
-    func getSummaryCellViewModel(at indexPath: IndexPath) -> SummaryCellViewModelProtocol {
+        
+    func getSummaryCellViewModel(at indexPath: IndexPath) -> SummaryCellViewModelProtocol? {
         switch indexPath.section {
         
         case LocationsTable.CurrentLocation.rawValue:
-            guard let weatherData = currentLocationWeatherData.value else {
-                return SummaryCellViewModel(weatherData: Weather.zeroWeather)
-            }
+            guard let weatherData = currentLocationWeatherData.value else { return nil }
             return SummaryCellViewModel(weatherData: weatherData)
         default:
             let weatherData = savedLocationsWeatherData.value[indexPath.row]
@@ -83,13 +76,11 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         }
     }
 
-    func getWeatherViewControllerViewModel(at indexPath: IndexPath) -> WeatherViewControllerViewModelProtocol {
+    func getWeatherViewControllerViewModel(at indexPath: IndexPath) -> WeatherViewControllerViewModelProtocol? {
         switch indexPath.section {
         
         case LocationsTable.CurrentLocation.rawValue:
-            guard let weatherData = currentLocationWeatherData.value else {
-                return WeatherViewControllerViewModel(weatherData: Weather.zeroWeather, isCurrentLocationViewController: true)
-            }
+            guard let weatherData = currentLocationWeatherData.value else { return nil }
             return WeatherViewControllerViewModel(
                 weatherData: weatherData,
                 isCurrentLocationViewController: true
