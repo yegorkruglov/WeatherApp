@@ -49,11 +49,7 @@ final class StorageManager {
                 })
             else { return }
             
-            print(locationToDelete)
-            print("before delete", realm.objects(LocationRealm.self))
             realm.delete(locationToDelete)
-            print(realm.objects(LocationRealm.self))
-            print("after delete", realm.objects(LocationRealm.self))
         }
     }
     
