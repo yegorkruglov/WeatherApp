@@ -44,6 +44,7 @@ private extension HourlyCollectionViewCellViewModel {
     }
     
     func getConditionImageURL() -> URL? {
+        guard hourData.condition.icon != "" else { return nil }
         guard let url = URL(string: "https:" + hourData.condition.icon) else { return nil}
         return url
     }

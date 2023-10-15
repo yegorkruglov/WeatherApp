@@ -46,6 +46,7 @@ final class SummaryCellViewModel: SummaryCellViewModelProtocol {
 
 extension SummaryCellViewModel {
     private func getConditionImageURL() -> URL? {
+        guard weatherData.current.condition.icon != "" else { return nil }
         guard let url = URL(string: "https:" + weatherData.current.condition.icon) else { return nil}
         return url
     }

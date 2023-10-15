@@ -51,6 +51,7 @@ private extension DailyCellViewModel {
     }
     
     func getConditionImageURL() -> URL? {
+        guard forecastDay.day.condition.icon != "" else { return nil }
         guard let url = URL(string: "https:" + forecastDay.day.condition.icon) else { return nil }
         return url
     }
