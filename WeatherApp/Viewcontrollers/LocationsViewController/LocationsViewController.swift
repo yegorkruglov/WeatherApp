@@ -13,6 +13,8 @@ class LocationsViewController: UIViewController {
     
     private let tableView = UITableView()
     
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    
     init(viewModel: LocationsViewControllerViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -32,6 +34,7 @@ class LocationsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        tableView.isHidden = true
         viewModel.updateTableView()
     }
 }
@@ -41,6 +44,10 @@ private extension LocationsViewController {
         title = "Locations"
         view.backgroundColor = .white
         
+        view.addSubview(activityIndicator)
+        activityIndicator.center = view.center
+        activityIndicator.startAnimating()
+        
         view.addSubview(tableView)
         tableView.layer.cornerRadius = Constants.cornerRadiusM
         
@@ -49,6 +56,7 @@ private extension LocationsViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
+        tableView.isHidden = true
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .search,
@@ -75,13 +83,13 @@ private extension LocationsViewController {
     func configureViewModelObserver() {
         viewModel.currentLocationWeatherData.bind { [weak self] _ in
             DispatchQueue.main.async {
+                self?.tableView.reloadData()
                 self?.tableView.isHidden = false
-                self?.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
             }
         }
         
         viewModel.savedLocationsWeatherData.bind { [weak self] savedLocationsWeatherData in
-            guard self?.viewModel.savedLocations.count == self?.viewModel.savedLocationsWeatherData.value?.count else { return }
+            guard self?.viewModel.savedLocations.count == savedLocationsWeatherData.count else { return }
             
             DispatchQueue.main.async {
                 self?.tableView.isHidden = false
@@ -101,24 +109,15 @@ extension LocationsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var weatherData: Weather!
+        let cell = UITableViewCell()
         
-        if indexPath.section == LocationsTable.CurrentLocation.rawValue {
-            weatherData = viewModel.currentLocationWeatherData.value
-        } else if indexPath.section == LocationsTable.Other.rawValue {
-            guard viewModel.savedLocations.count == viewModel.savedLocationsWeatherData.value?.count else { return UITableViewCell()}
-            guard let savedLocationWeatherData = viewModel.savedLocationsWeatherData.value?[indexPath.row] else { return UITableViewCell() }
-            weatherData = savedLocationWeatherData
-        }
-        
-        guard let weatherData = weatherData else { return UITableViewCell() }
+        guard self.viewModel.savedLocations.count == self.viewModel.savedLocationsWeatherData.value.count else { return cell }
         
         guard let summaryCell = tableView.dequeueReusableCell(
             withIdentifier: SummaryCell.identifier
         ) as? SummaryCell else { return UITableViewCell() }
-        summaryCell.viewModel = viewModel.getSummaryCellViewModel(
-            withWeather: weatherData
-        )
+        
+        summaryCell.viewModel = viewModel.getSummaryCellViewModel(at: indexPath)
         
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
@@ -140,17 +139,21 @@ extension LocationsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         
-        var weatherData: Weather!
+        let viewModel = viewModel.getWeatherViewControllerViewModel(at: indexPath)
+        let vc = WeatherViewController(viewModel: viewModel)
         
-        if indexPath.section == LocationsTable.CurrentLocation.rawValue {
-            weatherData = viewModel.currentLocationWeatherData.value
-        } else if indexPath.section == LocationsTable.Other.rawValue {
-            guard let savedLocationWeatherData = viewModel.savedLocationsWeatherData.value?[indexPath.row] else { return }
-            weatherData = savedLocationWeatherData
-        }
-        
-        guard let weatherData = weatherData else { return  }
-        
-        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: indexPath.section == LocationsTable.Other.rawValue ? false : true)), animated: true)
+        navigationController?.pushViewController(vc, animated: true)
+//        var weatherData: Weather!
+//        
+//        if indexPath.section == LocationsTable.CurrentLocation.rawValue {
+//            weatherData = viewModel.currentLocationWeatherData.value
+//        } else if indexPath.section == LocationsTable.Other.rawValue {
+//            guard let savedLocationWeatherData = viewModel.savedLocationsWeatherData.value?[indexPath.row] else { return }
+//            weatherData = savedLocationWeatherData
+//        }
+//        
+//        guard let weatherData = weatherData else { return  }
+//        
+//        navigationController?.pushViewController(WeatherViewController(viewModel: WeatherViewControllerViewModel(weatherData: weatherData, isCurrentLocationViewController: indexPath.section == LocationsTable.Other.rawValue ? false : true)), animated: true)
     }
 }

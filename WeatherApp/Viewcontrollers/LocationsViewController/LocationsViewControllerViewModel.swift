@@ -11,16 +11,16 @@ import RealmSwift
 
 protocol LocationsViewControllerViewModelProtocol {
     var currentLocationWeatherData: Bindable<Weather?> { get }
-    var savedLocations: Results<LocationRealm>! { get }
-    var savedLocationsWeatherData: Bindable<[Weather]?> { get }
+    var savedLocations: Results<LocationRealm> { get }
+    var savedLocationsWeatherData: Bindable<[Weather]> { get }
     
     func getNumberOfSections() -> Int
     func getNumberOfRowsInSection(number: Int) -> Int
     
     func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
-    
+    func getSummaryCellViewModel(at indexPath: IndexPath) -> SummaryCellViewModelProtocol
+    func getWeatherViewControllerViewModel(at indexPath: IndexPath) -> WeatherViewControllerViewModelProtocol
     func getHeaderTitleForSection(number: Int) -> String
-    
     func updateTableView()
 }
 
@@ -34,12 +34,13 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     
     private(set) var currentLocationWeatherData = Bindable<Weather?> (value: nil)
     
-    private(set) var savedLocations: RealmSwift.Results<LocationRealm>!
+    private(set) var savedLocations: Results<LocationRealm>
     
-    private(set) var savedLocationsWeatherData = Bindable<[Weather]?> (value: [])
-    
+    private(set) lazy var savedLocationsWeatherData = Bindable<[Weather]> (value: [])
+        
     init() {
-        getSavedLocations()
+        savedLocations = storageManager.realm.objects(LocationRealm.self)
+        getSavedLocationsWeatherData()
         
         NotificationCenter.default.addObserver(
             self,
@@ -68,18 +69,51 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
         SummaryCellViewModel(weatherData: weatherData)
     }
     
+    func getSummaryCellViewModel(at indexPath: IndexPath) -> SummaryCellViewModelProtocol {
+        switch indexPath.section {
+        
+        case LocationsTable.CurrentLocation.rawValue:
+            guard let weatherData = currentLocationWeatherData.value else {
+                return SummaryCellViewModel(weatherData: Weather.zeroWeather)
+            }
+            return SummaryCellViewModel(weatherData: weatherData)
+        default:
+            let weatherData = savedLocationsWeatherData.value[indexPath.row]
+            return SummaryCellViewModel(weatherData: weatherData)
+        }
+    }
+
+    func getWeatherViewControllerViewModel(at indexPath: IndexPath) -> WeatherViewControllerViewModelProtocol {
+        switch indexPath.section {
+        
+        case LocationsTable.CurrentLocation.rawValue:
+            guard let weatherData = currentLocationWeatherData.value else {
+                return WeatherViewControllerViewModel(weatherData: Weather.zeroWeather, isCurrentLocationViewController: true)
+            }
+            return WeatherViewControllerViewModel(
+                weatherData: weatherData,
+                isCurrentLocationViewController: true
+            )
+        default:
+            let weatherData = savedLocationsWeatherData.value[indexPath.row]
+            return WeatherViewControllerViewModel(
+                weatherData: weatherData,
+                isCurrentLocationViewController: false
+            )
+        }
+    }
+
     func getHeaderTitleForSection(number: Int) -> String {
         LocationsTable.allCases[number].value
     }
 
     func updateTableView() {
-        getSavedLocations()
+        savedLocations = getSavedLocations()
+        getSavedLocationsWeatherData()
     }
     
-    func getSavedLocations() {
-        savedLocations = storageManager.realm.objects(LocationRealm.self)
-        
-        getSavedLocationsWeatherData()
+    func getSavedLocations() -> Results<LocationRealm> {
+        return storageManager.realm.objects(LocationRealm.self)
     }
     
     func getSavedLocationsWeatherData() {
@@ -93,7 +127,7 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
             ) { [weak self] result in
                 switch result {
                 case .success(let weatherResponse):
-                    self?.savedLocationsWeatherData.value?.append(weatherResponse)
+                    self?.savedLocationsWeatherData.value.append(weatherResponse)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -122,10 +156,10 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     }
     
     func fetchWeatherForLocation(lat: CLLocationDegrees, long: CLLocationDegrees) {
-        networkManager.requestWeatherFor(latitude: lat, longitude: long) { [weak self] result in
+        networkManager.requestWeatherFor(latitude: lat, longitude: long) { [unowned self] result in
             switch result {
             case .success(let weatherData):
-                self?.currentLocationWeatherData.value = weatherData
+                self.currentLocationWeatherData.value = weatherData
             case .failure(let error):
                 print(error.rawValue)
             }
