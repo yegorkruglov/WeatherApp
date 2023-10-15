@@ -44,8 +44,8 @@ final class SummaryCell: UITableViewCell {
 
 // MARK: - Cell setup
 
-extension SummaryCell {
-    private func setupUI() {
+private extension SummaryCell {
+    func setupUI() {
         layer.cornerRadius = Constants.cornerRadiusM
         
         let backGroundView = UIView()

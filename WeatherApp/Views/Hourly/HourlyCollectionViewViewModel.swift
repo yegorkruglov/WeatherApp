@@ -10,7 +10,6 @@ import Foundation
 protocol HourlyCollectionViewViewModelProtocol {
     init(weatherData: Weather)
     
-    var weatherData: Bindable<Weather?> { get }
     func getHourlySectionCellViewModel(at indexPath: IndexPath) -> HourlyCollectionViewCellViewModel
     func getNumberOfItems() -> Int
 }
@@ -27,10 +26,10 @@ final class HourlyCollectionViewViewModel: HourlyCollectionViewViewModelProtocol
     
     private var hoursData: [Hour] { getHoursData() }
     
-    private(set) var weatherData = Bindable<Weather?> (value: nil)
+    private(set) var weatherData: Weather
 
     required init(weatherData: Weather) {
-        self.weatherData.value = weatherData
+        self.weatherData = weatherData
     }
 }
 
@@ -42,7 +41,7 @@ extension HourlyCollectionViewViewModel {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         
-        guard let allDays = weatherData.value?.forecast.forecastday else { return [] }
+        let allDays = weatherData.forecast.forecastday
         
         var allHoursData = allDays.flatMap { $0.hour }
         allHoursData.removeAll { hour in

@@ -13,10 +13,22 @@ final class HourlyCollectionView: UITableViewCell {
     
     var viewModel: HourlyCollectionViewViewModelProtocol!
 
-    private var collectionView: UICollectionView?
+    private var collectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.layer.cornerRadius = Constants.cornerRadiusM
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        
+        
+        return collectionView
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        configureCollectionView()
         setupUI()
     }
     
@@ -24,28 +36,23 @@ final class HourlyCollectionView: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
-extension HourlyCollectionView {
+private extension HourlyCollectionView {
+    func configureCollectionView() {
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(
+            HourlyCollectionViewCell.self,
+            forCellWithReuseIdentifier: HourlyCollectionViewCell.identifier
+        )
+    }
+    
     func setupUI() {
         backgroundColor = .clear
         layer.cornerRadius = Constants.cornerRadiusM
         contentView.layer.cornerRadius = Constants.cornerRadiusM
         
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView?.layer.cornerRadius = Constants.cornerRadiusM
-        collectionView?.showsHorizontalScrollIndicator = false
-        collectionView?.backgroundColor = .clear
-        collectionView?.dataSource = self
-        collectionView?.delegate = self
-        collectionView?.register(
-            HourlyCollectionViewCell.self,
-            forCellWithReuseIdentifier: HourlyCollectionViewCell.identifier
-        )
-        
-        contentView.addSubview(collectionView ?? UILabel())
-        collectionView?.snp.makeConstraints { make in
+        contentView.addSubview(collectionView )
+        collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -57,7 +64,11 @@ extension HourlyCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyCollectionViewCell.identifier, for: indexPath) as? HourlyCollectionViewCell else { return UICollectionViewCell() }
+        
+        guard
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourlyCollectionViewCell.identifier, for: indexPath) as? HourlyCollectionViewCell
+        else { return UICollectionViewCell() }
+        
         cell.viewModel = viewModel.getHourlySectionCellViewModel(at: indexPath)
         
         return cell
