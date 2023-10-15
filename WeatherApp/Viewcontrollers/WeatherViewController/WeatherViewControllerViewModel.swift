@@ -8,7 +8,7 @@
 import Foundation
 
 protocol WeatherViewControllerViewModelProtocol {
-    var weatherData: Bindable<Weather?> { get }
+    var weatherData: Bindable<Weather> { get }
     var isCurrentLocationViewController: Bool { get }
     var isFavourite: Bindable<Bool> { get }
     
@@ -18,10 +18,10 @@ protocol WeatherViewControllerViewModelProtocol {
     func numberOfRowsIn(section: Int) -> Int
     
     func getHeaderTitle(forSection number: Int) -> String
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol
-    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCollectionViewViewModelProtocol
-    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraCollectionViewModelProtocol
-    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol
+    func getSummaryCellViewModel() -> SummaryCellViewModelProtocol
+    func getHourlyCellViewModel() -> HourlyCollectionViewViewModelProtocol
+    func getExtraCellViewModel() -> ExtraCollectionViewModelProtocol
+    func getDailySectionCellViewModel(at indexPath: IndexPath) -> DailyCellViewModelProtocol
     
     func manageLocation()
 }
@@ -31,14 +31,14 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     
     private let storageManager = StorageManager.shared
     
-    private(set) var weatherData = Bindable<Weather?> (value: nil)
+    private(set) var weatherData: Bindable<Weather>
     
     private(set) var isCurrentLocationViewController: Bool
     
     private(set) var isFavourite = Bindable<Bool> (value: false)
     
     init(weatherData: Weather, isCurrentLocationViewController: Bool) {
-        self.weatherData.value = weatherData
+        self.weatherData = Bindable(value: weatherData)
         self.isCurrentLocationViewController = isCurrentLocationViewController
         isFavourite.value = setFavouriteStatus()
     }
@@ -47,7 +47,7 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     
     func numberOfRowsIn(section: Int) -> Int {
         switch section {
-        case WeatherTable.Daily.rawValue: weatherData.value?.forecast.forecastday.count ?? 0
+        case WeatherTable.Daily.rawValue: weatherData.value.forecast.forecastday.count 
         default: 1
         }
     }
@@ -56,24 +56,24 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
         WeatherTable.allCases[number].value
     }
     
-    func getSummaryCellViewModel(withWeather weatherData: Weather) -> SummaryCellViewModelProtocol {
-        SummaryCellViewModel(weatherData: weatherData)
+    func getSummaryCellViewModel() -> SummaryCellViewModelProtocol {
+        SummaryCellViewModel(weatherData: weatherData.value)
     }
     
-    func getHourlyCellViewModel(withWeather weatherData: Weather) -> HourlyCollectionViewViewModelProtocol {
-        HourlyCollectionViewViewModel(weatherData: weatherData)
+    func getHourlyCellViewModel() -> HourlyCollectionViewViewModelProtocol {
+        HourlyCollectionViewViewModel(weatherData: weatherData.value)
     }
     
-    func getExtraCellViewModel(withWeather weatherdata: Weather) -> ExtraCollectionViewModelProtocol {
-        ExtraCollectionViewViewmodel(weatherData: weatherdata)
+    func getExtraCellViewModel() -> ExtraCollectionViewModelProtocol {
+        ExtraCollectionViewViewmodel(weatherData: weatherData.value)
     }
     
-    func getDailySectionCellViewModel(withDay forecastDay: Forecastday) -> DailyCellViewModelProtocol {
-        DailyCellViewModel(forecastDay: forecastDay)
+    func getDailySectionCellViewModel(at indexPath: IndexPath) -> DailyCellViewModelProtocol {
+        DailyCellViewModel(forecastDay: weatherData.value.forecast.forecastday[indexPath.row])
     }
     
     func manageLocation() {
-        guard let location = weatherData.value?.location else { return }
+        let location = weatherData.value.location
         
         if isFavourite.value {
             storageManager.delete(location)
@@ -89,8 +89,8 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     
     func setFavouriteStatus() -> Bool {
         storageManager.realm.objects(LocationRealm.self).contains { savedLocation in
-            weatherData.value?.location.lat == savedLocation.latitude
-            && weatherData.value?.location.lon == savedLocation.longitude
+            weatherData.value.location.lat == savedLocation.latitude
+            && weatherData.value.location.lon == savedLocation.longitude
         }
     }
 }

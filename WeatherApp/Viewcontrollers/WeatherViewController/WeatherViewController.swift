@@ -49,7 +49,7 @@ final class WeatherViewController: UIViewController {
 private extension WeatherViewController {
     
     func setupUI() {
-        title = viewModel.weatherData.value?.location.name
+        title = viewModel.weatherData.value.location.name
         
         view.backgroundColor = .white
         tableView.layer.cornerRadius = Constants.cornerRadiusM
@@ -59,7 +59,6 @@ private extension WeatherViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
-        tableView.isHidden = true
         tableView.showsVerticalScrollIndicator = false
         
         guard !viewModel.isCurrentLocationViewController else { return }
@@ -94,7 +93,6 @@ private extension WeatherViewController {
         viewModel.weatherData.bind { [weak self] _ in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
-                self?.tableView.isHidden = false
             }
         }
         
@@ -122,47 +120,39 @@ extension WeatherViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        guard let weatherData = viewModel.weatherData.value else { return cell }
         
         switch indexPath.section {
             
         case WeatherTable.Summary.rawValue:
-            guard let summaryCell = tableView.dequeueReusableCell(
-                withIdentifier: SummaryCell.identifier
-            ) as? SummaryCell else { return cell }
-            summaryCell.viewModel = viewModel.getSummaryCellViewModel(
-                withWeather: weatherData
-            )
+            guard 
+                let summaryCell = tableView.dequeueReusableCell(withIdentifier: SummaryCell.identifier) as? SummaryCell
+            else { return cell }
+            summaryCell.viewModel = viewModel.getSummaryCellViewModel()
             
             return summaryCell
             
         case WeatherTable.Hourly.rawValue:
-            guard let hourlyCell = tableView.dequeueReusableCell(
-                withIdentifier: HourlyCollectionView.identifier
-            ) as? HourlyCollectionView else { return cell }
-            hourlyCell.viewModel = viewModel.getHourlyCellViewModel(
-                withWeather: weatherData
-            )
+            guard 
+                let hourlyCell = tableView.dequeueReusableCell(withIdentifier: HourlyCollectionView.identifier) as? HourlyCollectionView
+            else { return cell }
+            hourlyCell.viewModel = viewModel.getHourlyCellViewModel()
             
             return hourlyCell
             
         case WeatherTable.Extra.rawValue:
-            guard let extraCell = tableView.dequeueReusableCell(
-                withIdentifier: ExtraCollectionView.identifier
-            ) as? ExtraCollectionView else { return cell}
-            extraCell.viewModel = viewModel.getExtraCellViewModel(
-                withWeather: weatherData
-            )
+            guard
+                let extraCell = tableView.dequeueReusableCell(withIdentifier: ExtraCollectionView.identifier) as? ExtraCollectionView
+            else { return cell }
+            extraCell.viewModel = viewModel.getExtraCellViewModel()
             
             return extraCell
             
         case WeatherTable.Daily.rawValue:
-            guard let dailyCell = tableView.dequeueReusableCell(
-                withIdentifier: DailyCell.identifier
-            ) as? DailyCell else { return cell }
+            guard
+                let dailyCell = tableView.dequeueReusableCell(withIdentifier: DailyCell.identifier) as? DailyCell
+            else { return cell }
             
-            let dayData = weatherData.forecast.forecastday[indexPath.row]
-            dailyCell.viewModel = viewModel.getDailySectionCellViewModel(withDay: dayData)
+            dailyCell.viewModel = viewModel.getDailySectionCellViewModel(at: indexPath)
             
             return dailyCell
             
