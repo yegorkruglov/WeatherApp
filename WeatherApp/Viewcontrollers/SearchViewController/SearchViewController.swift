@@ -56,7 +56,7 @@ final class SearchViewController: UIViewController {
 private extension SearchViewController {
     func setupUI() {
         title = "Search"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
         tableView.layer.cornerRadius = Constants.cornerRadiusM

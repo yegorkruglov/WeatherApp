@@ -42,7 +42,7 @@ class LocationsViewController: UIViewController {
 private extension LocationsViewController {
     func setupUI() {
         title = "Locations"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         view.addSubview(activityIndicator)
         activityIndicator.center = view.center

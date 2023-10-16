@@ -46,7 +46,7 @@ private extension WeatherViewController {
     func setupUI() {
         title = viewModel.weatherData.location.name
         
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         tableView.layer.cornerRadius = Constants.cornerRadiusM
         
         view.addSubview(tableView)
