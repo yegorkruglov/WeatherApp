@@ -19,7 +19,7 @@ protocol ExtraCollectionViewModelProtocol {
 
 final class ExtraCollectionViewViewmodel: ExtraCollectionViewModelProtocol {
     
-    private(set) var weatherData: Weather
+    let weatherData: Weather
     
     required init(weatherData: Weather) {
         self.weatherData = weatherData

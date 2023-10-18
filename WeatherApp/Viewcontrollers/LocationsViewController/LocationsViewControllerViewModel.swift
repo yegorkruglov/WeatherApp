@@ -31,15 +31,14 @@ final class LocationsViewControllerViewModel: LocationsViewControllerViewModelPr
     
     private let storageManager = StorageManager.shared
     
-    private(set) var currentLocationWeatherData = Bindable<Weather?> (value: nil)
+    let currentLocationWeatherData = Bindable<Weather?> (value: nil)
     
-    private(set) var savedLocations: Results<LocationRealm>
+    var savedLocations: Results<LocationRealm>
     
-    private(set) lazy var savedLocationsWeatherData = Bindable<[Weather]> (value: [])
+    let savedLocationsWeatherData = Bindable<[Weather]> (value: [])
         
     init() {
         savedLocations = storageManager.realm.objects(LocationRealm.self)
-        getSavedLocationsWeatherData()
         
         NotificationCenter.default.addObserver(
             self,

@@ -34,7 +34,6 @@ class LocationsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tableView.isHidden = true
         viewModel.updateTableView()
     }
 }
@@ -56,18 +55,27 @@ private extension LocationsViewController {
             make.horizontalEdges.equalToSuperview().inset(Constants.insetL)
             make.verticalEdges.equalTo(self.view.safeAreaLayoutGuide.snp.verticalEdges)
         }
-        tableView.isHidden = true
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .search,
             target: self,
             action: #selector(goToSearchViewController)
         )
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .refresh,
+            target: self,
+            action: #selector(reload)
+        )
     }
     
     @objc func goToSearchViewController() {
         let searchVC = SearchViewController(viewModel: SearchViewControllerViewModel())
         navigationController?.pushViewController(searchVC, animated: true)
+    }
+    
+    @objc func reload() {
+        viewModel.updateTableView()
     }
     
     func configureTableView() {
@@ -84,7 +92,6 @@ private extension LocationsViewController {
         viewModel.currentLocationWeatherData.bind { [weak self] _ in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
-                self?.tableView.isHidden = false
             }
         }
         

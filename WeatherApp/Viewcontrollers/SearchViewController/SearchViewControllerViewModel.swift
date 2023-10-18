@@ -22,8 +22,8 @@ protocol SearchViewControllerViewModelProtocol {
 final class SearchViewControllerViewModel: SearchViewControllerViewModelProtocol {
     private let networkManager = NetworkManager.shared
     
-    private(set) var searchResults = Bindable<SearchResponse> (value: [])
-    private(set) var weatherData =  Bindable<Weather?> (value: nil)
+    let searchResults = Bindable<SearchResponse> (value: [])
+    let weatherData =  Bindable<Weather?> (value: nil)
     
     func searchFor(query: String) {
         networkManager.search(query: query) { [weak self] result in

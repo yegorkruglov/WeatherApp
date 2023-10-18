@@ -31,11 +31,11 @@ final class WeatherViewControllerViewModel: WeatherViewControllerViewModelProtoc
     
     private let storageManager = StorageManager.shared
     
-    private(set) var weatherData: Weather
+    let weatherData: Weather
     
-    private(set) var isCurrentLocationViewController: Bool
+    let isCurrentLocationViewController: Bool
     
-    private(set) var isFavourite = Bindable<Bool> (value: false)
+    let isFavourite = Bindable<Bool> (value: false)
     
     init(weatherData: Weather, isCurrentLocationViewController: Bool) {
         self.weatherData = weatherData
