@@ -42,9 +42,7 @@ private extension DailyCell {
     func setupUI() {
         layer.cornerRadius = Constants.cornerRadiusM
         
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = .appGray
-        backgroundView.layer.cornerRadius = Constants.cornerRadiusM
+        lazy var backgroundView = getBackgroundView()
         
         addSubview(backgroundView)
         backgroundView.snp.makeConstraints { make in

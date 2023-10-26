@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LocationsViewController: UIViewController {
+final class LocationsViewController: UIViewController {
     
     private let viewModel: LocationsViewControllerViewModelProtocol
     
@@ -83,6 +83,7 @@ private extension LocationsViewController {
         tableView.delegate = self
         
         tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.identifier)
+        tableView.register(StubCell.self, forCellReuseIdentifier: StubCell.identifier)
         
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
@@ -116,7 +117,11 @@ extension LocationsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = .clear
+        
+        let cell = StubCell()
+        cell.selectedBackgroundView = backgroundView
         
         guard self.viewModel.savedLocations.count == self.viewModel.savedLocationsWeatherData.value.count else { return cell }
         
@@ -129,8 +134,7 @@ extension LocationsViewController: UITableViewDataSource {
         
         summaryCell.viewModel = viewModel
         
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = .clear
+        
         summaryCell.selectedBackgroundView = backgroundView
         
         return summaryCell

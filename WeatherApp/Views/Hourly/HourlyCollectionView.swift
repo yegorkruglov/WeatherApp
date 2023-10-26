@@ -51,7 +51,7 @@ private extension HourlyCollectionView {
         layer.cornerRadius = Constants.cornerRadiusM
         contentView.layer.cornerRadius = Constants.cornerRadiusM
         
-        contentView.addSubview(collectionView )
+        contentView.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

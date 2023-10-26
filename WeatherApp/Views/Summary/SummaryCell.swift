@@ -49,9 +49,7 @@ private extension SummaryCell {
     func setupUI() {
         layer.cornerRadius = Constants.cornerRadiusM
         
-        let backGroundView = UIView()
-        backGroundView.backgroundColor = .appGray
-        backGroundView.layer.cornerRadius = Constants.cornerRadiusM
+        lazy var backGroundView = getBackgroundView()
         
         addSubview(backGroundView)
         backGroundView.snp.makeConstraints { make in
