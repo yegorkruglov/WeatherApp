@@ -11,7 +11,7 @@ final class NetworkManager {
     
     static let shared = NetworkManager()
     
-    private let apiKey = "26ddef4fb93844228da170739232809"
+    private let apiKey = "ed2a7fa0a05c4ce1888100150233010"
     private let baseURL = "https://api.weatherapi.com/v1/"
     
     func requestWeatherFor(
@@ -33,6 +33,8 @@ final class NetworkManager {
                 string: "\(baseURL)forecast.json?key=\(apiKey)&q=\(query)&days=6&aqi=no&alerts=no"
             )
         else { return }
+        
+        print(url)
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
