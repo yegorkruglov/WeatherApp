@@ -1,5 +1,5 @@
 //
-//  WetherInfoViewController.swift
+//  WeatherInfoViewController.swift
 //  WeatherApp
 //
 //  Created by Egor Kruglov on 13.05.2025.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class WetherInfoViewController: UIViewController {
+final class WeatherInfoViewController: UIViewController {
     
     // MARK: - private properties
     
@@ -33,7 +33,34 @@ final class WetherInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
+    }
+}
+
+// MARK: - private methods
+
+private extension WeatherInfoViewController {
+    
+    func bind() {
+        let input = WeatherInfoViewModel.Input()
+        let output = viewModel.bind(input)
+        handle(output)
+    }
+    
+    func handle(_ output: WeatherInfoViewModel.Output) {
         
     }
 }
+
+// MARK: - entities
+
+extension WeatherInfoViewController {
+    
+    enum State {
+        case error(Error)
+        case loading
+        case loaded(Weather)
+    }
+}
+
 

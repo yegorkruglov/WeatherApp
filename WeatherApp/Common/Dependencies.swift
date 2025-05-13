@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 final class Dependencies {
     private lazy var session = URLSession.shared
@@ -27,5 +28,9 @@ final class Dependencies {
     
     func resolve() ->  ApiProtocol {
         return api
+    }
+    
+    func resolve() -> CLLocationManager {
+        return CLLocationManager()
     }
 }

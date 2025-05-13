@@ -8,10 +8,10 @@
 import Foundation
 
 enum WeatherInfoBuilder {
-    static func build(dependencies: Dependencies) -> WetherInfoViewController {
+    static func build(dependencies: Dependencies) -> WeatherInfoViewController {
         
         let vm = WeatherInfoViewModel(dependencies: dependencies)
         
-        return WetherInfoViewController(viewModel: vm)
+        return WeatherInfoViewController(viewModel: vm)
     }
 }
