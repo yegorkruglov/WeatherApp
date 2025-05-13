@@ -15,6 +15,7 @@ final class WeatherInfoViewModel: NSObject {
     
     private let api: ApiProtocol
     private let locationManger: CLLocationManager
+    private let onGoToSettingsButtonTap: () -> Void
     private let defaultCorrdinate = CLLocationCoordinate2D(latitude: 55.752222, longitude: 37.615556)
     
     // MARK: - publishers
@@ -24,9 +25,10 @@ final class WeatherInfoViewModel: NSObject {
     
     // MARK: -  initilizers
     
-    init(dependencies: Dependencies) {
+    init(dependencies: Dependencies, onGoToSettingsButtonTap: @escaping () -> Void) {
         self.api = dependencies.resolve()
         self.locationManger = dependencies.resolve()
+        self.onGoToSettingsButtonTap = onGoToSettingsButtonTap
     }
     
     // MARK: - public methods
@@ -38,7 +40,8 @@ final class WeatherInfoViewModel: NSObject {
         
         handleReloadButtonPublisher(input.errorReloadButtonPublisher)
         handleReloadButtonPublisher(input.reloadButtonPublisher)
-        
+        handleGoToSettingsButtonPublisher(input.goToSettingsButtonPublisher)
+                                      
         return Output(
             statePublisher: statePublisher.eraseToAnyPublisher()
         )
@@ -51,6 +54,7 @@ private extension WeatherInfoViewModel {
     
     func setupLocationManager() {
         locationManger.delegate = self
+        locationManger.desiredAccuracy = kCLLocationAccuracyBest
     }
     
     func checkLocationAuthorizationStatus() {
@@ -73,6 +77,7 @@ private extension WeatherInfoViewModel {
     
     func getWeatherForLocation(latitude: Double, longitude: Double) {
         api.getWeatherInfoForLocation(lat: latitude, long: longitude)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
                 switch result {
                     
@@ -96,6 +101,14 @@ private extension WeatherInfoViewModel {
             .sink { [weak self] _ in
                 self?.statePublisher.send(.loading)
                 self?.locationManger.requestLocation()
+            }
+            .store(in: &cancellables)
+    }
+    
+    func handleGoToSettingsButtonPublisher(_ publisher: AnyPublisher<Void, Never>) {
+        publisher
+            .sink { [weak self] _ in
+                self?.onGoToSettingsButtonTap()
             }
             .store(in: &cancellables)
     }
@@ -136,6 +149,7 @@ extension WeatherInfoViewModel {
     struct Input {
         let errorReloadButtonPublisher: AnyPublisher<Void, Never>
         let reloadButtonPublisher: AnyPublisher<Void, Never>
+        let goToSettingsButtonPublisher: AnyPublisher<Void, Never>
     }
     
     struct Output {

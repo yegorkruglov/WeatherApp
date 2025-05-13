@@ -8,10 +8,11 @@
 import Foundation
 
 enum WeatherInfoBuilder {
-    static func build(dependencies: Dependencies) -> WeatherInfoViewController {
+    static func build(dependencies: Dependencies, onGoToSettingsButtonTap: @escaping () -> Void) -> WeatherInfoViewController {
         
-        let vm = WeatherInfoViewModel(dependencies: dependencies)
+        let vm = WeatherInfoViewModel(dependencies: dependencies, onGoToSettingsButtonTap: onGoToSettingsButtonTap)
         
         return WeatherInfoViewController(viewModel: vm)
     }
 }
+

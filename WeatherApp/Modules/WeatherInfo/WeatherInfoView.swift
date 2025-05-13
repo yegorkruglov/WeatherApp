@@ -34,6 +34,14 @@ final class WeatherInfoView: UIView {
             errorReloadButtonPublisher: errorReloadButtonPublisher.eraseToAnyPublisher()
         )
     }
+    
+    func handle(_ output: WeatherInfoViewModel.Output) {
+        output.statePublisher
+            .sink { [weak self] state in
+                self?.display(state)
+            }
+            .store(in: &cancellables)
+    }
 }
 
 // MARK: - private methods
@@ -55,6 +63,10 @@ private extension WeatherInfoView {
     }
     
     func makeConsraints() {
+        
+    }
+    
+    func display(_ state: WeatherInfoViewController.State) {
         
     }
 }

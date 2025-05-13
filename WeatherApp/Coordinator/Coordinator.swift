@@ -25,10 +25,20 @@ final class Coordinator: CoordinatorProtocol {
     
     func start() {
         
-        let weatherInfoViewController = WeatherInfoBuilder.build(dependencies: dependencies)
+        let weatherInfoViewController = WeatherInfoBuilder.build(
+            dependencies: dependencies,
+            onGoToSettingsButtonTap: goToAppSettings
+        )
+        
         navController.pushViewController(weatherInfoViewController, animated: false)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
         
     }
+    
+    func goToAppSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+    }
 }
+
