@@ -15,6 +15,7 @@ final class WeatherInfoViewModel: NSObject {
     
     private let api: ApiProtocol
     private let locationManger: CLLocationManager
+    private let defaultCorrdinate = CLLocationCoordinate2D(latitude: 55.752222, longitude: 37.615556)
     
     // MARK: - publishers
     
@@ -35,7 +36,12 @@ final class WeatherInfoViewModel: NSObject {
         setupLocationManager()
         checkLocationAuthorizationStatus()
         
-        return Output()
+        handleReloadButtonPublisher(input.errorReloadButtonPublisher)
+        handleReloadButtonPublisher(input.reloadButtonPublisher)
+        
+        return Output(
+            statePublisher: statePublisher.eraseToAnyPublisher()
+        )
     }
 }
 
@@ -57,15 +63,17 @@ private extension WeatherInfoViewModel {
             locationManger.requestLocation()
             
         default:
-            break
-            //get weather for moscow
-            //show alert to acces auth status??
+            getWeatherForLocation(
+                latitude: defaultCorrdinate.latitude,
+                longitude: defaultCorrdinate.longitude
+            )
+            statePublisher.send(.locationAuthRequiredAlert)
         }
     }
     
     func getWeatherForLocation(latitude: Double, longitude: Double) {
         api.getWeatherInfoForLocation(lat: latitude, long: longitude)
-            .sink { result in
+            .sink { [weak self] result in
                 switch result {
                     
                 case .finished:
@@ -73,14 +81,23 @@ private extension WeatherInfoViewModel {
                     
                 case .failure(let error):
                     print(error.localizedDescription)
-                    //show error
+                    self?.statePublisher.send(.error(error))
                 }
                 
-            } receiveValue: { weatherInfo in
+            } receiveValue: { [weak self] weatherInfo in
                 print(weatherInfo)
+                self?.statePublisher.send(.loaded(weatherInfo))
             }
             .store(in: &cancellables)
-
+    }
+    
+    func handleReloadButtonPublisher(_ publisher: AnyPublisher<Void, Never>) {
+        publisher
+            .sink { [weak self] _ in
+                self?.statePublisher.send(.loading)
+                self?.locationManger.requestLocation()
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -93,8 +110,7 @@ extension WeatherInfoViewModel: CLLocationManagerDelegate {
             manager.requestLocation()
             
         default:
-            break
-            //show alert to acces auth status??
+            statePublisher.send(.locationAuthRequiredAlert)
         }
     }
     
@@ -109,6 +125,7 @@ extension WeatherInfoViewModel: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
         print(error.localizedDescription)
+        statePublisher.send(.error(error))
     }
 }
 
@@ -117,10 +134,11 @@ extension WeatherInfoViewModel: CLLocationManagerDelegate {
 extension WeatherInfoViewModel {
     
     struct Input {
-        
+        let errorReloadButtonPublisher: AnyPublisher<Void, Never>
+        let reloadButtonPublisher: AnyPublisher<Void, Never>
     }
     
     struct Output {
-        
+        let statePublisher: AnyPublisher<WeatherInfoViewController.State, Never>
     }
 }

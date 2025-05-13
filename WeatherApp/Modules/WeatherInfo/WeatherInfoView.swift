@@ -6,8 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 final class WeatherInfoView: UIView {
+    
+    // MARK: - publishers
+    
+    private var cancellables: Set<AnyCancellable> = []
+    private var errorReloadButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - initializers
     
@@ -19,6 +25,14 @@ final class WeatherInfoView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - public methods
+    
+    func makeInput() -> Input {
+        Input(
+            errorReloadButtonPublisher: errorReloadButtonPublisher.eraseToAnyPublisher()
+        )
     }
 }
 
@@ -42,5 +56,14 @@ private extension WeatherInfoView {
     
     func makeConsraints() {
         
+    }
+}
+
+// MARK: - entities
+
+extension WeatherInfoView {
+    
+    struct Input {
+        let errorReloadButtonPublisher: AnyPublisher<Void, Never>
     }
 }

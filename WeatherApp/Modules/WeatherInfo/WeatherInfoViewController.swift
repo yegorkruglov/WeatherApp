@@ -6,12 +6,18 @@
 //
 
 import UIKit
+import Combine
 
 final class WeatherInfoViewController: UIViewController {
     
     // MARK: - private properties
     
     private let viewModel: WeatherInfoViewModel
+    
+    // MARK: - publishers
+    
+    private var cancellables: Set<AnyCancellable> = []
+    private var reloadButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - initilizers
     
@@ -42,8 +48,17 @@ final class WeatherInfoViewController: UIViewController {
 private extension WeatherInfoViewController {
     
     func bind() {
-        let input = WeatherInfoViewModel.Input()
+        guard let view = view as? WeatherInfoView else { return }
+        
+        let viewInput = view.makeInput()
+        
+        let input = WeatherInfoViewModel.Input(
+            errorReloadButtonPublisher: viewInput.errorReloadButtonPublisher,
+            reloadButtonPublisher: reloadButtonPublisher.eraseToAnyPublisher()
+        )
+        
         let output = viewModel.bind(input)
+        
         handle(output)
     }
     
@@ -60,6 +75,7 @@ extension WeatherInfoViewController {
         case error(Error)
         case loading
         case loaded(Weather)
+        case locationAuthRequiredAlert
     }
 }
 
