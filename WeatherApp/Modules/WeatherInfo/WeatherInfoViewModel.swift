@@ -90,7 +90,8 @@ private extension WeatherInfoViewModel {
                 }
                 
             } receiveValue: { [weak self] weatherInfo in
-                print(weatherInfo)
+                let formatted = WeatherFormatter.formatWeather(weatherInfo)
+                print(formatted)
                 self?.statePublisher.send(.loaded(weatherInfo))
             }
             .store(in: &cancellables)
