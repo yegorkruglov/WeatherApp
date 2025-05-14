@@ -28,7 +28,7 @@ final class Api: ApiProtocol {
             return Fail(error: NetworkError.badUrl).eraseToAnyPublisher()
         }
         
-        return networker.processWeatherInfo(request)
+        return networker.processRequest(request)
     }
     
     func getImageFor(endpoint: String) -> AnyPublisher<Data, Error> {
@@ -36,7 +36,7 @@ final class Api: ApiProtocol {
             return Fail(error: NetworkError.badUrl).eraseToAnyPublisher()
         }
         
-        return networker.processImageData(request)
+        return networker.processRequest(request)
     }
 }
 

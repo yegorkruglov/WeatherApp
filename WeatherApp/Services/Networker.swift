@@ -10,8 +10,8 @@ import Combine
 
 protocol NetworkerProtocol {
     
-    func processWeatherInfo(_ request: URLRequest) -> AnyPublisher<Weather, Error>
-    func processImageData(_ request: URLRequest) -> AnyPublisher<Data, Error>
+    func processRequest<T: Codable>(_ request: URLRequest) -> AnyPublisher<T, Error>
+    func processRequest(_ request: URLRequest) -> AnyPublisher<Data, Error>
 }
 
 final class Networker: NetworkerProtocol {
@@ -27,11 +27,11 @@ final class Networker: NetworkerProtocol {
         self.decoder = decoder
     }
     
-    func processWeatherInfo(_ request: URLRequest) -> AnyPublisher<Weather, Error>{
+    func processRequest<T: Codable>(_ request: URLRequest) -> AnyPublisher<T, Error> {
         return decodedRequestPublisher(request)
     }
     
-    func processImageData(_ request: URLRequest) -> AnyPublisher<Data, Error>{
+    func processRequest(_ request: URLRequest) -> AnyPublisher<Data, Error> {
         requestPublisher(request)
     }
 }
