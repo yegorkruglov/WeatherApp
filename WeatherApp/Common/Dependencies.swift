@@ -11,8 +11,8 @@ import CoreLocation
 final class Dependencies {
     private lazy var session = URLSession.shared
     private lazy var decoder = JSONDecoder()
-    private lazy var networker = Networker(session: session, decoder: decoder)
-    private lazy var api = Api(networker: networker)
+    private lazy var networker = Networker(session: resolve(), decoder: resolve())
+    private lazy var api = Api(networker: resolve())
     
     func resolve() -> URLSession {
         return session
