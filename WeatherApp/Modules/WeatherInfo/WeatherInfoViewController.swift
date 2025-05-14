@@ -91,6 +91,7 @@ private extension WeatherInfoViewController {
     
     func handleStatePublisher(_ publisher: AnyPublisher<State, Never>) {
         publisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 self?.displayState(state)
             }

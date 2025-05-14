@@ -77,8 +77,8 @@ private extension WeatherInfoViewModel {
     
     func getWeatherForLocation(latitude: Double, longitude: Double) {
         api.getWeatherInfoForLocation(lat: latitude, long: longitude)
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] result in
+                
                 switch result {
                     
                 case .finished:

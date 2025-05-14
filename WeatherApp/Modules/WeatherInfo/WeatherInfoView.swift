@@ -44,6 +44,7 @@ final class WeatherInfoView: UIView {
     
     func handle(_ output: WeatherInfoViewModel.Output) {
         output.statePublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
                 self?.display(state)
             }
