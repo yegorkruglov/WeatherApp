@@ -21,12 +21,28 @@ final class WeatherInfoView: UIView {
         indicator.startAnimating()
         return indicator
     }()
+    private lazy var collectionView: UICollectionView = {
+        let cv = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: makeLayout()
+        )
+        
+        cv.register(CurrentWeatherCell.self, forCellWithReuseIdentifier: CurrentWeatherCell.identifier)
+        cv.register(HourCell.self, forCellWithReuseIdentifier: HourCell.identifier)
+        cv.register(DayCell.self, forCellWithReuseIdentifier: DayCell.identifier)
+        
+        cv.backgroundColor = .red
+        
+        return cv
+    }()
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>?
     
     // MARK: - initializers
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
+        initDataSource()
     }
     
     @available(*, unavailable)
@@ -63,7 +79,7 @@ private extension WeatherInfoView {
     }
     
     func addViews() {
-        [errorView, activityIndicator].forEach { subview in
+        [errorView, activityIndicator, collectionView].forEach { subview in
             addSubview(subview)
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -84,6 +100,11 @@ private extension WeatherInfoView {
                 
                 activityIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
                 activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+                
+                collectionView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+                collectionView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+                collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                collectionView.trailingAnchor.constraint(equalTo: trailingAnchor)
             ]
         )
     }
@@ -95,18 +116,54 @@ private extension WeatherInfoView {
             errorView.isHidden = false
             errorView.configureWith(error)
             activityIndicator.stopAnimating()
+            collectionView.isHidden = true
             
         case .loading:
             errorView.isHidden = true
             activityIndicator.startAnimating()
+            collectionView.isHidden = true
             
         case .loaded(let weatherFormatted):
             errorView.isHidden = true
             activityIndicator.stopAnimating()
+            collectionView.isHidden = false
+            displayWeather(weatherFormatted)
             
         case .locationAuthRequiredAlert:
             break
         }
+    }
+    
+    func makeLayout() -> UICollectionViewLayout {
+        
+        
+        return UICollectionViewFlowLayout()
+    }
+    
+    func initDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(
+            collectionView: collectionView,
+            cellProvider: { collectionView, indexPath, item in
+                #warning("dequeueReusableCell")
+                return UICollectionViewCell()
+            }
+        )
+    }
+    
+    func displayWeather(_ weatherFormatted: WeatherFormatted) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
+        snapshot.appendSections(Section.allCases)
+        
+        let currentWeather = Item.currentWeather(weatherFormatted.currentWeather)
+        snapshot.appendItems( [currentWeather], toSection: .currentWeather)
+        
+        let hourlyWeather = weatherFormatted.hourlyWeather.map { Item.hourWeather($0) }
+        snapshot.appendItems(hourlyWeather, toSection: .hourlyForecast)
+        
+        let dailyWeather = weatherFormatted.dailyWeather.map { Item.dayWeather($0) }
+        snapshot.appendItems(dailyWeather, toSection: .dailyForecast)
+        
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 }
 
@@ -116,5 +173,17 @@ extension WeatherInfoView {
     
     struct Input {
         let errorReloadButtonPublisher: AnyPublisher<Void, Never>
+    }
+    
+    enum Section: Int, CaseIterable, Hashable {
+        case currentWeather
+        case hourlyForecast
+        case dailyForecast
+    }
+    
+    enum Item: Hashable {
+        case currentWeather(CurrentWeather)
+        case hourWeather(HourlyWeather)
+        case dayWeather(DailyWeather)
     }
 }
