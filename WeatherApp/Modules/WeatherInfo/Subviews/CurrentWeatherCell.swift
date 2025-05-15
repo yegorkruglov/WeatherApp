@@ -40,6 +40,7 @@ final class CurrentWeatherCell: UICollectionViewCell {
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
         return activityIndicator
     }()
     private lazy var feelsLikeLabel: UILabel = {
@@ -84,6 +85,17 @@ final class CurrentWeatherCell: UICollectionViewCell {
         super.prepareForReuse()
         
         cancellable = nil
+        
+        conditionImageView.image = nil
+        activityIndicator.startAnimating()
+        
+        locationLabel.text = nil
+        tempretureLabel.text = nil
+        conditionLabel.text = nil
+        feelsLikeLabel.text = nil
+        humidityLabel.text = nil
+        precipitaionLabel.text = nil
+        windLabel.text = nil
     }
 }
 
@@ -98,9 +110,6 @@ private extension CurrentWeatherCell {
     }
     
     func addViews() {
-        
-        
-        
         [
             locationLabel,
             tempretureLabel,
@@ -149,8 +158,6 @@ private extension CurrentWeatherCell {
     }
     
     func makeDetailsStackView() -> UIStackView {
-        
-        
         let subStacks: [UIStackView] = [
             ("Feels like:", feelsLikeLabel),
             ("Wind direction and speed:", windLabel),
@@ -203,8 +210,8 @@ extension CurrentWeatherCell: ItemConfigurable {
                 let image = UIImage(data: data)
                 DispatchQueue.main.async { [weak self] in
                     self?.conditionImageView.image = image
+                    self?.activityIndicator.stopAnimating()
                 }
             }
-
     }
 }
