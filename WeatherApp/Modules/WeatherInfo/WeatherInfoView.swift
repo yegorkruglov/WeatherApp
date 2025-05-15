@@ -136,8 +136,48 @@ private extension WeatherInfoView {
     
     func makeLayout() -> UICollectionViewLayout {
         
-        
-        return UICollectionViewFlowLayout()
+        return UICollectionViewCompositionalLayout { sectionIndex, enviroment in
+            
+            let sectionType = Section(rawValue: sectionIndex)
+            
+            let groupWidthRatio: CGFloat = {
+                switch sectionType {
+                    
+                case .hourlyForecast:
+                    return 1/4
+                    
+                default:
+                    return  1
+                }
+            }()
+            
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(1)
+            )
+            
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(groupWidthRatio),
+                heightDimension: .estimated(1)
+            )
+            
+            let group: NSCollectionLayoutGroup = {
+                switch sectionType {
+                    
+                case .hourlyForecast:
+                    return NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+                    
+                default:
+                    return NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+                }
+            }()
+           
+            let section = NSCollectionLayoutSection(group: group)
+            
+            return section
+        }
     }
     
     func initDataSource() {
@@ -219,6 +259,19 @@ extension WeatherInfoView {
         case currentWeather
         case hourlyForecast
         case dailyForecast
+        
+        var title: String {
+            switch self {
+            case .currentWeather:
+                return "Current weather"
+                
+            case .hourlyForecast:
+                return "Hourly forecast"
+                
+            case .dailyForecast:
+                return "Daily forecast"
+            }
+        }
     }
     
     enum Item: Hashable {
