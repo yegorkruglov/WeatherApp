@@ -46,7 +46,7 @@ final class WeatherInfoView: UIView {
         output.statePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
-                self?.display(state)
+                self?.displayState(state)
             }
             .store(in: &cancellables)
     }
@@ -88,7 +88,7 @@ private extension WeatherInfoView {
         )
     }
     
-    func display(_ state: WeatherInfoViewController.State) {
+    func displayState(_ state: WeatherInfoViewController.State) {
         switch state {
             
         case .error(let error):
@@ -100,7 +100,7 @@ private extension WeatherInfoView {
             errorView.isHidden = true
             activityIndicator.startAnimating()
             
-        case .loaded(let weatherInfo):
+        case .loaded(let weatherFormatted):
             errorView.isHidden = true
             activityIndicator.stopAnimating()
             

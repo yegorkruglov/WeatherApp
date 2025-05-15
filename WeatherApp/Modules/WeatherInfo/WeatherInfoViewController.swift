@@ -109,7 +109,6 @@ private extension WeatherInfoViewController {
             
         case .locationAuthRequiredAlert:
             showLocationAuthAlert()
-            
         }
     }
     
@@ -148,7 +147,7 @@ extension WeatherInfoViewController {
     enum State {
         case error(Error)
         case loading
-        case loaded(Weather)
+        case loaded(WeatherFormatted)
         case locationAuthRequiredAlert
     }
 }
