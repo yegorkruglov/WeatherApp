@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return nc
         }()
         
-        let dependencies = Dependencies()
+        let dependencies = Dependencies.shared
 
         let coordinator = Coordinator(
             window: window,

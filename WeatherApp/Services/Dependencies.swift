@@ -9,10 +9,14 @@ import Foundation
 import CoreLocation
 
 final class Dependencies {
+    static var shared = Dependencies()
+    
     private lazy var session = URLSession.shared
     private lazy var decoder = JSONDecoder()
     private lazy var networker = Networker(session: resolve(), decoder: resolve())
     private lazy var api = Api(networker: resolve())
+    
+    private init() {}
     
     func resolve() -> URLSession {
         return session

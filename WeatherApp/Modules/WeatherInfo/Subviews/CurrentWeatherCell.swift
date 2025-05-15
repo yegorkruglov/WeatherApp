@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import Combine
 
 final class CurrentWeatherCell: UICollectionViewCell {
+    
+    private let api: ApiProtocol = Dependencies.shared.resolve()
+    private var cancellable: AnyCancellable?
     
     // MARK: - ui elements
     
@@ -31,7 +35,6 @@ final class CurrentWeatherCell: UICollectionViewCell {
     private lazy var conditionImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(systemName: "cloud")
         return imageView
     }()
     private lazy var activityIndicator: UIActivityIndicatorView = {
@@ -80,7 +83,7 @@ final class CurrentWeatherCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        
+        cancellable = nil
     }
 }
 
@@ -192,5 +195,16 @@ extension CurrentWeatherCell: ItemConfigurable {
         humidityLabel.text = "\(item.humidity)%"
         precipitaionLabel.text = "\(item.precipitationMm) mm"
         windLabel.text = "\(item.windDirection) \(item.windSpeed) m/s"
+        
+        cancellable = api.getImageFor(endpoint: item.currentConditionImageUrl)
+            .sink { _ in
+                
+            } receiveValue: { data in
+                let image = UIImage(data: data)
+                DispatchQueue.main.async { [weak self] in
+                    self?.conditionImageView.image = image
+                }
+            }
+
     }
 }
