@@ -7,6 +7,9 @@
 
 import UIKit
 
-final class CurrentWeatherCell: UICollectionViewCell {
+final class CurrentWeatherCell: UICollectionViewCell, ItemConfigurable {
     
+    func configure(with item: CurrentWeather) {
+        
+    }
 }

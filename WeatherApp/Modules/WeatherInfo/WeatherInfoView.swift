@@ -141,13 +141,53 @@ private extension WeatherInfoView {
     }
     
     func initDataSource() {
+        
         dataSource = UICollectionViewDiffableDataSource(
             collectionView: collectionView,
-            cellProvider: { collectionView, indexPath, item in
-                #warning("dequeueReusableCell")
-                return UICollectionViewCell()
+            cellProvider: { [weak self] collectionView, indexPath, item in
+                
+                guard let self else { return UICollectionViewCell() }
+                
+                let cell: UICollectionViewCell?
+                
+                switch item {
+                    
+                case .currentWeather(let currentWeather):
+                    cell = configureCell(collectionView, for: indexPath, with: currentWeather, as: CurrentWeatherCell.self)
+                    
+                case .hourWeather(let hourWeather):
+                    cell = configureCell(collectionView, for: indexPath, with: hourWeather, as: HourCell.self)
+
+                case .dayWeather(let dayWeather):
+                    cell = configureCell(collectionView, for: indexPath, with: dayWeather, as: DayCell.self)
+                }
+                
+                guard let cell else { return UICollectionViewCell() }
+                
+                return cell
             }
         )
+    }
+    
+    func configureCell<T: UICollectionViewCell & ItemConfigurable>(
+        _ collectionView: UICollectionView,
+        for indexPath: IndexPath,
+        with item: T.ItemType,
+        as cellType: T.Type
+    ) -> UICollectionViewCell? {
+        
+        guard let cell = dequeueCell(collectionView, for: indexPath, as: cellType) else { return nil }
+        cell.configure(with: item)
+        return cell
+    }
+    
+    func dequeueCell<T: UICollectionViewCell>(
+        _ collectionView: UICollectionView,
+        for indexPath: IndexPath,
+        as type: T.Type
+    ) -> T? {
+        
+        return collectionView.dequeueReusableCell(withReuseIdentifier: T.identifier, for: indexPath) as? T
     }
     
     func displayWeather(_ weatherFormatted: WeatherFormatted) {

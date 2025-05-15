@@ -7,6 +7,9 @@
 
 import UIKit
 
-final class HourCell: UICollectionViewCell {
+final class HourCell: UICollectionViewCell, ItemConfigurable {
     
+    func configure(with item: HourlyWeather) {
+        
+    }
 }

@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class DayCell: UICollectionViewCell {
+final class DayCell: UICollectionViewCell, ItemConfigurable {
     
-    
+    func configure(with item: DailyWeather) {
+        
+    }
 }
