@@ -31,7 +31,7 @@ final class WeatherInfoView: UIView {
         cv.register(HourCell.self, forCellWithReuseIdentifier: HourCell.identifier)
         cv.register(DayCell.self, forCellWithReuseIdentifier: DayCell.identifier)
         
-        cv.backgroundColor = .red
+        cv.backgroundColor = .clear
         
         return cv
     }()
