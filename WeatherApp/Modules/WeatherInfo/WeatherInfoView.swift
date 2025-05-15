@@ -136,7 +136,7 @@ private extension WeatherInfoView {
     
     func makeLayout() -> UICollectionViewLayout {
         
-        return UICollectionViewCompositionalLayout { sectionIndex, enviroment in
+        let layout =  UICollectionViewCompositionalLayout { sectionIndex, enviroment in
             
             let sectionType = Section(rawValue: sectionIndex)
             
@@ -144,7 +144,7 @@ private extension WeatherInfoView {
                 switch sectionType {
                     
                 case .hourlyForecast:
-                    return 1/4
+                    return 1/3
                     
                 default:
                     return  1
@@ -153,14 +153,14 @@ private extension WeatherInfoView {
             
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(1)
+                heightDimension: .estimated(150)
             )
             
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(groupWidthRatio),
-                heightDimension: .estimated(1)
+                heightDimension: .estimated(150)
             )
             
             let group: NSCollectionLayoutGroup = {
@@ -176,8 +176,21 @@ private extension WeatherInfoView {
            
             let section = NSCollectionLayoutSection(group: group)
             
+            if sectionType == .hourlyForecast {
+                section.orthogonalScrollingBehavior = .continuous
+            }
+            
+            section.interGroupSpacing = 16
+            
             return section
         }
+        
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.interSectionSpacing = 16
+        
+        layout.configuration = config
+        
+        return layout
     }
     
     func initDataSource() {
