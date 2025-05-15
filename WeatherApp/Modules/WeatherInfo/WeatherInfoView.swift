@@ -153,14 +153,14 @@ private extension WeatherInfoView {
             
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(150)
+                heightDimension: .estimated(100)
             )
             
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(groupWidthRatio),
-                heightDimension: .estimated(150)
+                heightDimension: .estimated(1)
             )
             
             let group: NSCollectionLayoutGroup = {

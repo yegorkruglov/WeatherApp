@@ -131,8 +131,8 @@ private extension CurrentWeatherCell {
     func makeConsraints() {
         NSLayoutConstraint.activate(
             [
-                conditionImageView.widthAnchor.constraint(equalToConstant: 30),
-                conditionImageView.heightAnchor.constraint(equalToConstant: 30),
+                conditionImageView.widthAnchor.constraint(equalToConstant: 50),
+                conditionImageView.heightAnchor.constraint(equalToConstant: 50),
                 conditionImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
                 conditionImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
                 

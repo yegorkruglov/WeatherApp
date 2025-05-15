@@ -47,7 +47,6 @@ final class HourCell: UICollectionViewCell {
     private lazy var vStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [timeLabel, conditionImageView, tempLabel])
         stackView.axis = .vertical
-//        stackView.distribution = .equalSpacing
         stackView.spacing = 8
         
         return stackView
