@@ -26,16 +26,17 @@ final class ErrorView: UIView {
     
     private lazy var errorMessageLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .caption2)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        label.textAlignment = .center
         label.textColor = .label
         label.numberOfLines = 0
         return label
     }()
     
     private lazy var reloadButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton(configuration: .bordered())
         button.setTitle("Reload", for: .normal)
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         button.addAction(
             UIAction(
                 handler: { [weak self] _ in
@@ -64,11 +65,11 @@ final class ErrorView: UIView {
     func configureWith(_ error: Error) {
 
         guard let error = error as? NetworkError else {
-            errorMessageLabel.text = "Unknown Error:/n\(error.localizedDescription)"
+            errorMessageLabel.text = "Unknown Error:\n\(error.localizedDescription)"
             return
         }
         
-        errorMessageLabel.text = "Network Error:/n\(error.userDescription)"
+        errorMessageLabel.text = "Network Error:\n\(error.userDescription)"
         
     }
 }
