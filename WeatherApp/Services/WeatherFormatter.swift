@@ -21,10 +21,10 @@ enum WeatherFormatter {
     private static func formatCurrentWeather(_ weather: Weather) -> CurrentWeather {
         
         let location = "\(weather.location.name), \(weather.location.region)"
-        let currentTemperature = String(format: "%.1f", weather.current.tempC)
+        let currentTemperature = String(format: "%.0f", weather.current.tempC)
         let conditionDescription = weather.current.condition.text
         let currentConditionImageUrl = weather.current.condition.icon
-        let feelsLikeTemperature = String(format: "%.1f", weather.current.feelslikeC)
+        let feelsLikeTemperature = String(format: "%.0f", weather.current.feelslikeC)
         let precipitationMm = String(weather.current.precipMm)
         let windSpeed = String(weather.current.windKph)
         let windDirerction = weather.current.windDir
@@ -65,7 +65,13 @@ enum WeatherFormatter {
                 return time > currentTime
             }
             .compactMap { weatherAtParticularHour in
-                guard let formatedTimeString = formatDate(weatherAtParticularHour.time, fromFormat: "yyyy-MM-dd HH:mm", toFormat: "HH:mm") else { return nil }
+                guard let formatedTimeString = formatDate(
+                    weatherAtParticularHour.time,
+                    fromFormat: "yyyy-MM-dd HH:mm",
+                    toFormat: "HH:mm"
+                ) else {
+                    return nil
+                }
                 
                 return HourlyWeather(
                     time: formatedTimeString,
@@ -93,8 +99,8 @@ enum WeatherFormatter {
                     date: formatedDateString,
                     conditionImageUrl: forecastDay.day.condition.icon,
                     conditionDescription: forecastDay.day.condition.text,
-                    highTemperature: String(forecastDay.day.maxtempC),
-                    lowTemperature: String(forecastDay.day.mintempC)
+                    highTemperature: String(format: "%.0f", forecastDay.day.maxtempC),
+                    lowTemperature: String(format: "%.0f", forecastDay.day.mintempC)
                 )
             }
         

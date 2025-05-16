@@ -124,7 +124,7 @@ extension HourCell: ItemConfigurable {
     
     func configure(with item: HourlyWeather) {
         timeLabel.text = item.time
-        tempLabel.text = "\(item.temperature)°"
+        tempLabel.text = "\(String(format: "%.0f", item.temperature))°"
         
         cancellable = api.getImageFor(endpoint: item.conditionImageUrl)
             .sink { _ in
