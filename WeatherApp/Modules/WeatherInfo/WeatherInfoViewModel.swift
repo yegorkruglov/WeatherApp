@@ -101,7 +101,7 @@ private extension WeatherInfoViewModel {
         publisher
             .sink { [weak self] _ in
                 self?.statePublisher.send(.loading)
-                self?.locationManger.requestLocation()
+                self?.checkLocationAuthorizationStatus()
             }
             .store(in: &cancellables)
     }
@@ -118,14 +118,7 @@ private extension WeatherInfoViewModel {
 extension WeatherInfoViewModel: CLLocationManagerDelegate {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch manager.authorizationStatus {
-        
-        case .authorizedAlways, .authorizedWhenInUse:
-            manager.requestLocation()
-            
-        default:
-            statePublisher.send(.locationAuthRequiredAlert)
-        }
+        checkLocationAuthorizationStatus()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
