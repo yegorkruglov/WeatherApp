@@ -14,7 +14,7 @@ final class WeatherInfoViewModel: NSObject {
     // MARK: - private properties
     
     private let api: ApiProtocol
-    private let locationManger: CLLocationManager
+    private let locationManger: LocationManager
     private let onGoToSettingsButtonTap: () -> Void
     private let defaultCorrdinate = CLLocationCoordinate2D(latitude: 55.752222, longitude: 37.615556)
     
@@ -22,6 +22,7 @@ final class WeatherInfoViewModel: NSObject {
     
     private var cancellables: Set<AnyCancellable> = []
     private var statePublisher = PassthroughSubject<WeatherInfoViewController.State, Never>()
+    private var locationRequestPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: -  initilizers
     
@@ -35,13 +36,11 @@ final class WeatherInfoViewModel: NSObject {
     
     func bind(_ input: Input) -> Output {
         
-        setupLocationManager()
-        checkLocationAuthorizationStatus()
-        
+        handleLocationMager()
         handleReloadButtonPublisher(input.errorReloadButtonPublisher)
         handleReloadButtonPublisher(input.reloadButtonPublisher)
         handleGoToSettingsButtonPublisher(input.goToSettingsButtonPublisher)
-                                      
+        
         return Output(
             statePublisher: statePublisher.eraseToAnyPublisher()
         )
@@ -52,30 +51,57 @@ final class WeatherInfoViewModel: NSObject {
 
 private extension WeatherInfoViewModel {
     
-    func setupLocationManager() {
-        locationManger.delegate = self
-        locationManger.desiredAccuracy = kCLLocationAccuracyBest
+    func handleLocationMager() {
+        
+        let input = LocationManager.Input(
+            locationRequestPublisher: locationRequestPublisher.eraseToAnyPublisher()
+        )
+        
+        let output = locationManger.bind(input)
+        
+        handleLocationManagerStatePublisher(output.statePublisher)
+        locationRequestPublisher.send()
     }
     
-    func checkLocationAuthorizationStatus() {
-        switch locationManger.authorizationStatus {
-            
-        case .notDetermined:
-            locationManger.requestWhenInUseAuthorization()
-            
-        case .authorizedAlways, .authorizedWhenInUse:
-            locationManger.requestLocation()
-            
-        default:
-            getWeatherForLocation(
-                latitude: defaultCorrdinate.latitude,
-                longitude: defaultCorrdinate.longitude
-            )
-            statePublisher.send(.locationAuthRequiredAlert)
-        }
+    func handleLocationManagerStatePublisher(_ publisher: AnyPublisher<LocationManager.State, Error>) {
+        publisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] status in
+                print(status)
+                switch status {
+                    
+                case .finished:
+                    print("Received response from loaction manger")
+                    
+                case .failure(let error):
+                    self?.statePublisher.send(.error(error))
+                    
+                }
+                
+            } receiveValue: { [weak self] state in
+                
+                switch state {
+                    
+                case .location(let location):
+                    self?.statePublisher.send(.loading)
+                    self?.getWeatherForLocation(
+                        latitude: location.coordinate.latitude,
+                        longitude: location.coordinate.longitude
+                    )
+                    
+                case .accessDenied:
+                    self?.statePublisher.send(.error(LocationManager.LMError.accessDeniedError))
+                    self?.statePublisher.send(.locationAuthRequiredAlert)
+                    
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func getWeatherForLocation(latitude: Double, longitude: Double) {
+        
+        statePublisher.send(.loading)
+        
         api.getWeatherInfoForLocation(lat: latitude, long: longitude)
             .sink { [weak self] result in
                 
@@ -100,7 +126,7 @@ private extension WeatherInfoViewModel {
         publisher
             .sink { [weak self] _ in
                 self?.statePublisher.send(.loading)
-                self?.checkLocationAuthorizationStatus()
+                self?.locationRequestPublisher.send()
             }
             .store(in: &cancellables)
     }
@@ -111,27 +137,6 @@ private extension WeatherInfoViewModel {
                 self?.onGoToSettingsButtonTap()
             }
             .store(in: &cancellables)
-    }
-}
-
-extension WeatherInfoViewModel: CLLocationManagerDelegate {
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkLocationAuthorizationStatus()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.first else { return }
-        
-        getWeatherForLocation(
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude
-        )
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
-        print(error.localizedDescription)
-        statePublisher.send(.error(error))
     }
 }
 

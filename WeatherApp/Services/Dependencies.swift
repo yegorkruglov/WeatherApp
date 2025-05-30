@@ -15,6 +15,8 @@ final class Dependencies {
     private lazy var decoder = JSONDecoder()
     private lazy var networker = Networker(session: resolve(), decoder: resolve())
     private lazy var api = Api(networker: resolve())
+    private lazy var coreLocationManager = CLLocationManager()
+    private lazy var locationManager = LocationManager(coreLocationManager: resolve())
     
     private init() {}
     
@@ -36,5 +38,9 @@ final class Dependencies {
     
     func resolve() -> CLLocationManager {
         return CLLocationManager()
+    }
+    
+    func resolve() -> LocationManager {
+        return locationManager
     }
 }
