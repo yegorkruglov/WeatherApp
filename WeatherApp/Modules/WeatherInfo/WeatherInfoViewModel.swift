@@ -90,7 +90,7 @@ private extension WeatherInfoViewModel {
                     )
                     
                 case .accessDenied:
-                    self?.statePublisher.send(.error(LocationManager.LMError.accessDeniedError))
+                    self?.statePublisher.send(.error(AppError.locationError))
                     self?.statePublisher.send(.locationAuthRequiredAlert)
                     
                 }

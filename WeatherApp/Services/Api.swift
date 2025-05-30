@@ -25,7 +25,7 @@ final class Api: ApiProtocol {
     
     func getWeatherInfoForLocation(lat: Double, long: Double) -> AnyPublisher<Weather, Error> {
         guard let request = prepareRequest(.weatherInfo(lat, long)) else {
-            return Fail(error: NetworkError.badUrl).eraseToAnyPublisher()
+            return Fail(error: AppError.networkError(.badUrl)).eraseToAnyPublisher()
         }
         
         return networker.processRequest(request)
@@ -33,7 +33,7 @@ final class Api: ApiProtocol {
     
     func getImageFor(endpoint: String) -> AnyPublisher<Data, Error> {
         guard let request = prepareRequest(.image(endpoint)) else {
-            return Fail(error: NetworkError.badUrl).eraseToAnyPublisher()
+            return Fail(error: AppError.networkError(.badUrl)).eraseToAnyPublisher()
         }
         
         return networker.processRequest(request)

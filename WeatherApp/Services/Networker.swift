@@ -45,7 +45,7 @@ private extension Networker {
                     let response = response as? HTTPURLResponse,
                     (200..<300).contains(response.statusCode)
                 else {
-                    throw NetworkError.badResponse
+                    throw AppError.networkError(.badResponse)
                 }
                 return data
             }

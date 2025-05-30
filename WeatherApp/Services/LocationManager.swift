@@ -65,7 +65,7 @@ private extension LocationManager {
 extension LocationManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
-        statePublisher.send(completion: .failure(error))
+        statePublisher.send(completion: .failure(AppError.locationError))
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -93,11 +93,5 @@ extension LocationManager {
     enum State {
         case location(CLLocation)
         case accessDenied
-    }
-    
-    struct LMError: Error {
-        let localizedDescription: String
-        
-        static let accessDeniedError = LMError(localizedDescription: "Location access denied")
     }
 }

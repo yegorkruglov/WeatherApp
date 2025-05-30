@@ -64,12 +64,12 @@ final class ErrorView: UIView {
     
     func configureWith(_ error: Error) {
 
-        guard let error = error as? NetworkError else {
+        guard let appError = error as? AppError else {
             errorMessageLabel.text = "Unknown Error:\n\(error.localizedDescription)"
             return
         }
         
-        errorMessageLabel.text = "Network Error:\n\(error.userDescription)"
+        errorMessageLabel.text = "\(appError.title): \(appError.userDescription)"
         
     }
 }
