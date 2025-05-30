@@ -201,7 +201,7 @@ extension CurrentWeatherCell: ItemConfigurable {
         feelsLikeLabel.text = "\(item.feelsLikeTemperature)°"
         humidityLabel.text = "\(item.humidity)%"
         precipitaionLabel.text = "\(item.precipitationMm) mm"
-        windLabel.text = "\(item.windDirection) \(item.windSpeed) m/s"
+        windLabel.text = "\(item.windDirection) \(item.windSpeed) kM/h"
         
         cancellable = api.getImageFor(endpoint: item.currentConditionImageUrl)
             .sink { _ in

@@ -25,7 +25,7 @@ enum WeatherFormatter {
         let conditionDescription = weather.current.condition.text
         let currentConditionImageUrl = weather.current.condition.icon
         let feelsLikeTemperature = String(format: "%.0f", weather.current.feelslikeC)
-        let precipitationMm = String(weather.current.precipMm)
+        let precipitationMm = String(format: "%.0f", weather.current.precipMm)
         let windSpeed = String(weather.current.windKph)
         let windDirerction = weather.current.windDir
         let humidity = String(weather.current.humidity)
