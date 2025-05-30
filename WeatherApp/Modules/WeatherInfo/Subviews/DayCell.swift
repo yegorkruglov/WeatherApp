@@ -51,7 +51,7 @@ final class DayCell: UICollectionViewCell {
         return activityIndicator
     }()
     
-    private lazy var hStackView: UIStackView = {
+    private lazy var mainElementsStackView: UIStackView = {
         let stackView = UIStackView(
             arrangedSubviews: [
                 dayLabel,
@@ -60,6 +60,31 @@ final class DayCell: UICollectionViewCell {
                 tempLabel
             ]
         )
+        
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        stackView.spacing = 8
+        
+        return stackView
+    }()
+    
+    private lazy var windSpeedLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption1)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    
+    private lazy var humidityLabel: UILabel = {
+        let label = UILabel()
+        label.font = .preferredFont(forTextStyle: .caption1)
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    
+    private lazy var supplementaryElementsStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [windSpeedLabel, humidityLabel])
         
         stackView.axis = .horizontal
         stackView.distribution = .fill
@@ -107,7 +132,7 @@ private extension DayCell {
     }
     
     func addViews() {
-        [hStackView, activityIndicator].forEach { subview in
+        [mainElementsStackView, activityIndicator, supplementaryElementsStackView].forEach { subview in
             contentView.addSubview(subview)
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -121,31 +146,35 @@ private extension DayCell {
     func makeConsraints() {
         NSLayoutConstraint.activate(
             [
-                hStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-                hStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-                hStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-                hStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                mainElementsStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+                mainElementsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                mainElementsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
                 
                 conditionImageView.heightAnchor.constraint(equalToConstant: 50),
                 conditionImageView.widthAnchor.constraint(equalToConstant: 50),
                 
                 activityIndicator.centerXAnchor.constraint(equalTo: conditionImageView.centerXAnchor),
-                activityIndicator.centerYAnchor.constraint(equalTo: conditionImageView.centerYAnchor)
+                activityIndicator.centerYAnchor.constraint(equalTo: conditionImageView.centerYAnchor),
+                
+                supplementaryElementsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                supplementaryElementsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                supplementaryElementsStackView.topAnchor.constraint(equalTo: mainElementsStackView.bottomAnchor, constant: 8),
+                supplementaryElementsStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
             ]
         )
     }
-}
-
-// MARK: - ItemConfigurable
-
-extension DayCell: ItemConfigurable {
-    func configure(with item: DailyWeather) {
-        dayLabel.text = item.date
-        tempLabel.text = "H: \(item.highTemperature) L: \(item.lowTemperature)"
-        condtionLabel.text = item.conditionDescription
-        
-        cancellable = api.getImageFor(endpoint: item.conditionImageUrl)
-            .sink { _ in
+    
+    func loadImage(endpoint: String) {
+        cancellable = api.getImageFor(endpoint: endpoint)
+            .sink { status in
+                switch status {
+                    
+                case .finished:
+                    print("finished fetching image")
+                    
+                case .failure(let error):
+                    print("failed loading image. error: \(error.localizedDescription)")
+                }
                 
             } receiveValue: { data in
                 let image = UIImage(data: data)
@@ -154,5 +183,19 @@ extension DayCell: ItemConfigurable {
                     self?.activityIndicator.stopAnimating()
                 }
             }
+    }
+}
+
+// MARK: - ItemConfigurable
+
+extension DayCell: ItemConfigurable {
+    func configure(with item: DailyWeather) {
+        dayLabel.text = item.date
+        tempLabel.text = "\(item.avgTemp)°"
+        condtionLabel.text = item.conditionDescription
+        windSpeedLabel.text = "Avg. wind speed: \(item.maxWind)"
+        humidityLabel.text = "Humidity: \(item.avgHumidity)"
+        
+        loadImage(endpoint: item.conditionImageUrl)
     }
 }
