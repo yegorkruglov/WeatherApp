@@ -1,10 +1,6 @@
 UIKit + MVVM + Coordinator + Combine + DiffableDataSource + CompositionalLayout
 
-![IMG_7799](https://github.com/user-attachments/assets/8b2ec534-b929-4934-8df8-681ec65cece7)
 
-![IMG_7797](https://github.com/user-attachments/assets/79e47a12-1b1c-4375-a60c-dd87ee30c350)
-
-![IMG_7798](https://github.com/user-attachments/assets/b569f807-76bf-4146-a7f3-a97efe51a237)
-
-https://github.com/user-attachments/assets/5f539fdc-037c-4e61-9ffe-96eede18921e
-
+![IMG_7806](https://github.com/user-attachments/assets/9aa2cb85-f71e-4d53-8152-84f1d47dd0c6)
+![IMG_7804](https://github.com/user-attachments/assets/64acbd46-4d8a-43d9-8b75-4e84abd4e39c)
+![IMG_7805](https://github.com/user-attachments/assets/a1d7b28f-8a34-4a33-a455-3a479ef3d0b5)
