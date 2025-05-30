@@ -99,8 +99,9 @@ enum WeatherFormatter {
                     date: formatedDateString,
                     conditionImageUrl: forecastDay.day.condition.icon,
                     conditionDescription: forecastDay.day.condition.text,
-                    highTemperature: String(format: "%.0f", forecastDay.day.maxtempC),
-                    lowTemperature: String(format: "%.0f", forecastDay.day.mintempC)
+                    avgTemp: String(format: "%.0f", forecastDay.day.avgtempC),
+                    maxWind: String(format: "%.0f", forecastDay.day.maxwindKph) + " kM/h",
+                    avgHumidity: String(forecastDay.day.avghumidity) + " %"
                 )
             }
         

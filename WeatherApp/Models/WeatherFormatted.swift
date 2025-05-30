@@ -29,8 +29,9 @@ struct DailyWeather: Hashable {
     var date: String
     let conditionImageUrl: String
     let conditionDescription: String
-    let highTemperature: String
-    let lowTemperature: String
+    let avgTemp: String
+    let maxWind: String
+    let avgHumidity: String
 }
 
 struct WeatherFormatted {
