@@ -98,14 +98,14 @@ private extension ErrorView {
     func makeConsraints() {
         NSLayoutConstraint.activate(
             [
-                imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-                imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-                imageView.widthAnchor.constraint(equalToConstant: 200),
-                imageView.heightAnchor.constraint(equalToConstant: 200),
-                
-                errorMessageLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
+                errorMessageLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
                 errorMessageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
                 errorMessageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+                
+                imageView.widthAnchor.constraint(equalToConstant: 200),
+                imageView.heightAnchor.constraint(equalToConstant: 200),
+                imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+                imageView.bottomAnchor.constraint(equalTo: errorMessageLabel.topAnchor, constant: -16),
                 
                 reloadButton.topAnchor.constraint(equalTo: errorMessageLabel.bottomAnchor, constant: 16),
                 reloadButton.centerXAnchor.constraint(equalTo: centerXAnchor)
