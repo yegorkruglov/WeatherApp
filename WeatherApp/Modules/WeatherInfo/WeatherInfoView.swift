@@ -79,7 +79,7 @@ private extension WeatherInfoView {
     }
     
     func addViews() {
-        [errorView, activityIndicator, collectionView].forEach { subview in
+        [collectionView, errorView, activityIndicator].forEach { subview in
             addSubview(subview)
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
